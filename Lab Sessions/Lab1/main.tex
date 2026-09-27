@@ -1,0 +1,177 @@
+\documentclass[11pt,a4paper]{article}
+
+% Paquetes
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{verbatim}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{pdflscape}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+% Configuración
+\captionsetup{font=small}
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{0.75em}{}
+\setlist{nosep}
+% Listings
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  frame=single,
+  showstringspaces=false,
+  language=python
+}
+
+% Nota
+\newtcolorbox{nota}{colback=yellow!10,colframe=black!5,boxrule=0.5pt}
+
+\begin{document}
+
+% Portada
+ \begin{titlepage}
+    \begin{center}
+    {\includegraphics[width=1\textwidth]{logo.png}\par}
+       \vspace{0.5 cm}
+       
+    {\bfseries\LARGE Universidad de Zaragoza  \par}
+    \vspace{0.5 cm}
+    
+    {\scshape\Large Facultad de Ingenier\'ia\par}
+    \vspace{0.5 cm}
+    
+    {\scshape\LARGE  Artificial Intelligence - Lab Session 1: Fundamentals\par}
+    \vspace{1.5 cm}
+
+    \vfill
+    {\Large Jorge Ruiz González (826685) \par}
+    {\Large Hugo López Sola (875455) \par}
+    
+    \vfill
+    
+    {\Large September 27th, 2026 \par}
+    \end{center}
+    \end{titlepage}
+
+    \tableofcontents
+    \newpage
+
+
+\section{Aim and evaluation}
+We compare different regression and classification methods on
+Concrete Compressive Strength, Superconductivity and CIFAR-10.
+Scaling and PCA are fitted using training data only. Validation data is used for
+model selection, and test data for the final evaluation. RMSE penalizes large
+regression errors more than MAE; classification accuracy measures the proportion
+of correct predictions, while macro F1 gives equal weight to each class.
+
+\section{Regression}
+\subsection{Concrete Compressive Strength}
+The dataset contains 1,030 samples and eight input features. We use 721 samples
+for training, 206 for validation and 103 for testing. Training correlations with
+strength are strongest for \textit{cement} ($r=0.497$), \textit{superplasticizer} ($r=0.377$), \textit{age} ($r=0.328$) and \textit{water} ($r=-0.301$). Zero superplasticizer values are retained:
+they can represent a mixture without this additive, rather than an outlier.
+
+Polynomial degree and Ridge regularization are selected by cross-validation (n=5) on the training set. Table~\ref{tab:concrete} compares the models
+on validation data.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Concrete validation results.}
+\label{tab:concrete}
+\begin{tabular}{lrrr}
+\toprule
+Model & MAE (MPa) & RMSE (MPa) & $R^2$\\
+\midrule
+Linear regression & 8.47 & 10.65 & 0.60\\
+Polynomial regression, degree 2 & 5.99 & 7.81 & 0.79\\
+Polynomial Ridge, degree 3, $\alpha=10$ & 4.95 & 6.51 & 0.85\\
+Huber & 8.32 & 10.90 & 0.58\\
+RANSAC & 10.32 & 18.65 & $-0.22$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Polynomial Ridge achieves the lowest validation RMSE. Its test MAE is
+5.20 MPa, RMSE is 7.01 MPa and $R^2=0.798$.
+Polynomial features capture nonlinear relationships, while Ridge limits large
+coefficients. Huber slightly improves MAE over linear regression but increases
+RMSE. RANSAC performs worse on this split; robustness to outliers alone does not
+capture nonlinear relationships.
+
+\subsection{Superconductivity}
+This dataset contains 21,263 samples and 81 features. The training, validation and
+test sets contain 14,884, 4,252 and 2,127 samples. Linear regression obtains the
+lowest validation RMSE (17.92 K), although tuned Ridge is practically tied
+(17.93 K). PCA retaining 95\% of input variance reduces the data to 17 components,
+but PCA followed by Ridge gives an RMSE of 21.99 K. Tuning PCA and Ridge by cross-validation (n=3) improves this to 18.97 K, using 50 components and
+$\alpha=10$, still above linear regression.
+
+With a fixed validation set, increasing the training size from 500 to 14,884
+reduces linear regression RMSE from 19.21 to 17.92 K. Gains become smaller after
+2,000 samples. The selected linear model obtains a test RMSE of
+17.44 K and $R^2=0.733$. Preserving input variance with PCA does not
+necessarily preserve the information most useful for predicting temperature.
+
+\clearpage
+\section{CIFAR-10 classification}
+CIFAR-10 contains 60,000 RGB images of $32\times32$ pixels in ten classes.
+We select 10,000 training and 2,000 validation images from the official training
+set, keeping the official 10,000 test images separate. We compare k-NN ($k=5$),
+logistic regression ($C=1$) and SVM with an RBF kernel. SVM parameters $C$ and
+$\gamma$ are selected by cross-validation (n=3) on training subsets; the
+selected models are then fitted on all 10,000 training images.
+
+For pixel features, scaling and PCA reduce the 3,072 inputs to 64 components.
+GIST descriptors are computed for all images using the supplied implementation:
+16 Gabor filters and a $4\times4$ spatial grid give 256 features per grayscale
+image. Both representations use the same training and validation
+images. Table~\ref{tab:cifar} reports test accuracy.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{CIFAR-10 test accuracy for the two representations.}
+\label{tab:cifar}
+\begin{tabular}{lrr}
+\toprule
+Model & Pixels + PCA & GIST\\
+\midrule
+k-NN & 33.5\% & 49.7\%\\
+Logistic regression & 37.8\% & 53.8\%\\
+SVM & 46.5\% & 62.5\%\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+GIST improves test accuracy by about 16 percentage points for each classifier.
+The GIST SVM, selected on validation data, obtains 62.5\% accuracy and
+0.625 macro F1. Its per-class F1 is higher for automobile (0.748) and
+truck (0.745) than for cat (0.422) and bird (0.494). The notebooks show examples
+of correct and incorrect predictions. GIST summarizes texture and spatial
+structure, but this grayscale representation loses colour and fine detail.
+These results compare the complete feature pipelines, including their different
+dimensions and preprocessing.
+
+\section{Conclusions}
+Regularized polynomial features improve concrete strength prediction. For
+superconductivity, more training data reduces error, while the tested PCA models
+do not improve on linear regression. For CIFAR-10, GIST gives higher accuracy
+than pixels reduced by PCA, and SVM performs best among the tested classifiers.
+
+\end{document}
