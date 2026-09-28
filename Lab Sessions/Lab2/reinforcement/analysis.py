@@ -24,38 +24,44 @@ def question2():
     answerNoise = 0.01
     return answerDiscount, answerNoise
 
+# 1. Prefer the close exit (+1), risking the cliff (-10)
 def question3a():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 0.2 # The model gives much more value to the immediate cells, as the forward rewards lose 80% of its value with each step. This way, it prefers to stay on the first end besides having a more valuable one 2 steps aside.  
+    answerNoise = 0.001 # Having a small noise allows the model to go through a more risky path, having a fewer probability of stepping into the cliff with an error. 
+    answerLivingReward = -0.2 # Having a negative living reward makes the model try the shortest paths in order to achieve the objective. This is due to the decrease of it's reward with each step, which promotes arriveng earlier. 
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
+# 2. Prefer the close exit (+1), but avoiding the cliff (-10)
 def question3b():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 0.2
+    answerNoise = 0.1
+    answerLivingReward = 0.1
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
+# 3. Prefer the distant exit (+10), risking the cliff (-10)
 def question3c():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 0.95
+    answerNoise = 0.001
+    answerLivingReward = -0.2
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
+# 4. Prefer the distant exit (+10), avoiding the cliff (-10)
 def question3d():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 0.95           # High discount factor to make the agent "ambitious" and value more future rewards
+    answerNoise = 0.1               # Low noise to make the agent more confident to cross the bridge
+    answerLivingReward = 0.2        # Slightly positive living reward to encourage the agent to continue moving
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
+# 5. Avoid both exits and the cliff (so an episode should never terminate)
 def question3e():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 0.01           # Very low discount factor so the agent values inmediate rewards versus future ones
+    answerNoise = 0.2               # Standard value for noise
+    answerLivingReward = -0.2       # Negative living reward to make the agent prefer to stay alive and avoid exits
+                                    # and the cliff (better to keep moving and getting "free" rewards than to take risk)
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
