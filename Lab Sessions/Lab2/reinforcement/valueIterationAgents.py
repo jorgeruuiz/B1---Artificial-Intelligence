@@ -47,14 +47,14 @@ class ValueIterationAgent(ValueEstimationAgent):
 
     def runValueIteration(self):
         # Write value iteration code here
+        "*** YOUR CODE HERE ***"
         new_values = util.Counter()
         for i in range(self.iterations):
             for s in self.mdp.getStates():
-                if self.mdp.isTerminal(s):
-                    new_values[s] = 0
-                else:
-                    new_values[s] = max([self.computeQValueFromValues(s, a) for a in self.mdp.getPossibleActions(s)])
-            self.values = new_values.copy()
+                a_star = self.getAction(s)
+                new_values[s] = self.getQValue(s,a_star)
+            self.values = new_values
+                
 
     def getValue(self, state):
         """
@@ -68,11 +68,15 @@ class ValueIterationAgent(ValueEstimationAgent):
           Compute the Q-value of action in state from the
           value function stored in self.values.
         """
+        "*** YOUR CODE HERE ***"
         sum = 0.0
         if not self.mdp.isTerminal(state):
-            for next_state, p in self.mdp.getTransitionStatesAndProbs(state, action):
-                sum += p * (self.mdp.getReward(state, action, next_state) + self.discount * self.values[next_state])
+            for next_s, p in self.mdp.getTransitionStatesAndProbs(state, action):
+                sum += p * (self.mdp.getReward(state,action,next_s) + self.discount * self.values[next_s])
+            
         return sum
+
+
 
     def computeActionFromValues(self, state):
         """
@@ -83,16 +87,19 @@ class ValueIterationAgent(ValueEstimationAgent):
           there are no legal actions, which is the case at the
           terminal state, you should return None.
         """
+        "*** YOUR CODE HERE ***"
         if self.mdp.isTerminal(state):
             return None
-        q_values = util.Counter()
+        qvalues = util.Counter()
         a_star = self.mdp.getPossibleActions(state)[0]
         for action in self.mdp.getPossibleActions(state):
-            q_values[action] = self.getQValue(state, action)
-            if q_values[action] > q_values[a_star]:
+            qvalues[action] = self.getQValue(state,action)
+            if qvalues[action] > qvalues[a_star]:
                 a_star = action
         return a_star
-    
+        
+
+
     def getPolicy(self, state):
         return self.computeActionFromValues(state)
 
