@@ -35,16 +35,16 @@ def question3a():
 # 2. Prefer the close exit (+1), but avoiding the cliff (-10)
 def question3b():
     answerDiscount = 0.2
-    answerNoise = 0.1
-    answerLivingReward = 0.1
+    answerNoise = 0.1 # Having higher noise makes it less probable to achieve crossing the cliff. 
+    answerLivingReward = 0.1 # The positive living reward makes choosing a longer path a better idea, as it'll be rewarded as long as it keeps alive. 
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
 # 3. Prefer the distant exit (+10), risking the cliff (-10)
 def question3c():
-    answerDiscount = 0.95
-    answerNoise = 0.001
-    answerLivingReward = -0.2
+    answerDiscount = 0.95 # With a higher discount, we give more importance to the cells which are further, so in this case, it'll try to arrive to the most rewarding ending besides it being further. 
+    answerNoise = 0.001 # Allows the model to cross the cliff with a tiny probability of falling. 
+    answerLivingReward = -0.2 # Encourages to take the shortest path (cliff), as the model is penaliced for each step it takes. 
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
