@@ -1,0 +1,72 @@
+[
+  {
+    "epsilon": 0.0,
+    "learning_rate": 0.1,
+    "mean_success_rate": 0.0,
+    "best_success_rate": 0.0,
+    "trials_above_99_percent": 0
+  },
+  {
+    "epsilon": 0.0,
+    "learning_rate": 0.25,
+    "mean_success_rate": 0.0,
+    "best_success_rate": 0.0,
+    "trials_above_99_percent": 0
+  },
+  {
+    "epsilon": 0.0,
+    "learning_rate": 0.5,
+    "mean_success_rate": 0.0,
+    "best_success_rate": 0.0,
+    "trials_above_99_percent": 0
+  },
+  {
+    "epsilon": 0.0,
+    "learning_rate": 0.6,
+    "mean_success_rate": 0.0,
+    "best_success_rate": 0.0,
+    "trials_above_99_percent": 0
+  },
+  {
+    "epsilon": 0.0,
+    "learning_rate": 0.7,
+    "mean_success_rate": 0.0,
+    "best_success_rate": 0.0,
+    "trials_above_99_percent": 0
+  },
+  {
+    "epsilon": 0.0,
+    "learning_rate": 0.8,
+    "mean_success_rate": 0.0,
+    "best_success_rate": 0.0,
+    "trials_above_99_percent": 0
+  },
+  {
+    "epsilon": 0.0,
+    "learning_rate": 0.9,
+    "mean_success_rate": 0.0,
+    "best_success_rate": 0.0,
+    "trials_above_99_percent": 0
+  },
+  {
+    "epsilon": 0.0,
+    "learning_rate": 1.0,
+    "mean_success_rate": 0.0,
+    "best_success_rate": 0.0,
+    "trials_above_99_percent": 0
+  },
+  {
+    "epsilon": 0.05,
+    "learning_rate": 0.1,
+    "mean_success_rate": 0.0,
+    "best_success_rate": 0.0,
+    "trials_above_99_percent": 0
+  },
+  {
+    "epsilon": 0.05,
+    "learning_rate": 0.25,
+    "mean_success_rate": 0.0,
+    "best_success_rate": 0.0,
+    "trials_above_99_percent": 0
+  }
+]
