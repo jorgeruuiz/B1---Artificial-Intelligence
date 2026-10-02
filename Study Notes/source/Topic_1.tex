@@ -1,0 +1,342 @@
+\documentclass[11pt]{article}
+\newcommand{\shorttitle}{Topic 1: Shallow and Bayesian learning}
+\input{notes_style.tex}
+\hypersetup{pdftitle={Topic 1 - Learning Fundamentals, Shallow and Bayesian Learning}}
+\begin{document}
+\cover{1}{Learning fundamentals, shallow methods and Bayesian learning}{Set up a sound learning experiment; derive regression and classification objectives; explain regularization, metrics, kernels and ensembles; calculate Bayesian linear and Gaussian-process predictions with uncertainty.}
+\tableofcontents\clearpage
+\newsection{What is learned, and from which kind of data?}
+\sources{1.1. Fundamentals, pp. 4--30.}
+A learning system improves a performance measure on a task through experience. Define all three before choosing an algorithm. The output determines whether the task is regression, classification, clustering or sequential decision making.
+\begin{longtable}{@{}P{.20\textwidth}P{.32\textwidth}P{.39\textwidth}@{}}
+\toprule Setting & Available information & Target\\\midrule\endhead
+Supervised regression & Input--output pairs $(x_i,y_i)$ & Predict a continuous quantity.\\
+Supervised classification & Inputs with class labels & Predict a category or its probability.\\
+Unsupervised learning & Inputs without target labels & Discover clusters or a useful representation.\\
+Reinforcement learning & States, actions and rewards from interaction & Learn a policy maximizing cumulative reward.\\\bottomrule
+\end{longtable}
+The slides emphasize that data quality, representativeness and useful features matter as much as model choice. More data from the same biased source need not improve performance on the target population. Correlation supports prediction; it does not, by itself, establish a causal effect.
+
+Every model has an inductive bias: assumptions about which patterns should generalize. A linear model assumes an affine relationship in the chosen features; k-NN assumes nearby inputs have related outputs. The No Free Lunch motivation is that no method wins across all possible problems without assumptions. It does not mean all methods perform equally on a particular structured dataset.
+\newsection{The learning experiment: avoid leakage}
+\sources{1.1. Fundamentals, pp. 31--32, 42--44; 1.2. Shallow Learning, pp. 21--25, 43.}
+\subsection{Parameters, hyperparameters and data splits}
+\textbf{Parameters} are learned from training data, such as regression weights. \textbf{Hyperparameters} control fitting or model structure, such as polynomial degree, regularization strength or the number of neighbours. Choose them using validation data or cross-validation.
+
+Training fits the model; validation selects among alternatives; a final test estimates performance after selection. The slide split of roughly 80/10/10 is an example, not a universal rule. The appropriate split must respect the prediction problem: repeated measurements from the same person, closely related images or future observations may need group or temporal separation.
+\begin{keyidea}{Fit preprocessing within the training split}
+Means, standard deviations, PCA directions and feature selection are learned quantities. Compute them from the training split, then apply those same transformations to validation and test observations. In cross-validation, repeat this fitting inside each fold.
+\end{keyidea}
+\subsection{K-fold cross-validation}
+Divide development data into $K$ folds. Train on $K-1$ folds and validate on the remaining fold, repeating until each fold has been held out. Average the validation metrics and inspect their variation. $K=n$ gives leave-one-out cross-validation. Keep the final test set outside hyperparameter selection.
+
+Standardizing feature $j$ means $z_{ij}=(x_{ij}-\mu_j)/s_j$. This matters for distance-based methods and penalties: multiplying one raw feature by 100 changes Euclidean distances and the size of the coefficient needed to represent the same effect. A fitted pipeline keeps transformation and prediction consistent.
+\subsection{A practical sequence from the methodology slides}
+Frame the objective and metric; obtain representative data; explore the development data; clean and transform it; compare sensible baselines; tune promising models; evaluate once on the held-out test; report limitations and failure cases. A large score without a defensible split is weak evidence of generalization.
+\newsection{Nearest neighbours: the first useful baseline}
+\sources{1.1. Fundamentals, pp. 33--39.}
+For a query $x_*$, find the training indices $N_k(x_*)$ with smallest distance. Classification uses majority voting:
+\[
+\hat y=\argmax_c\sum_{i\in N_k(x_*)}I(y_i=c).
+\]
+Regression instead averages neighbour outputs. The metric and feature scaling are part of the model. An odd $k$ reduces binary vote ties, but does not eliminate all multiclass ties.
+
+k-NN is a lazy, memory-based, nonparametric method: it retains training examples and performs much of its work at prediction time. Small $k$ gives very local, variable predictions; large $k$ smooths predictions and can blur class boundaries. Increasing dimension makes coverage harder, which helps explain the slides' poorer raw-pixel results on CIFAR than on simpler examples.
+\subsection{Worked example}
+For neighbour labels $[A,A,B]$, 3-NN predicts $A$. For neighbour responses $[2,4,9]$, unweighted 3-NN regression predicts $5$. If one feature measures metres and another millimetres, Euclidean distance may be dominated by the latter until scaling is addressed.
+\newsection{Linear regression: from a probability model to least squares}
+\sources{1.2. Shallow Learning, pp. 4--12.}
+\subsection{Model and dimensions}
+Let $X\in\R^{n\times q}$ have one row per observation and include an intercept column. For $w\in\R^q$,
+\[
+y=Xw+\varepsilon,\qquad \varepsilon\sim\mathcal N(0,\sigma^2I_n).
+\]
+The Gaussian likelihood is $p(y\mid X,w)=\mathcal N(y\mid Xw,\sigma^2I)$. For fixed noise variance, its negative log is
+\[
+-\log p(y\mid X,w)=\frac{1}{2\sigma^2}\|y-Xw\|_2^2+\text{constant}.
+\]
+Maximizing likelihood is therefore equivalent to minimizing squared residuals. A residual is observed output minus prediction; a probability model explains why this particular penalty is appropriate.
+\subsection{Derivation of the normal equations}
+For $J(w)=\tfrac12\|Xw-y\|^2$,
+\[
+\nabla J=X^T(Xw-y)=0\quad\Longrightarrow\quad X^TX\hat w=X^Ty.
+\]
+With full column rank,
+\[
+\hat w=(X^TX)^{-1}X^Ty.
+\]
+If columns are redundant, the inverse is unavailable and minimizers need not be unique. A numerical implementation should solve the system using a stable factorization rather than explicitly compute an inverse.
+\subsection{Worked regression}
+For inputs $0,1,2$ and outputs $1,2,2$, the sample means are $\bar x=1$, $\bar y=5/3$. The slope is
+\[
+\hat w_1=\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}{\sum_i(x_i-\bar x)^2}
+=\frac1{2},\qquad \hat w_0=\bar y-\hat w_1\bar x=\frac76.
+\]
+At $x_*=3$, prediction is $8/3$. The training predictions are $7/6,5/3,13/6$, so RSS is $1/6$. These calculations estimate the line; they do not yet establish reliable extrapolation beyond the input range.
+\subsection{Nonlinear inputs, linear parameters}
+Replace each row by a feature vector $\phi(x_i)^T$. A polynomial model
+\[
+f(x)=w_0+w_1x+\cdots+w_dx^d=w^T\phi(x)
+\]
+is nonlinear in $x$ but linear in $w$. Thus least squares still applies to the feature matrix $\Phi$. Increasing degree enlarges the family of possible curves; it can fit noise as well as signal.
+\newsection{Overfitting, ridge and sparse models}
+\sources{1.2. Shallow Learning, pp. 13--21.}
+\subsection{Why training error is insufficient}
+A flexible model can reduce training error while increasing error on new data. High variance means that small changes in the dataset can produce substantially different fits. Constraints trade some fitting flexibility for stability. More representative data, a smaller model, regularization and validation-based selection are the slide remedies.
+
+The bias--variance interpretation is useful for regression, but ``ML is unbiased'' is not a universal claim. Ordinary least-squares weights are unbiased under a correctly specified linear model with zero conditional-mean errors; maximum-likelihood estimators in general need not be unbiased in finite samples.
+\subsection{Ridge solution and the scaling convention}
+Use the objective
+\[
+J(w)=\|y-\Phi w\|^2+\lambda\|w\|^2.
+\]
+Differentiating gives
+\[
+\boxed{\hat w_{\mathrm{ridge}}=(\Phi^T\Phi+\lambda I)^{-1}\Phi^Ty}.
+\]
+For $\lambda>0$, the penalized system is invertible even if $\Phi$ is rank deficient. Larger $\lambda$ shrinks coefficients more strongly. If the loss is averaged over $n$ observations, the corresponding matrix term is $n\lambda I$; never mix conventions between an objective and its solution. The intercept is often excluded from the penalty.
+
+A Gaussian prior $w\sim\mathcal N(0,\tau^2I)$ with Gaussian noise yields the MAP objective above with $\lambda=\sigma^2/\tau^2$. A narrow prior permits smaller weights; noisy data receive less relative influence.
+\subsection{L1 regularization}
+Replacing $\|w\|_2^2$ with $\|w\|_1=\sum_j|w_j|$ gives the lasso. Its geometry can place solutions exactly on coordinate axes, giving zero coefficients and a sparse model. Ridge generally shrinks correlated coefficients rather than setting them exactly to zero. Both require sensible feature scaling and a validation-selected penalty.
+\newsection{Gradient methods and robust regression}
+\sources{1.2. Shallow Learning, pp. 26--39.}
+\subsection{Batch and stochastic gradients}
+For $J=\tfrac1{2n}\|Xw-y\|^2$,
+\[
+\nabla J=\frac1nX^T(Xw-y),\qquad w\leftarrow w-\eta\nabla J.
+\]
+The learning rate $\eta$ controls step size. A large rate can overshoot; a small rate can make progress slow. Batch GD uses all training samples for a step. SGD uses one sampled example; mini-batch SGD averages a smaller batch. An epoch is one pass over the training dataset.
+
+Shuffle training observations or sample batches appropriately. Stochastic gradients contain noise and can move differently around saddle points or local minima, but do not guarantee the global minimum of an arbitrary nonconvex objective. Momentum smooths the update direction; adaptive optimizers adjust scaling by coordinate. Neural-network notes develop these further.
+\subsection{Outliers motivate a different likelihood or loss}
+Squaring a residual gives large errors disproportionate influence. Gaussian noise leads to squared loss; Laplace noise leads to absolute loss. Huber combines them:
+\[
+\rho_\delta(r)=
+\begin{cases}
+\tfrac12r^2,&|r|\leq\delta,\\
+\delta(|r|-\tfrac12\delta),&|r|>\delta.
+\end{cases}
+\]
+The derivative is $r$ near zero and saturates at $\pm\delta$ outside. Huber stays smooth at the transition while reducing extreme-residual influence. RANSAC instead fits candidate models from subsets and identifies observations consistent with each candidate. Its success depends on an adequate inlier fraction, sampling and an inlier threshold.
+\newsection{Regression metrics: compare on the output scale}
+\sources{1.2. Shallow Learning, pp. 40--44.}
+For held-out residuals $r_i=y_i-\hat y_i$,
+\[
+\mathrm{MAE}=\frac1n\sum_i|r_i|,\quad
+\mathrm{MSE}=\frac1n\sum_ir_i^2,\quad
+\mathrm{RMSE}=\sqrt{\mathrm{MSE}}.
+\]
+MAE and RMSE share the response units; MSE has squared units. Median absolute error is less affected by a few large errors. Compare against a simple predictor fitted on training data, such as the training response mean.
+\[
+R^2=1-\frac{\sum_i(y_i-\hat y_i)^2}{\sum_i(y_i-\bar y)^2}.
+\]
+On a test set, $R^2$ can be negative: the model can perform worse than the constant benchmark implicit in that denominator. If all evaluation outputs are identical, the mathematical denominator is zero. High $R^2$ does not prove causation or quantify prediction uncertainty.
+\subsection{Worked metric example}
+For errors $(1,-1,4)$, MAE is $2$, MSE is $6$ and RMSE is $\sqrt6\approx2.449$. The outlying error of $4$ contributes $16$ of the total squared error $18$. Median absolute error is $1$.
+\newsection{Linear classification, logistic regression and softmax}
+\sources{1.2. Shallow Learning, pp. 45--59.}
+\subsection{A score is different from a probability}
+A linear score is $z=w^Tx+b$. A sign or threshold turns it into a class. A perceptron uses this threshold idea, but discontinuous activations are unsuitable for ordinary gradient-based differentiation.
+
+Logistic regression maps the score to a Bernoulli probability:
+\[
+p=P(Y=1\mid x)=\sigma(z)=\frac1{1+e^{-z}}.
+\]
+At threshold $0.5$, the decision boundary is $z=0$. Changing the threshold changes decisions without retraining the score function.
+\subsection{Bernoulli likelihood gives binary cross-entropy}
+\[
+p(y_i\mid x_i,w)=p_i^{y_i}(1-p_i)^{1-y_i},
+\]
+\[
+J(w)=-\frac1n\sum_i[y_i\log p_i+(1-y_i)\log(1-p_i)].
+\]
+For an intercept included in $X$, its gradient is $X^T(p-y)/n$. The Hessian is $X^T\operatorname{diag}(p_i(1-p_i))X/n$, which is positive semidefinite. The loss is convex, unlike a multilayer network's general training objective.
+\begin{careful}{Convex does not always mean one finite solution}
+The slides describe logistic loss as having a single minimum. Uniqueness needs additional conditions. Rank deficiency can create nonuniqueness; perfectly separable data can drive unregularized coefficients toward infinity without a finite minimizer. Regularization helps make fitting well posed.
+\end{careful}
+For a positive example, $p=0.9$ gives loss $0.105$, while $p=0.1$ gives $2.303$. Confident wrong predictions are penalized strongly.
+\subsection{Multiple classes}
+One-vs-rest fits one binary classifier per class. A joint softmax model instead uses scores $z_1,\ldots,z_C$:
+\[
+p_c=\frac{e^{z_c}}{\sum_je^{z_j}},\qquad \ell=-\log p_y.
+\]
+Subtracting the largest score before exponentiation leaves probabilities unchanged and improves numerical stability. With equal scores, every probability is $1/C$, giving loss $\log C$.
+\newsection{Classification metrics and the confusion matrix}
+\sources{1.2. Shallow Learning, pp. 60--67.}
+The slide convention is \textbf{rows = true class, columns = predicted class}. For a chosen positive class, count true positives (TP), false positives (FP), false negatives (FN) and true negatives (TN).
+\[
+\mathrm{accuracy}=\frac{TP+TN}{TP+TN+FP+FN},\quad
+\mathrm{precision}=\frac{TP}{TP+FP},\quad
+\mathrm{recall}=\frac{TP}{TP+FN}.
+\]
+Precision answers ``How many positive predictions were correct?'' Recall answers ``How many actual positives were found?''
+\[
+F_1=\frac{2PR}{P+R}=\frac{2TP}{2TP+FP+FN},\qquad
+F_\beta=\frac{(1+\beta^2)PR}{\beta^2P+R}.
+\]
+$\beta>1$ emphasizes recall; $\beta<1$ emphasizes precision. This corrects the verbal weighting description on p. 65. Undefined denominators need an explicit reporting convention.
+
+Lowering the positive threshold cannot reduce the number of predicted positives, so recall cannot decrease on a fixed dataset. Precision often falls, but need not change monotonically; the slide trade-off wording is an intuition rather than a universal law.
+\subsection{Worked slide confusion matrix}
+The slides' counts correspond to
+\[
+M=\begin{bmatrix}4&0&0\\0&6&0\\0&3&1\end{bmatrix}.
+\]
+There are 14 observations and 11 correct predictions, so ordinary multiclass accuracy is $11/14\approx0.786$. Per-class precision is $(1,2/3,1)$; recall is $(1,1,1/4)$. Macro precision is $8/9\approx0.889$, and macro recall is $0.75$.
+
+For class 2, $TP=6$, $FP=3$, $FN=0$, $TN=5$. Its one-vs-rest accuracy is $11/14$. Averaging one-vs-rest accuracies over classes gives $6/7\approx0.857$ here, but that is \emph{not} ordinary multiclass accuracy. Macro averages give each class equal weight; weighted averages use class support; micro metrics pool counts.
+\newsection{PCA and clustering}
+\sources{1.2. Shallow Learning, pp. 68--71.}
+\subsection{Principal-component analysis}
+PCA projects inputs onto directions of largest variance. Center the training matrix $X_c$ and compute $X_c=USV^T$. With rows as observations, the columns of $V$ are directions in feature space; the first $r$ directions give scores $Z=X_cV_{[:,1:r]}$.
+
+The slide's use of $U$ depends on its matrix orientation. Always check whether samples are rows or columns before choosing the component vectors. PCA is unsupervised: large input variance need not be relevant to a prediction target. Fit it on training data only, and consider scaling when feature units differ.
+\subsection{K-means}
+Choose $K$ initial centroids; assign each point to the nearest centroid; replace each centroid by the mean of its assigned points; repeat. This alternates reductions of
+\[
+\sum_{i=1}^n\|x_i-\mu_{c_i}\|^2.
+\]
+It finds a local solution sensitive to initialization and scaling. Its geometry favors compact, roughly spherical clusters. Gaussian mixture models with EM allow a probabilistic alternative and more flexible covariance structure. The slides mention X-means as a way to explore the number of clusters; no derivation is supplied.
+\newsection{Support vector machines and the kernel trick}
+\sources{1.2. Shallow Learning, pp. 72--80.}
+\subsection{Maximum margin}
+For labels $y_i\in\{-1,+1\}$, a hard-margin SVM solves
+\[
+\min_{w,b}\frac12\|w\|^2\quad\text{subject to}\quad
+y_i(w^Tx_i+b)\geq1.
+\]
+The gap between support hyperplanes is $2/\|w\|$. Minimizing the norm maximizes this margin under the constraints. Only some training points, the support vectors, determine the boundary.
+
+For overlapping classes, use a soft margin:
+\[
+\min_{w,b}\frac12\|w\|^2+C\sum_i\max(0,1-y_i(w^Tx_i+b)).
+\]
+The second term is hinge loss. Larger $C$ penalizes margin violations more strongly, giving \emph{less} relative regularization. This is the reverse direction from a larger ridge $\lambda$.
+\subsection{Implicit feature spaces}
+Instead of constructing every feature $\phi(x)$, compute an inner product
+\[
+k(x,x')=\phi(x)^T\phi(x').
+\]
+Then prediction has the form $f(x)=\sum_i\alpha_i y_i k(x_i,x)+b$. The dual depends on kernel values, so feature dimension can be very large or infinite without explicitly representing each feature.
+
+Examples in the slides are linear $x^Tx'$, polynomial $(x^Tx'+c)^d$, and RBF $\exp(-\gamma\|x-x'\|^2)$. A larger RBF $\gamma$ means a shorter influence range and more local variation. Valid covariance or inner-product kernels require positive-semidefinite Gram matrices; not every arbitrary similarity function qualifies.
+\newsection{Trees, bagging and boosting}
+\sources{1.2. Shallow Learning, pp. 81--84.}
+A tree recursively splits feature space and predicts within leaves. For classification, a split can reduce entropy or Gini impurity; for regression, it can reduce squared error. Very deep trees can memorize training details.
+
+\textbf{Bagging} trains models on bootstrap resamples, sampled with replacement, and averages or votes. Random forests add random feature subsets when considering splits, reducing correlation among trees. The slides' reference to selecting classes is not a required part of standard random-forest construction.
+
+\textbf{Boosting} builds models sequentially. AdaBoost increases the relative influence of previously misclassified examples; gradient boosting fits a new learner to a negative loss gradient, which is a residual for squared loss, then adds a scaled contribution. Ensemble gains depend on the quality and diversity of errors; they are not guaranteed just by collecting many models.
+\newsection{Bayesian learning: retain uncertainty in parameters}
+\sources{1.3. Bayesian Learning, pp. 4--14.}
+ML returns a likelihood-maximizing parameter vector. MAP returns a posterior-maximizing vector. Bayesian inference retains the entire posterior and predicts by averaging over plausible parameter values:
+\[
+p(y_*\mid x_*,D)=\int p(y_*\mid x_*,w)p(w\mid D)\,dw.
+\]
+The diagnostic example on p. 4 illustrates why a highly confident prediction from very little data is not enough. Model uncertainty should reflect how much relevant information is available. A posterior is still conditional on the assumed model and prior; it cannot automatically repair unrepresentative data.
+\subsection{Gaussian prior and Gaussian linear likelihood}
+For $y\mid w\sim\mathcal N(\Phi w,\sigma^2I)$ and $w\sim\mathcal N(m_0,S_0)$,
+\begin{align*}
+S_n^{-1}&=S_0^{-1}+\sigma^{-2}\Phi^T\Phi,\\
+m_n&=S_n(S_0^{-1}m_0+\sigma^{-2}\Phi^Ty),\\
+w\mid D&\sim\mathcal N(m_n,S_n).
+\end{align*}
+Prior precision plus data precision gives posterior precision. With $m_0=0$ and $S_0=\tau^2I$, $m_n$ equals the ridge estimate with $\lambda=\sigma^2/\tau^2$. A Gaussian posterior's mean and mode agree, but keeping its covariance adds information beyond MAP.
+\subsection{Predictive uncertainty}
+For test features $\phi_*$,
+\[
+y_*\mid D\sim\mathcal N(\phi_*^Tm_n,\ \sigma^2+\phi_*^TS_n\phi_*).
+\]
+The first variance term is observation noise; the second is uncertainty in the latent prediction. If predicting the noiseless function value, omit $\sigma^2$. More relevant data can reduce parameter uncertainty without removing irreducible observation noise.
+\subsection{Worked scalar posterior}
+Suppose $y_i=w+\varepsilon_i$, prior $w\sim\mathcal N(0,1)$, noise variance $1$, and observations $1,2$. Posterior precision is $1+2=3$, so
+\[
+w\mid D\sim\mathcal N(1,1/3).
+\]
+The sample mean is $1.5$, but the prior pulls the posterior mean to $1$. A future noisy observation has mean $1$ and variance $1+1/3=4/3$. The latent mean has variance only $1/3$.
+\newsection{From basis functions to Gaussian processes}
+\sources{1.3. Bayesian Learning, pp. 15--36.}
+The slides explore polynomial, Fourier, bell-shaped, Heaviside and exponential basis functions. Each defines what shapes can be represented. A Gaussian weight prior induces a Gaussian distribution over function values:
+\[
+f(x)=\phi(x)^Tw,\quad
+m(x)=\phi(x)^Tm_0,\quad
+k(x,x')=\phi(x)^TS_0\phi(x').
+\]
+This is the bridge from weight space to function space. A Gaussian process is a collection of random variables such that any finite collection has a joint Gaussian distribution:
+\[
+f\sim\mathcal{GP}(m,k).
+\]
+The mean specifies a baseline and the covariance kernel specifies how function values vary together. A GP is nonparametric in the sense that its effective representation and computation grow with data; it still has kernel hyperparameters.
+\subsection{GP regression is Gaussian conditioning}
+Let $K_{ij}=k(x_i,x_j)$, $k_*=[k(x_1,x_*),\ldots,k(x_n,x_*)]^T$, and $C=K+\sigma_n^2I$. For a fixed mean function,
+\begin{align*}
+\mu_*&=m(x_*)+k_*^TC^{-1}(y-m(X)),\\
+v_*&=k(x_*,x_*)-k_*^TC^{-1}k_*.
+\end{align*}
+These are latent-function mean and variance. A future independent noisy observation has variance $v_*+\sigma_n^2$. The minus sign reflects the information gained from conditioning. Far from data, with a local kernel, the posterior tends back toward its prior mean and variance.
+\subsection{Worked one-observation GP}
+Take zero mean, $k(x,x)=1$, noise variance $0.25$, one observation $y_1=2$, and test-to-training covariance $k(x_*,x_1)=0.5$. Then
+\[
+\mu_*=\frac{0.5}{1.25}(2)=0.8,\qquad
+v_*=1-\frac{0.5^2}{1.25}=0.8.
+\]
+Noisy predictive variance is $1.05$. At the training input, the latent mean is $1.6$ rather than exactly $2$, because the observation is noisy.
+\newsection{Kernel choices and hyperparameter learning}
+\sources{1.3. Bayesian Learning, pp. 37--56.}
+\subsection{Match covariance assumptions to the function}
+With distance $r=\|x-x'\|$, common choices are
+\begin{align*}
+k_{\mathrm{RBF}}(r)&=\sigma_f^2\exp(-r^2/(2\ell^2)),\\
+k_{3/2}(r)&=\sigma_f^2(1+\sqrt3r/\ell)e^{-\sqrt3r/\ell},\\
+k_{5/2}(r)&=\sigma_f^2(1+\sqrt5r/\ell+5r^2/(3\ell^2))e^{-\sqrt5r/\ell}.
+\end{align*}
+RBF implies very smooth functions; Mat\'ern kernels permit rougher behavior. Linear kernels represent linear variation; periodic kernels encode repeating structure, for example $\sigma_f^2\exp[-2\sin^2(\pi r/p)/\ell^2]$. The slides also include a neural-network kernel and combinations.
+
+Scale, add or multiply valid kernels to construct richer assumptions. A sum can model a trend plus a periodic component. Kernel composition still needs interpretation; flexibility alone does not justify a choice.
+\subsection{Length scale, amplitude, noise and ARD}
+$\ell$ controls how quickly correlations decay; $\sigma_f^2$ controls signal amplitude; $\sigma_n^2$ controls independent observation noise. Automatic relevance determination uses separate $\ell_j$ per dimension:
+\[
+k(x,x')=\sigma_f^2\exp\!\left[-\frac12\sum_j\frac{(x_j-x'_j)^2}{\ell_j^2}\right].
+\]
+A very large $\ell_j$ makes the kernel relatively insensitive to coordinate $j$. This can indicate low relevance under that fitted model; it is not the same operation as PCA, nor proof that the variable is causally irrelevant.
+\subsection{Marginal likelihood and stable prediction}
+For $r=y-m(X)$,
+\[
+\log p(y\mid X,\theta)=-\tfrac12r^TC^{-1}r-\tfrac12\log|C|-\tfrac n2\log(2\pi).
+\]
+The quadratic term measures data fit; the determinant term accounts for the volume of plausible outcomes. Optimize this marginal likelihood over kernel hyperparameters (empirical Bayes), or place a prior on them and integrate or sample. Fixing a fitted hyperparameter vector omits its posterior uncertainty.
+
+Use $C=LL^T$: solve $Lz=r$, then $L^T\alpha=z$. Compute $\mu_*=m_*+k_*^T\alpha$. Solve $Lv=k_*$ and compute latent variance $k_{**}-v^Tv$. Also, $\log|C|=2\sum_i\log L_{ii}$. This avoids explicit inverses. Exact dense factorization costs about $O(n^3)$ time and $O(n^2)$ storage, motivating the sparse and inducing-point methods named in the slides.
+
+Non-Gaussian likelihoods, including classification or heavy-tailed robust regression, generally remove the closed-form Gaussian posterior. The slides list Laplace approximation, expectation propagation and MCMC as inference options. Deep GPs and deep kernels are introductory extensions here, not separate detailed lessons.
+\newsection{Revision questions and answers}
+\subsection{Questions}
+\begin{enumerate}
+\item Why is a polynomial model still a linear regression model?
+\item What does increasing ridge $\lambda$ do? What about SVM $C$?
+\item Why fit a scaler separately within each cross-validation training fold?
+\item With $TP=20$, $FP=5$, $FN=10$, what are precision, recall and $F_1$?
+\item Does convex logistic loss guarantee a unique finite unregularized optimum?
+\item Which SVD matrix contains PCA feature directions when samples are rows?
+\item What does a Bayesian predictive variance contain that latent-function variance does not?
+\item How does a large RBF length scale affect predictions?
+\item Why can GP prediction be computed by triangular solves?
+\item Does a kernel need an explicitly constructed finite feature map?
+\end{enumerate}
+\subsection{Answers}
+\begin{enumerate}
+\item It is linear in the unknown coefficients of its fixed basis functions.
+\item Ridge shrinks more. Larger SVM $C$ gives margin violations more weight, weakening relative regularization.
+\item Validation data must not influence fitted transformations.
+\item $P=20/25=0.8$, $R=20/30=2/3$, $F_1=40/55\approx0.727$.
+\item No; rank deficiency and separation are important exceptions.
+\item $V$ in $X_c=USV^T$.
+\item Independent noise variance for the future observation.
+\item Correlations persist over longer distances, favoring slower variation.
+\item Gaussian conditioning requires linear-system solutions; Cholesky provides them stably without forming an inverse.
+\item No. The kernel directly supplies inner products, even for infinite-dimensional representations.
+\end{enumerate}
+\newsection{Source guide}
+\texttt{1.1. Fundamentals.pdf}: learning settings, data, nearest neighbours and methodology. \texttt{1.2. Shallow Learning.pdf}: regression, regularization, optimization, classification, metrics, PCA, clustering, SVMs and ensembles. \texttt{1.3. Bayesian Learning.pdf}: Gaussian parameter posteriors, feature-space models, Gaussian processes, kernels, marginal likelihood and extensions. The numerical examples derive these ideas; the multiclass count example uses the teacher's matrix.
+\end{document}

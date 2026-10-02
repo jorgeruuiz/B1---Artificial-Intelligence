@@ -1,0 +1,533 @@
+Artificial Intelligence -
+Deep Learning fundamentals
+
+Master in Artificial Intelligence & Computational Engineering
+Luis Montesano
+Faculty
+
+ Luis Montesano - faculty - montesano@unizar.es
+
+Office hours in Google Meet or in person
+
+https://directorio.unizar.es/?#/tutoria?colectivo=PDI&codCentro=110
+
+M - 13.00-14.00h y de 1700 a 1900
+J - 1600-18.00h
+
+Please, isend me an email to book a slot 24h in advance
+to confirm (I am part time at Unizae,my week schedule changes,
+some weeks I may need to re-locate office hours) and specify if
+it's in person or online.
+In this part
+
+ Fundamentals of DL
+     Introduction & Shallow netes
+     Deep nets
+
+ Convolutional NN
+ Unsupervised
+ Generative models. GANs
+ Transformers
+ Recent DL challenges. Foundation models.
+Let's know each other a little bit better
+
+ Myself
+ You
+
+    What is your background
+    What do you expect from this course
+ Little survey about the fundamentals
+Today's class
+
+ What's deep learning?
+    Related topics
+    DL pipeline
+
+ Fundamentals of DL
+    Review basic concepts
+    NN and DNN
+ lity to learn without being
+9).
+
+euxrepePWr,ieifhnitacsetp'seErwdfoietrhmerapenslpceeeacortnntoiTn, g? (and what's not ...?)
+
+ce E. (Tom Mitchell, 1997)
+
+detection, search engines...
+
+                          ?
+
+act
+
+ent          ?
+
+-
+
+          ?
+
+     8
+ lity to learn without being
+9).
+
+euxrepePWr,ieifhnitacsetp'seErwdfoietrhmerapenslpceeeacortnntoiTn, g? (and what's not ...?)
+
+ce E. (Tom Mitchell, 1997)
+
+detection, search engines...automate tasks that usually people performs
+                                             (any non-machine learning example?)
+
+act      Rules       Classical  Answers
+ ent     Data     programming
+-
+         Answers  Machine       Rules
+           Data   Learning
+
+                       when that is achieved
+         by learning from data (examples)
+
+         using certain type of techniques
+
+      8           (with a lot of layers)
+ lity to learn without being
+9).
+
+euxrepePWr,ieifhnitacsetp'seErwdfoietrhmerapenslpceeeacortnntoiTn, g? (and what's not ...?)
+
+ce E. (Tom Mitchell, 1997)
+
+detection, search engines...
+
+act
+
+ent     ?
+
+-
+
+     8
+lity to learn without being
+9).
+
+euxrepePWr,ieifhnitacsetp'seErwdfoietrhmerapenslpceeeacortnntoiTn, g? (and what's not ...?)
+
+ce E. (Tom Mitchell, 1997)
+
+detection, search engines...         Model of our brain
+
+act                              quizz  Models with numerous
+
+ent                              ?  layers (depth of N layers)
+
+                                     Deep understanding of the
+
+-                                   problem/solution
+
+                                     Learning useful
+
+                                    representations from data
+
+                                    (hierarchical
+
+                              8     representations of the data)
+lity to learn without being
+9).
+
+euxrepePWr,ieifhnitacsetp'seErwdfoietrhmerapenslpceeeacortnntoiTn, g? (and what's not ...?)
+
+ce E. (Tom Mitchell, 1997)
+
+detection, search engines...      Model of our brain
+
+act                               Models with numerous
+
+                                                   layers (depth of N layers)
+
+ent
+
+                                  Deep understanding of the
+
+-                                problem/solution
+
+                                  Learning useful
+
+                                 representations from data
+
+                                 (hierarchical
+
+                              8  representations of the data)
+What can we do with deep learning?
+
+ Some examples ... (and a bit of "recent" history)
+What can we do with deep learning?
+
+                                              And what not ... :-)
+Some examples of successful DL applications ...
+
+ Voice recognition and         Not only visual
+  Natural Language Processing      tasks ...
+Some examples of successful DL applications ...
+
+ Object recognition                          Objects
+
+ AlexNet. Competed in the ImageNet Large Scale Visual Recognition
+  Challenge in 2012
+
+ ImageNet: over 10 million annotated images  http://image-net.org
+Some examples of successful DL applications ...
+
+ Face detection  People
+
+ CelebFaces Attributes Dataset (CelebA). Large-scale face
+  attributes dataset, more than 200K celebrity images
+
+                                             https://www.youtube.com/watch?v=IMPjPQSb9g8&feature=youtu.be
+
+From Facial Parts Responses to Face Detection: A Deep Learning Approach
+
+Shuo Yang Ping Luo Chen Change Loy Xiaoou Tang
+
+International Conference on Computer Vision (ICCV) 2015.
+Some examples of successful DL applications ...
+
+ Face recognition                                                                                                                                                                                                                                                                                                                                                                                                     People
+
+ 4 million images of 4,000 persons
+
+                                                                                                                                                                                                                                                                                                                                                                                                                      Human
+
+                                                                            E                                                                                                                                                                                                                                                                                                                                         performance!
+                                                                                                                                                                                                                                                                                                                                                  where  is a margin that is enforced between positive and
+                                                                            M                                                                                                                                                                                                                                                                     negative pairs. T is the set of all possible triplets in the
+
+...    DEEP ARCHITECTURE                    L2                              B  Triplet
+                                                                            E   Loss
+                                                                            D
+                                                                            D
+                                                                            I
+
+Batch                                                                       N                                                                                                                                                                                                                                                                     training set and has cardinality N .
+                                                                            G
+
+                                                                                                                                                                                                                                                                                                                                                  The loss that is being minimized is then L =
+Figure 2. FOiugtulinree o2f.thMe DoedepeFlascteraurcchtiutercetu. reO. Aurfrnonett-wenodrokf acsoinngsliesctosnvoofluatiobna-ptcoohlining--convolution filtering on the rectified input, followed by three
+YDlpoaaecrnaaelmilpvyeF-tTceaaorcsnipg,enuwme:cthCtaeellnrdaoeMyslmaeiiynonrerggreastntYahhdnaednnaGg9tw5Mda%opeafecrutpocollm'yACH-ecuNufornmoeNnmlaieocntfthoe-RedLlalleolonavcwyzaeealelratsdPon. deLCbrifooyfuollrolrLyWrmsc2oialnllnnfun.cosetCecrratmVeitnedPaflFlRaeiyaazte2caur0etrsei.1oVm4ne.a,rpFifwsaicpchareiotcbdiohuoncoe.
+dk  at  eachX lNayerh. kTfhe(nxetiai)ncludfes(mxoipre)kth22an  120 million
+          results in the face embedding. This is followed by the triplet loss                                                                                                                                                                                                                                                                                                                                                         i
+                                                                                                                                                                                                                                                                                                                                                                                                          kf (xai )   f (xni )k22 +  + .
+
+during training.                                                                                                                                                                                                                                                                                                                                  i
+
+very few parameters. These layers merely expand the input                      The goal of training is to maximize the probability of                                                                                                                                                                                                                                                                                 (2)
+
+into a set of simpNleelgoacatilvfeeatures.                                     the correct class (facGe eidn)e. raWtiengacahlielvpe othssisibblye mtriinpilmeitzs- would result in many
+
+   The suAbnscehqourent layers (L4,  L5 and L6) are instead            lo-     ing the cross-entrotrpiyplleotsss tfhoar teaacrhe treaaisniilnyg ssaamtipsfilee. dIf(ik.e. fulfill the constraint
+cally connected [13, 16], like a     convLEoAluRtNioINnGal layer they  ap-     iNs ethgeatiinvdeex of theintruEeql.a(b1e)l)f.oTr haegsievetnriipnlpeutts, wthoeuloldssnios:t contribute to the train-
+
+FFalocreiapiaeaNmsanldysseaiuStfagb:mfceeefiAhprtlhwretUtoaeinFceofnvrthfein,eigbsfoniDeauerdottnmrdifhoefakfeifEcn,te3rofimbdery.neyulTbtvnKaeteehotsaerdpelsvllaueo.doeTntncSirsindirayoiictglinnihtplvchsofelcteeoecenaa,raPdttkentiFibooLyisnfoatof,seooinecbticJttshresiraisevhon,mnReomwottthefelhsridecsenew.oegisPfxmghpieFhohniaaioicniitltzbtbhuriAsieaoiirnntsoelehnx;fcvstamhaChataevamennroaVetydiprdPpaotdlillCRnhiseePigatef,lau2anofrraeins0essntrrtca1ydis--etem5irvi.bneeGegtio.wd
+obbsLpeecgryyneoel=tennpcuittoapya(gmd,nSaapaGltatoiunionDngtdn-ig)np.ogktTfh. htethTheeephgtpibaerngrereriagrropaldaropmvoldiseaeairisentnnest[snitegsd2,sstre5satmdtr,ohhreuf2eiaetsns1hLctuii]onmmr.laomgtwriOouze.pisdergnnu.tdateoht.celcsoi.tdhttlnhvihoatvbeeTewseryertphieetncsaahsertertanegiatnnfcdmwrpodgaoalaedocnrlprtiaarovederkmAwnorwnebs.pptrieraitgepetanhdcIerendltkgteerydn.s--rcifcessaoeefcmco,cerrtuarieeosccncioatohgltnaenttlyiortkiiosbwsnuea
+otlbeeuocltdtuothsiattmhirlde-l
+Some examples of successful DL applications ...
+
+ Learn by watching how to play?! --> DRL  Behaviours
+
+Google's Deep Mind
+Some examples of successful DL applications ...
+
+ Self-driving car          Behaviours
+
+                   NVIDIA
+Healthcare
+
+ Diagnosis
+
+Ophthalmology (diabetic retinopathy): Deep CNNs on retinal fundus photos. Google's system (published in JAMA, 2016) matched specialists, and IDx-DR became the rst FDA-authorized
+autonomous diagnostic AI in 2018.
+Dermatology: Esteva et al. (Nature, 2017) trained a CNN to classify skin lesions at dermatologist level from photographs.
+Radiology: CheXNet (a DenseNet) for pneumonia on chest X-rays; Google's mammography model (Nature, 2020) for breast cancer screening; Viz.ai's FDA-cleared stroke (large-vessel
+occlusion) detection on CT.
+Pathology: CNNs on whole-slide histology for detecting lymph-node metastases (the CAMELYON challenge); Paige Prostate became an FDA-authorized cancer-detection tool. Newer work
+uses vision transformers and pathology foundation models.
+Cardiology: ECG deep learning -- Stanford's arrhythmia model and Mayo Clinic's ECG-AI, which infers things not visible to humans, like reduced ejection fraction or atrial brillation from a
+normal-rhythm ECG.
+
+if if
+Healthcare
+
+ Treatment development
+
+Protein structure -- AlphaFold (DeepMind): The landmark example. AlphaFold2 (2021) solved structure prediction using attention-based architecture (the Evoformer); AlphaFold3 (2024)
+extended this to protein­ligand and protein­nucleic-acid complexes. Related: RoseTTAFold and Meta's ESMFold (a protein language model).
+Antibiotic discovery: Stokes et al. (Cell, 2020) used a graph neural network to screen millions of molecules and identi ed halicin, a structurally novel antibiotic.
+Generative drug design: VAEs, GANs, and diffusion models for de novo molecule generation. Insilico Medicine used generative AI to design a brosis drug candidate that advanced into
+clinical trials.
+Genomics: DeepVariant (Google) for variant calling, SpliceAI for splice-site prediction, and Enformer for predicting gene expression from DNA sequence.
+
+if if
+Healthcare
+
+ Monitoring
+
+EHR-based risk prediction: Rajkomar et al. (npj Digital Medicine, 2018) applied deep learning to raw electronic health records to predict mortality, readmission, and length of stay.
+Sepsis early warning: Duke's Sepsis Watch and Johns Hopkins' TREWS, the latter validated in a large real-world deployment (Nature Medicine, 2022) showing faster treatment.
+Wearables: Apple Watch atrial- brillation detection uses deep learning on photoplethysmography (PPG) signals; similar approaches drive continuous glucose prediction and fall detection.
+Critical care: Models predicting hypotension or clinical deterioration from ICU vitals streams.
+Neurology: Deep learning on EEG for seizure detection and automated sleep staging from wearable signals.
+
+if
+Some examples of successful DL applications ...
+
+ DeepMind AI
+
+ Reduces Google Data Centre Cooling Bill by 40%
+
+ "Using a system of neural networks trained on different
+   operating scenarios and parameters within our data centres,
+   we created a more efficient and adaptive framework to
+   understand data centre dynamics and optimize efficiency."
+
+                                                                       Google's Deep Mind
+Some examples of successful DL applications ...
+
+ Recommendation systems
+Some examples of successful DL applications ...
+
+ Science
+    Math!
+    Brain decoding!
+Some examples of successful DL applications ...
+
+ Business products
+    Coding
+    Marketing
+    Legal advice
+    Education
+ ield of study that gives computers the ability to learn without being
+explicitly programmed (Arthur Samuel 1959).
+
+AocmoeDmteapsuektpeTraLpnerdoagsrronamminegispseaarnifdodrtmoBaleingacreDn mfaroteamaseuxrepePr,ieifnitcsepeE rwfoitrhmraenspceecotntoT,
+
+as measured by P, improves with experience E. (Tom Mitchell, 1997)
+
+ uccessRsetolariteesd: StpoapmicsfiltteoriDngL, OCR, face detection, search engines...
+
+DaatteadmtienirnmgBs:i:Tghedafietald of study that aims to extract
+
+nformation and structure from raw data.
+
+Artificial IntDelaligtaensccei:etnhecetheory and development
+
+of computer systems able to perform tasks
+
+iosurmalapllyerrceeBqpuutirisoininng,eshpsuesmeIacnnhteirneltlciegolleiggnnecintiecoen,,  such as
+                                                                                          decision-
+
+making, and translation between languages.
+
+nowledge...Discovery, Pattern Recognition, ...
+
+                                                                                                     Big
+                                                                                                     Data
+
+                                                                                                                            8
+                              Definitions
+
+Deep Learning and Big Data  Machine Learning:
+                                                                    Field of study that gives computers the ability to learn without being
+                                                                      explicitly programmed (Arthur Samuel 1959).
+
+ Related topics to DL          A computer program is said to learn from experience E with respect to
+                                 some task T and some performance measure P, if its performance on T,
+                                 as measured by P, improves with experience E. (Tom Mitchell, 1997)
+
+                               Success stories: Spam filtering, OCR, face detection, search engines...
+
+ Big data: "data sets thatRealaretedsteormlas:rge or complex that
+
+  traditional  data    processing application software is  Data mining: The field of study that aims to extract
+                                             information and structure from raw data.
+
+  inadequate to deal with them" (Wikipedia)  Artificial Intelligence: the theory and development
+                              of computer systems able to perform tasks
+
+                              normally requiring human intelligence, such as
+
+  Data  science:  Scientific  field with the aim of extracting visual perception, speech recognition, decision-
+                                 making, and translation between languages.
+
+  knowledge from raw data(uKnsouwlaedllgye "Dbisciogvedrya, Ptaatte"r)n Recognition, ...
+
+ Business Intelligence: Set of techniques to extract                                                             Big                        8
+  information from business data, that will be used to
+  improve its performance.                                                                                       Data
+
+ Data mining: The exploration of raw data in the search
+  for patterns (usually in the context of databases).
+Data
+
+ Dec'16 report from IBM Marketing Cloud (among others ...) :
+    "90% of the data in the world created in the last two years"
+    "2.5 quintillion bytes* of data a day"
+    "Data growth rate will likely accelerate even more"
+
+ more and more sources, faster, etc ...
+
+ By 2020, about 2.3 petabytes / second, 1% AI
+ By 2026, about 4,7 petabytes (second, ???% AI
+
+ Many companies in the data management business                   * (1012 MB)
+
+      US million/billion/trillion/quart./quint. --> 106, 109, 1012, 1015, 1018
+
+      European million/billion/trillion/quart./quint. --> 106, 1012, 1018, 1024, 1030
+Machine Learning + Big Data
+
+                            +
+
+· Cons:
+    · Torture the numbers, and they'll confess to anything --
+      Gregg Easterbrook (and probably many others ... )
+    · So it's like having billions of monkeys typing. One of
+      them will write Shakespeare. -- Michael Jordan
+
+· Pros: New opportunities, challenges, and amazing results
+   and applications!!
+Deep Learning vs general ML pipeline
+
+                                                    Machine
+                                                    Learning
+Deep Learning vs general ML pipeline
+
+ Same methodology you saw in the previous seesions. Certain steps/
+  ideas get particularly important: data selection, avoid overfitting, ...
+
+1. Frame problem
+
+2. Get data                                      It may sound you just
+3. Explore data                                "throw" as much data as
+                                             you can ... but not just that!
+
+4. Prepare data
+
+5. Explore promising models                  expensive!
+
+6. Fine tune the best
+
+7. Present/analyze the solution and results
+ML pipeline & DL
+
+· Get/explore/prepare data
+   (labeled?), how to represent it?
+
+· Learn: organize the sample data
+   (training data): fit/learn a model
+
+· Classify: evaluate new data
+   with regard to the model learnt
+   (classify/recognize new content)
+How to get training data?
+
+Lots of strategies. Crowdsourcing
+is a common ingredient lately
+
+ ESP game. Luis Von Ahn and
+   Laura Dabbish 2004
+
+ LabelMe (MIT) - researchers and
+   volunteers Russell, Torralba,
+   Freeman, 2005
+
+ Birds-200-2011 - fans of certain
+   topic. Caltech-UCSD. Wah,
+   Branson, Welinder, Perona,
+   Belongie, 2011
+Is my dataset good?
+
+ Enough classes? Enough examples? Enough variability?
+   Good labels?
+How to label training data?
+
+ Depends on the application/problem
+
+                                            Contains a motorbike
+ML pipeline & DL
+
+· Get/explore/prepare data            features: VERY complicated
+                                    and important design decision!!
+(labeled?), how to represent it?
+
+· Learn: organize the sample data   ·
+
+(training data): fit/learn a model
+
+· Classify: evaluate new data
+  with regard to the model learnt
+  (classify/recognize new content)
+ML pipeline & DL
+
+· Get/explore/prepare data            features: VERY complicated
+                                    and important design decision!!
+(labeled?), how to represent it?
+
+· Learn: organize the sample data   ·
+
+(training data): fit/learn a model
+
+· Classify: evaluate new data
+  with regard to the model learnt
+  (classify/recognize new content)
+ML pipeline & DL pipeline
+
+                                                         ??
+
+·
+
+                                     20.5 90.1 2.5           Machine Learning
+
+ Traditional ML                      Features                 Classification
+                               Data                                                   Categories
+ML pipeline & DL pipeline
+
+                                                         ??
+
+·
+
+                                      20.5 90.1 2.5          Machine Learning
+
+ Traditional ML                       Features                Classification
+                               Data                                                   Categories
+
+ Deep Learning                        Features               Machine Learning
+                                Data
+                                                              Classification
+   we can also learn the                                                              Categories
+representations (features)
+Next                    (Key "take-home" messages)
+
+ What's deep learning?
+
+ Related topics (AI >= ML >= DL)
+
+ DL pipeline  (Data? 
+              Able to learn suitable representation )
+
+ Fundamentals of DL
+
+ Review basic concepts
+
+ NN and DNN
+Bibliography - Resources for some of the materials today
+
+ Ian Goodfellow, Yoshua Bengio, Aaron Courville. Deep Learning.
+   MIT
+   Press, 2016. http://www.deeplearningbook.org
+
+ Book: Unserstanding Deep Learning, Simon Prince, The MIT
+   Press, 2023
+
+ Check many videos & tutorials
+
+     Stanford classes on deep learning for Computer Vision (http://
+      cs231n.stanford.edu)
+
+     Ian Goodfellow, https://www.youtube.com/embed//vi7lACKOUao
+

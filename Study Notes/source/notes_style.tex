@@ -1,0 +1,50 @@
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=23mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,bm,graphicx,booktabs,longtable,array}
+\usepackage{xcolor,microtype,enumitem,fancyhdr,fancyvrb,titlesec,tikz}
+\usepackage[breakable]{tcolorbox}
+\usepackage{hyperref}
+\definecolor{navy}{HTML}{163653}
+\definecolor{teal}{HTML}{007F86}
+\definecolor{pale}{HTML}{EEF5F7}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal,pdfauthor={Study notes based on the supplied teacher slides}}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\sffamily\color{navy}Artificial Intelligence}
+\fancyhead[R]{\small\sffamily\color{navy}\shorttitle}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\titleformat{\section}{\Large\sffamily\bfseries\color{navy}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\sffamily\bfseries\color{teal}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\sffamily\bfseries\color{navy}}{\thesubsubsection}{0.6em}{}
+\setcounter{tocdepth}{2}\setcounter{secnumdepth}{2}
+\setlength{\parindent}{0pt}\setlength{\parskip}{6pt plus 1pt}
+\linespread{1.06}\setlist{itemsep=3pt,topsep=4pt,leftmargin=1.5em}
+\setlength{\emergencystretch}{3em}
+\newtcolorbox{keyidea}[1]{breakable,colback=pale,colframe=teal,boxrule=0.6pt,arc=1mm,title={#1},fonttitle=\sffamily\bfseries,coltitle=white,colbacktitle=teal}
+\newtcolorbox{careful}[1]{breakable,colback=white,colframe=navy,boxrule=0.6pt,arc=1mm,title={#1},fonttitle=\sffamily\bfseries,coltitle=navy,colbacktitle=pale}
+\newcommand{\sources}[1]{{\small\color{teal}\textit{Teacher slides: #1}}\par\nopagebreak[4]}
+\newcommand{\newsection}[1]{\par\begingroup\skip0=\pagegoal\advance\skip0 by-\pagetotal\ifdim\skip0<12\baselineskip\newpage\fi\endgroup\section{#1}}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\argmax}{\operatorname*{arg\,max}}
+\newcommand{\argmin}{\operatorname*{arg\,min}}
+\newcommand{\relu}{\operatorname{ReLU}}
+\newcommand{\codeinline}[1]{\texttt{\detokenize{#1}}}
+\DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small,samepage=true,frame=single,rulecolor=\color{teal},framesep=2.5mm}
+\newcommand{\cover}[3]{%
+\begin{titlepage}\vspace*{12mm}
+{\sffamily\color{teal}\large ARTIFICIAL INTELLIGENCE\par}\vspace{9mm}
+{\sffamily\bfseries\color{navy}\Huge TOPIC #1\par}\vspace{5mm}
+{\sffamily\color{navy}\LARGE #2\par}\vspace{11mm}
+{\large Explanatory study notes\par}
+{\large Theory, worked examples and revision questions\par}\vspace{12mm}
+\begin{keyidea}{What you should be able to do}#3\end{keyidea}
+\vfill
+Based on the teacher PDFs supplied in \texttt{Lecture Slides}. The notes explain and reorganize that material. Worked calculations are study examples derived from the slide concepts, unless explicitly identified as a slide exercise. Clarifications of ambiguous or incorrect expressions are marked in context. References use \textbf{PDF page numbers}, counted from 1, rather than printed slide numbers.
+\par\vspace{4mm}{\small English edition\enspace\textbullet\enspace 2 October 2026}
+\end{titlepage}\setcounter{page}{2}}

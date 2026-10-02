@@ -1,0 +1,857 @@
+Artificial Intelligence ­
+Deep Learning fundamentals
+
+  Master in Artificial Intelligence & Computational Engineering
+  Luis Montesano
+Today
+
+ What's a CNN?
+ Well-known CNN architectures
+ Transfer learning
+ Training diagnostics
+ Other tasks (detection, segmentation, regression, video)
+Computer vision
+Networks for images
+
+ Can you think of limitations or issues with fully-connected
+   networks?
+Networks for images
+
+ Can you think of limitations or issues with fully-connected
+   networks?
+
+1. Size
+
+        224x224 RGB image = 150,528 dimensions
+        Hidden layers generally larger than inputs
+        One hidden layer = 150,528x150,528 weights aprx 22.7 billion
+
+2. Nearby pixels statistically related
+
+        But could permute pixels and relearn and get same results with FC
+
+3. Should be stable under transformations
+
+        Don't want to re-learn appearance at different parts of image
+Networks for images
+
+ Can you think of desirable properties for image
+   processing?
+Networks for images
+
+ Can you think of desirable properties for image
+   processing?
+
+          Living room
+
+          Living room
+Networks for images
+
+ Can you think of desirable properties for image
+   processing?
+
+          Living room
+
+ Living room  Equivariance
+
+Invariance
+CNNs
+
+ Convolutional (deep) Neural Networks (CNN)
+
+NOT all LAYERS
+  are the same
+
+                                  Fei-Fei, Karpathy, Johnson. Convolutional Neural Networks for Visual Recognition (http://cs231n.stanford.edu)
+                Evan Shelhamer, Jeff Donahue, Jon Long, Yangqing Jia, and Ross Girshick. Deep Learning for Vision: a Hands-On Tutorial
+CNNs - Basic Layers
+
+ Input: raw pixel values. RGB image 32x32, volume [32x32x3]
+
+ Convolutional: compute output of neurons connected to local input
+   regions (each computes dot product between their weights and the
+   region). Larger volume [32x32x12].
+
+ RELU: element-wise activation function (e.g. thresholding at zero).
+   Volume unchanged ([32x32x12]).
+
+ Pooling: downsampling operation. e.g. reduce volume to [16x16x12].
+
+ Fully-connected: compute class scores. Each neuron in this layer will
+   be connected to all the numbers in the previous volume. Volume of
+   size [1x1x10].
+Convolutional layer
+
+ Look only at local image patches (at each level)
+ Share parameters across the image
+1D Convolution
+
+ Output is just a weighted sum of neigbour elements in a
+   vector
+
+ The parameter      is called a kernel, in this
+  case with size 3
+
+ We can then add a bias and an activation to make it a
+  layer
+Visual interpretation of kernel size 3 convolution
+
+ Slide the kernel over the vector and compute the
+   weighted sum at each position
+Visual interpretation of kernel size 3 convolution
+
+ Slide the kernel over the vector and compute the
+   weighted sum at each position
+
+ At the edges, either pad or diminish the number of
+   outputs
+Stride, kernel size and dilation
+
+ Stride = shift by k positions for each output
+    Decreases size of output relative to input
+
+ Kernel size = weight a different number of inputs for each output
+    Combine information from a larger area
+    But kernel size 5 uses 5 parameters
+
+ Dilated or atrous convolutions = intersperse kernel values with zeros
+    Combine information from a larger area
+    Fewer parameters
+Stride, kernel size and dilation
+
+PyTorch and Keras use dilation = 1 for no dilation, take into account in the lab.
+Output size
+
+     Output size =  (W - K + 2P) / S  + 1
+
+ W is the input size along one spatial dimension (width or height), e.g. 240 for a 240×240
+
+    image
+
+ K is the kernel (filter) size, e.g. 3 for a 3×3 kernel
+ P is the padding: how many zeros are added on each side of the input. That's why it
+
+    appears as 2P
+
+ S is the stride: how many positions the kernel moves between outputs
+ With dilation: replace K by the effective size D(K - 1) + 1. In PyTorch/Keras, D = 1 means
+
+    no dilation
+
+ Check with slide 16:
+    (a) 8 inputs, K = 3, S = 2, P = 1: 7/2 + 1 = 4 outputs
+    (c) K = 5, S = 1, P = 2: 8 outputs, so the size is kept ("same")
+    (d) K = 3, D = 2 gives an effective kernel of 5
+Questions
+
+· Kernel size?
+· Stride?
+· Dilation?
+· Zero padding / valid?
+Channels (or feature maps)
+
+ Loss of information (hopefully finding some interesting
+   feature)
+
+ We need multiple of them to combine them later
+
+ Apply several convolutions to compute multiple outputs
+   called channels or feature maps
+Receptive fields
+Receptive fields
+Receptive fields
+Receptive fields
+2D convolution
+
+ Weighted sum over a KxK region
+ Add bias and pass through an activation function
+Simple examples of useful handmade 2D
+convolutions
+Simple examples of useful handmade 2D
+convolutions
+
+                 What about channels?
+2D convolution for an RGB image
+How many parameters?
+
+ C input channels and a kernel of size KxK
+
+ C input channels, C' output channels and same kernel
+CNNs
+
+ Convolutional (deep) Neural Networks (CNN)
+
+NOT all LAYERS
+  are the same
+
+                                  Fei-Fei, Karpathy, Johnson. Convolutional Neural Networks for Visual Recognition (http://cs231n.stanford.edu)
+                Evan Shelhamer, Jeff Donahue, Jon Long, Yangqing Jia, and Ross Girshick. Deep Learning for Vision: a Hands-On Tutorial
+Downsampling and upsampling images
+
+ Downsampling
+    Stride (a)
+    Max pooling (b)
+    Mean pooling ©
+
+                Downsampling. Understanding Deep Learning, S. J. D. Prince, MIT Press.
+Downsampling and upsampling images
+
+ Upsampling
+    Duplicate (a)
+    Max unpooling (b)
+    Interpolation (c)
+    Transposed convolution
+
+                  Upsampling. Understanding Deep Learning, S. J. D. Prince, MIT Press.
+CNNs - pooling example
+
+                           ?
+                                                      ?
+
+                                                              Fei-Fei, Karpathy, Johnson. Convolutional Neural Networks for Visual Recognition (http://cs231n.stanford.edu)
+                                            Evan Shelhamer, Jeff Donahue, Jon Long, Yangqing Jia, and Ross Girshick. Deep Learning for Vision: a Hands-On Tutorial
+CNNs - pooling example
+
+                                                             Fei-Fei, Karpathy, Johnson. Convolutional Neural Networks for Visual Recognition (http://cs231n.stanford.edu)
+                                           Evan Shelhamer, Jeff Donahue, Jon Long, Yangqing Jia, and Ross Girshick. Deep Learning for Vision: a Hands-On Tutorial
+Adjusting the number of channels
+
+ 1x1 convolution to mix channels
+
+ Equivalent to running the same fully connected network at
+   each position
+CNNs
+
+ A bit of "history" about CNNs
+CNNs - Image Classification
+
+            CNNs basics: AlexNet (Beginning of the new CNN boom):
+       a layered model composed of convolution, subsampling, and further
+
+                     operations followed by a holistic representation.
+
+                                    Illustrated the
+
+· ImageNet: 15M annotated images    benefits of CNNs
+
+over 22,000 classes
+
+· Most Used ILSVRC subset of 1.2M images and
+
+1000 classes                        ImageNet Classification with Deep Convolutional Neural Networks
+· ReLU, data augmentation, dropout     Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton. NIPS 2012
+CNNs - Image Classification
+
+            CNNs basics: AlexNet (Beginning of the new CNN boom):
+       a layered model composed of convolution, subsampling, and further
+
+                     operations followed by a holistic representation.
+
+· ImageNet: 15M annotated images
+
+over 22,000 classes
+
+· Most Used ILSVRC subset of 1.2M images and
+
+1000 classes                        ImageNet Classification with Deep Convolutional Neural Networks
+· ReLU, data augmentation, dropout     Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton. NIPS 2012
+CNNs
+
+CNNs basics: DeConvNet
+
+                                                      better understanding:
+                                                      earlier vs later layers
+· Similar architecture to AlexNet
+· smaller filters and stride
+· Deconvolutional Network - visualization
+
+Visualizing and Understanding Convolutional Neural Networks  http://people.csail.mit.edu/torralba/research/drawCNN/drawNet.html
+Matthew Zeiler and Rob Fergus. 2013
+  CNNs
+
+   CNNs basics: DeConvNet
+
+Visualizing and Understanding Convolutional Neural Networks
+Matthew Zeiler and Rob Fergus. 2013
+  CNNs
+
+   CNNs basics: DeConvNet
+
+Visualizing and Understanding Convolutional Neural Networks
+Matthew Zeiler and Rob Fergus. 2013
+  CNNs
+
+   CNNs basics: DeConvNet
+
+        top 9 activations for a few feature maps
+        (projection to pixel space using DeConv
+        and actual image patches)
+
+Visualizing and Understanding Convolutional Neural Networks
+Matthew Zeiler and Rob Fergus. 2013
+CNNs - Image classification
+
+ Deeper classification: VGG - very deep ConvNets
+    Smaller filters - less params (per receptive field)
+    more depth! --> always good (?)
+    Consecutive conv. layers (smaller filters).
+    Compare to AlexNet 5 conv. layers
+
+Very Deep Convolutional Networks for Large-Scale Image Recognition. K. Simonyan, A. Zisserman. 2014  slide from R. Zemel. DLSS. 2017
+Deep Face Recognition: O. M. Parkhi, A. Vedaldi, A. Zisserman. BMVC. 2015
+CNNs - Image classification
+
+ Deeper classification: VGG - very deep ConvNets
+    Smaller filters - less params (per receptive field)
+    more depth! --> always good (?)
+    Consecutive conv. layers (smaller filters).
+    Compare to AlexNet 5 conv. layers
+
+                                How deep?
+
+Very Deep Convolutional Networks for Large-Scale Image Recognition. K. Simonyan, A. Zisserman. 2014  slide from R. Zemel. DLSS. 2017
+Deep Face Recognition: O. M. Parkhi, A. Vedaldi, A. Zisserman. BMVC. 2015
+Image classification (deeper)
+
+                                                                                                                                                            slide from R. Zemel. DLSS. 2017
+Image classification (deeper)
+
+Are they just deeper versions of the
+  same?
+
+                                      slide from R. Zemel. DLSS. 2017
+Deeper: How does memory get affected?
+
+                                                                                  Very Deep Convolutional Networks for Large-Scale Image Recognition.
+                                                                                                                                      K. Simonyan, A. Zisserman. 2014
+Deeper: How does memory get affected?
+
+                                                                                  Very Deep Convolutional Networks for Large-Scale Image Recognition.
+                                                                                                                                      K. Simonyan, A. Zisserman. 2014
+Deeper: How does memory get affected?
+
+slide from                                                  What is more relevant for
+Fei-Fei Li & Justin Johnson & Serena Yeung                        batch size design
+http://cs231n.stanford.edu                                             decisions?
+
+                                            Very Deep Convolutional Networks for Large-Scale Image Recognition.
+                                                                                               K. Simonyan, A. Zisserman. 2014
+Image classification (deeper)
+
+  Not only more layers! it's getting hard(er) to train ...
+
+                                                                          Vanishing gradients!
+
+ImageNet Classification with Deep Convolutional Neural Networks
+Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton. NIPS 2012
+
+                                                                                                                                                                           slide from R. Zemel. DLSS. 2017
+Some reference modules for CNN architectures ...
+
+ to train better: GoogLeNet, ResNet, DenseNet, ...
+
+                                                                 Inception                                  No FC
+                                                                 module
+
+          Many "modules"
+          have been proposed
+
+ImageNet Classification with Deep Convolutional Neural Networks                 Going Deeper With Convolutions.
+Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton. NIPS 2012                  C.Szegedy, at al. CVPR 2015.
+
+Residual  Vanishing                                                                      Dense
+module    gradients                                                                      module
+
+                                                                  All previous
+                                                                 feature maps
+
+                                                                   combined
+
+Deep residual learning for image recognition.                    Densely Connected Convolutional Networks.
+He, Kaiming, et al. CVPR 2016                                    Huang, G., et al. CVPR 2017.
+Efficient CNNs
+
+ MobileNet (Howard et al., 2017)
+    Replaces each standard convolution with a depthwise separable convolution.
+    First, one K×K kernel filters each channel separately. Then a 1×1 convolution
+
+        mixes the channels
+
+    Used on phones and embedded devices.
+ EfficientNet (Tan & Le, ICML 2019)
+
+    Efficient way to make a network bigger: deeper, wider (more channels) or
+
+        higher input resolution.
+
+    Scale all three together in fixed proportions ("compound scaling") with better
+
+        performance than much larger earlier models.
+CNNs in the transformer era
+
+ Vision Transformers: ViT (Dosovitskiy et al., ICLR 2021)
+
+    Treats the 16x16 image patches as words in a sentence, no
+
+      convolutions
+
+ ConvNeXt (Liu et al., CVPR 2022)
+
+    Implements ideas of transformers (larger kernels, better
+
+      training recipes and fewer normalization and activation
+      layers)
+
+    Showed that most of Transformer's advantage in ViT like
+
+      models came from training and design, not only from
+      attention
+A decade of ImageNet classification
+
+                    ImageNet top-1 error over time. Understanding Deep Learning, S. J. D. Prince, MIT Press.
+CNNs & Transfer Learning
+
+ CNNs are able to generalize well!
+    great features
+    fine-tuning
+
+ImageNet Classification with Deep Convolutional Neural Networks  deep features
+Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton. NIPS 2012
+Transfer Learning
+
+ What is it?
+ When would you use transfer learning?
+ Types of transfer learning?
+  Transfer Learning: features
+
+    E.g., features from AlexNet last layer: 4096 dims. vector
+
+                 How do we get these
+                          features?
+
+ImageNet Classification with Deep Convolutional Neural Networks
+Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton. NIPS 2012
+Transfer Learning: features
+
+ E.g., features from AlexNet last layer: 4096 dims. vector
+
+                                     20.5 90.1 2.5                         Machine Learning
+
+ Traditional ML                                                  Features  Classification
+                               Data                                                               Categories
+
+                 How do we use these
+                          features?
+
+ImageNet Classification with Deep Convolutional Neural Networks
+Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton. NIPS 2012
+  Transfer Learning: fine-tune
+
+     For example, fine-tune ImageNet AlexNet for non ImageNet classes
+     Basically, initialise weights to something more "interesting" than
+
+      random (careful also with hyperparameters!)
+
+ImageNet Classification with Deep Convolutional Neural Networks
+Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton. NIPS 2012
+Transfer Learning
+
+... when not enough resources to train from scratch
+
+original model     small                             medium
+(large dataset)    dataset                           dataset
+
+When to use
+each option?
+
+                                                     Images from http://cs231n.stanford.edu .
+                                                     Li, Johnson, Yeung
+Transfer Learning
+
+... when not enough resources to train from scratch
+
+original model     small                             medium
+(large dataset)    dataset                           dataset
+
+When to use
+each option?
+
+                   Features                          Fine-tuning
+
+                                                     Images from http://cs231n.stanford.edu .
+                                                     Li, Johnson, Yeung
+Transfer Learning: fine-tuning
+
+ not just that! very very common strategy:
+
+Object Detection                  Image captioning: CNN + RNN
+    (Fast R-CNN)
+
+                   Pre-trained
+                    models to
+                     initialize
+                  certain blocks
+
+                                  Images from http://cs231n.stanford.edu . Li, Johnson, Yeung
+Understanding the training process
+
+Initial sanity checks (after a few "toy" iterations)
+      Correct loss at chance
+      Increasing regularisation strength increases loss
+      Overfit a tiny training set (you can set regularisation
+
+strength to zero to better see this)
+Understanding the training process
+
+ Monitor the loss function
+Understanding the training process
+
+ Monitor the loss function
+
+                            Typical loss function.
+                            Batch size a little low? (noisy plot)
+
+                                    http://cs231n.stanford.edu Class notes
+Understanding the training process
+
+ Monitor training/validation accuracy
+Understanding the training process
+
+ Monitor training/validation accuracy
+
+                                                                                                  What's an
+                                                                                                    epoch?
+
+                                                                                                                                                               http://cs231n.stanford.edu Class notes
+Understanding the training process
+
+ Visualize first conv layer weights
+
+                                                  What's a good
+                                                        sign?
+Understanding the training process
+
+Additional tips:
+    Decay your learning rate during training
+    If you can afford it
+       Search for good hyperparameters with random
+         search (not grid search). From coarse to fine
+       Consider model ensembles (not in our labs)
+   Open/Interesting problems
+    related to deep learning?
+Perform more complex tasks
+ than image classification?
+Deep Learning && Regression
+
+ Linear regression: relationship between a scalar (y) and
+   one or more explanatory variables (x)
+
+yi=01+1xi1+2xi2+ ... +pxip+i = xTi+i, i=1, ... ,n
+
+"map" to a continuous output (regression)
+            vs
+
+"map" to a discrete output (classification)
+
+                                                                                                                                                                                                      Wikipedia:
+                                                                                                                                                              File:Linear least squares example2.png
+Deep Learning && Regression
+
+ Detection
+
+predict normalized b-box coordinates
+ p = (x1, y1, x2, y2)
+
+           Fast R-CNN. Ross Girshick. 2015
+
+Different versions of Region-CNN:
+
+ R-CNN ­ 2014 (CVPR)
+ Fast R-CNN ­ 2015 (ICCV)
+Detection: Faster R-CNN, learning where to look
+
+ Analyze the feature maps: Region - CNN
+
+The network also learns the proposals (RPN), with no external region
+search.
+
+                                                                          Analyze feature maps
+                                                                           (activations) to learn
+                                                                           where the objects are
+
+                                                                     Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks
+                                                                                         Shaoqing Ren, Kaiming He, Ross Girshick, and Jian Sun. NIPS 2015
+YOLO ­ single-shot detection
+
+ Network inspired by GoogLeNet, 448x448 input
+ 7×7 grid of locations
+ Predict class at each location
+ Predict 2 bounding boxes at each location
+
+    Five parameters ­ x, y, w, h, and confidence
+ Momentum, weight decay, dropout, and data augmentation
+ Non maximum suppression: Heuristic at the end to threshold and decide final
+
+    boxes
+
+                                                                                         Redmon et al., You Only Look Once, CVPR 2016
+Deep Learning && Regression
+
+ Regression of Pose - PoseNet
+    Train the network to output 3D position (x) and orientation
+      (q) (7 dims). Loss function:
+
+ Modify GoogLeNet:
+
+Deep Learning        Features  Classification
+
+               Data
+
+                     PoseNet: A Convolutional Network for Real-Time 6-DOF Camera Relocalization.
+                                            Alex Kendall, Matthew Grimes and Roberto Cipolla. ICCV 2015
+Deep Learning && Regression
+
+ Regression of Pose - PoseNet
+    Train the network to output 3D position (x) and orientation
+      (q) (7 dims). Loss function:
+
+ Modify GoogLeNet. Key change: replace softmax
+  classifiers with affine regressors (each final fully connected
+  layer now outputs a pose vector of 7-dims).
+
+Deep Learning        Features                     Classification
+                                                  Regression
+               Data                                               POSE
+                                                                  6DOF
+
+http://mi.eng.cam.ac.uk/projects/relocalisation/  PoseNet: A Convolutional Network for Real-Time 6-DOF Camera Relocalization.
+                                                                         Alex Kendall, Matthew Grimes and Roberto Cipolla. ICCV 2015
+More architectures ...
+
+            More accurate image understanding?
+  Deep Learning && pixel classification
+
+  Dense labeling/Segmentation - Fully Convolutional Net (FCN)
+
+Fully Convolutional Networks for Semantic Segmentation
+J. Long*, E. Shelhamer* and T. Darrell CVPR 2015 and PAMI 2016
+Deep Learning && pixel classification
+
+ Dense labeling/Segmentation - Encoder-Decoder
+
+                          http://mi.eng.cam.ac.uk/projects/segnet/
+
+                                                                                             SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation.
+                                                                                             Vijay Badrinarayanan, Alex Kendall and Roberto Cipolla. PAMI, 2017.
+Deep Learning && pixel classification
+
+ Dense labeling/Segmentation - Encoder-Decoder
+
+                          http://mi.eng.cam.ac.uk/projects/segnet/ How many cars are
+
+                                                                                                        there?
+
+                                                                                             SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation.
+                                                                                             Vijay Badrinarayanan, Alex Kendall and Roberto Cipolla. PAMI, 2017.
+Deep Learning && pixel classification
+
+ Detection + Instance Segmentation
+   Mask R-CNN - 2017
+
+                                                            (R-CNN + Semantic Segmentation)
+
+                                                                                                                                       Mask R-CNN.
+                                                                                                                                       He, K., Gkioxari, G., Dollár, P., & Girshick, R. ICCV 2017.
+More architectures ...
+
+ More details? Interaction? Time?
+ More "complex" input data
+Deep Learning && Video
+
+ Fuse multiple frame info
+ high-resolution center crop + low-resolution full image (reduced
+
+  input size, more efficient training)
+
+http://cs.stanford.edu/people/karpathy/deepvideo/  Large-scale Video Classification with Convolutional Neural Networks.
+                                                   Andrej Karpathy et al. CVPR 2014.
+Deep Learning && Video
+
+ Fuse multiple frame info. Many strategies
+
+                                                                                                                     Large-scale Video Classification with Convolutional Neural Networks.
+                                                                                                                     Andrej Karpathy et al. CVPR 2014.
+Deep Learning && Video
+
+ Fuse multiple frame info. Many strategies
+
+                                                                                                                     Large-scale Video Classification with Convolutional Neural Networks.
+                                                                                                                     Andrej Karpathy et al. CVPR 2014.
+Deep Learning && Video
+
+ Fuse multiple frame info. Many strategies
+
+                                                                                                                     Large-scale Video Classification with Convolutional Neural Networks.
+                                                                                                                     Andrej Karpathy et al. CVPR 2014.
+Deep Learning && Multi-Modal
+
+ Multi-modal input from images
+    Deep learning features: Pose-based CNN
+    Combine parts, pose and flow with CNNs (aggregates motion and
+      appearance information)
+
+                                                                                                        P-CNN: Pose-based CNN Features for Action Recognition
+                                                                                                               G. Chéron, I. Laptev and C. Schmid; in Proc. ICCV'15
+Deep Learning && Video
+
+              Do you see any problem with this way of treating
+                               sequential/video data?
+Deep Learning && Video
+
+              Do you see any problem with this way of treating
+                               sequential/video data?
+
+      Later in the course: RNN, TCN, Transformers, ...
+      (More modern-adequate architectures to deal with
+      sequential and multi-modal data)
+Summarizing: CNNs & Transfer Learning
+
+ CNNs are able to generalize well!                               In the next Lab
+    great features                                                you'll practice
+    fine-tuning                                                     some of this
+
+ImageNet Classification with Deep Convolutional Neural Networks  deep features
+Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton. NIPS 2012
+ Summarizing - More architectures ...
+
+  CNN - Not only image-classification
+
+regression
+
+                                                             classification per pixel
+
+             fusion of multiple
+                       "sources"
+Other applications 1/2
+
+· Industrial inspection (2D)
+   · Defects, cracks and scratches: classification, detection or segmentation
+   · Few defect examples, so transfer learning and anomaly detection are used
+
+· Sensor signals (1D convolution)
+   · Vibration or current signals  motor/bearing fault detection in real time
+   · The same operation as our 1D convolution slides
+   · Diagnosis using EEG (sleep, epilepsy), ECG
+
+· Medical imaging (3D)
+   · CT/MRI segmentation (U-Net)
+
+· Climate data (Liu et al., 2016)
+   · Detecting extreme weather events (cyclones, atmospheric rivers) in climate simulation
+
+         data
+Other applications 2/2
+
+ Simulation surrogates (2D/3D fields)  Solver (LBM) vs CNN prediction and error (Guo et al., KDD 2016)
+
+ Input: geometry on a grid. Output: steady flow field (velocity).
+
+ CNN encoder­decoder, same idea as SegNet but with regression per pixel.
+
+ 2 orders of magnitude faster than a GPU CFD solver (4 orders vs CPU).
+
+ Use: fast design exploration and optimization loops.
+
+ Materials: microstructure  properties (Yang et al., Comput. Mater. Sci. 2018)
+
+ Input: 3D microstructure image. Output: effective stiffness (regression).
+
+ Trained on finite-element simulations, then replaces them at inference time.
+
+ Key idea
+
+ Simulation data lives on grids, so convolutions apply directly.
+
+ Train once on simulations, then predict in milliseconds.
+Examples to understand CNNs
+
+ Params? feature map size?
+    How many params. does the 2nd conv. layer have? and the 5th?
+
+    Input of 240x240x3; Conv1 (48 kernels, 3x3) - Pooling (stride 2) -
+     Conv2 (48 kernels, 3x3) --> size of feature map after Conv2?
+Some demos to understand CNNs
+
+ karpathy : DEMO online, CNN
+
+ visualisation (places CNN)
+
+   http://people.csail.mit.edu/torralba/research/drawCNN/drawNet.html
+
+                                                                                                                          Visualizing and Understanding Convolutional Neural Networks
+                                                                                                                          Matthew Zeiler and Rob Fergus. 2013
+
+ https://poloclub.github.io/cnn-explainer/
+
+                                                                                                                         Wang et al., "CNN Explainer: Learning Convolutional Neural
+                                                                                                                         Networks with Interactive Visualization", IEEE TVCG (VIS
+                                                                                                                         2020)
+Lab 3: CNNs applied in Computer Vision
+
+ Understand a DNN implemented from scratch           Please check
+ Implement a toy CNN with Keras                      the prior-work
+ Fine-tune a well-known CNN architecture with Keras  task (prepare
+All this is applied to Image Classification
+                                                       your set up
+                                                        and data)
+
+ Optional tasks:
+
+ explore semantic segmentation model (with PyTorch)
+Lab 3: CNNs applied in Computer Vision
+
+ Frameworks
+    Tensorflow+Keras, Pytorch, ...
+
+ We will implement a model from scratch for classification
+ But then, we will use already existing models.
+
+    Retrain them with your dataset
+ TO-DO ...
+
+   Lab 3 - NEXT WEEK (Oct 6)
+
+   PLEASE have your computer ready with Tensorflow2+Keras (ideally with GPU
+     available) AND/OR we will use Google COLAB
+
+ASSIGNMENT BEFORE YOUR LAB:
+1. Pick 5 to 10 classes from one of these datasets (do not take
+
+   all images from each class if you don't have space)
+   · https://www.kaggle.com/kmader/food41/version/5#
+   · http://www.robots.ox.ac.uk/~vgg/data/pets/
+   · http://www.robots.ox.ac.uk/~vgg/data/flowers/
+   · any other dataset you have?
+2. Put them in folders like ---------------------------->
+
+3. Upload to Google Drive if you plan to use COLAB
+Bibliography - Resources for some of the materials today
+
+ Stanford classes on deep learning for Computer Vision
+
+   (http://cs231n.stanford.edu) and Deep Learning (https://cs230.stanford.edu/)
+
+ Ian Goodfellow, Yoshua Bengio, Aaron Courville, Deep Learning, MIT Press,
+
+   2016. http://www.deeplearningbook.org
+
+ Deep Learning Summer School Montreal: https://mila.quebec/en/cours/deep-
+
+   learning-summer-school-2017/
+
+ Understanding deep learning, Simon J.D. Prince, MIT Press,
+
+   https://udlbook.github.io/udlbook/
+
+    Many figures in this presentation come from the materials of this book
+

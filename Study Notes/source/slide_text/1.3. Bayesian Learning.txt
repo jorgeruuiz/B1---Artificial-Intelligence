@@ -1,0 +1,771 @@
+Artificial Intelligence
+(62651)
+
+Bayesian Machine Learning
+
+Rubén Martínez Cantín
+Dpto. Informática e Ingeniería de Sistemas.
+Content
+
+ · Bayesian learning
+ · Bayesian regression
+
+          · Bayesian linear regression
+          · Gaussian parametric regression
+ · Gaussian processes
+          · GPs for regression
+          · Kernels
+          · GPs beyond regression
+
+                                                                                                                                        2
+  Complementary bibliography
+
+ Carl Edward Rasmussen and Christopher K. I. Williams, Gaussian
+   Processes for Machine Learning The MIT Press, 2006. ISBN 0-262-
+   18253-X. http://www.gaussianprocess.org/gpml/
+
+ MacKay, D.J., 2003. Information theory, inference and learning
+   algorithms. Cambridge university press.
+   http://www.inference.org.uk/mackay/itila/book.html
+
+ https://distill.pub/2019/visual-exploration-gaussian-processes/
+
+ Online courses
+
+    Nando de Freitas, Machine Learning,
+       https://www.cs.ubc.ca/~nando/540-2013/lectures.html
+
+    Phillip Henning, Probabilistic Machine Learning,
+       https://uni-tuebingen.de/en/180804
+
+ Python resources
+
+    In the labs: GPy, GPyOpt , scikit-learn.
+    Gpyflow, PyMC3...
+
+                                                                                                                                               3
+Example: Medical Diagnostics
+
+ dAIbetes: an exciting new startup (not really)
+
+    claims to automatically diagnose diabetic retinopathy
+    accuracy 99% on their 4 train/test patients
+    engineer trained two deep learning systems to predict
+
+      probability y
+    given input fondus image x .
+
+ The engineer runs their system on your fondus
+  image x*
+
+ Which model f1, f2 would you want the
+  engineer to use for your diagnosis?
+
+    None of these! (`I don't know')
+
+    How do we say: `I don't know'?
+
+                                                                                                                                        4
+Bayesian learning
+
+p(h | d) =    p(d | h) p(h)
+
+             p(d | h) p(h)
+
+            hH
+
+Likelihood Posterior
+
+                      Prior of "sheep" class
+
+"sheep"
+
+                             Images: Wikipedia, Nando de Freitas.  5
+Basic statistics (reminder)
+
+ Conditional probability
+
+ Marginalization
+
+ Bayes Rule
+
+ Expectation
+
+                                                                                                                                        6
+Bayesian regression vs ML/MAP
+
+ In ML/MAP the result was a set of parameters 
+ The Bayesian approach computes the posterior (|)
+
+                                                                                                                                                       Image: Kevin P. Murphy
+
+                                                                                                                                       10
+Bayesian learning for model parameters
+
+ Step 0: Specify a parametric model with parameters w
+
+ Step 1: Given data,  = (1, 1 , 2, 2 , ... , (, )}, write
+  down the expression for the likelihood:
+                                      (|)
+
+ Step 2: Specify a prior (conjugate, informative...):
+                                        ()
+
+ Step 3: Compute the posterior:
+                                          (|)()
+
+                               = ()
+
+                                                                                                                                       11
+Bayesian linear regression
+
+ The input/output relation is linear in the model parameters
+                 =  +  ~ 0, 2 one data point
+                =  +  ~ 0, 2 dataset (size n)
+
+ What is the likelihood?
+              (|, ) = ( |, 2) one data point
+
+         ,  =   , 2) joint distribution dataset
+ What is the prior?
+
+    For a linear-Gaussian likelihood model, the conjugate prior is a Gaussian.
+    The posterior is also Gaussian  Closed-form, easy, allows recurrence.
+
+                            =   0, 0)
+
+                                                                                                                                       12
+Multivariate Gaussians are great!
+
+ Represented by just 2 sets of parameters
+
+    Mean vector
+    Covariance matrix (SPD)
+
+ Important: Closed-form integral. Easy!
+
+ Everything is Gaussian
+
+    Iff p(x,y) is Gaussian:
+       p(x) and p(y) are Gaussian.
+       p(x|y) and p(y|x) are Gaussian.
+       Linear: a * p(x) + b * p(y) is a Gaussian.
+       Product: p(x)*p(y) is a Gaussian:
+       Convolution: p(x + y) is a Gaussian
+
+                                                   Images: Wikipedia
+
+                                                                        13
+Multivariate Gaussians
+
+ Theorem 4.3.1 (Murphy's book)   = (|, )
+
+                    Linearity
+
+ 1 + 2 =   1 + 2, 1 + 2)
+
+Marginal  Conditional
+
+                                          14
+Are Gaussian useful in practice?
+
+ "Everything ends up being Gaussian..."
+
+ Central limit theorem
+
+      "... the sum of a number of independent and identically distributed
+      random variables (with finite variances) will tend to a normal
+      distribution, as the number of variables grows."
+
+ Noise is usually Gaussian
+
+                            Image: Wikipedia                               15
+Bayesian linear regression (cont.)
+
+ Likelihood:   ,  =   , 2)
+
+ Prior (general case):   =   0, 0)
+
+ Posterior (see Murphy2012 Sec. 4.4.3):
+
+ |,     , 2)  0, 0) =   , )
+                               1
+               =  0-10 +       2             
+
+               - 1  =  0-1  +  1           
+                               2
+
+ If we use an isotropic Gaussian prior:   =   0, 2) then
+
+         =  1          =     +  -1
+            2
+
+with:    =  2               ...which is again ridge regression!
+            2
+
+                                                          16
+Predictions in Bayesian regression
+
+ Now that we have a distribution over parameters, we can
+  integrate the parameters and get a predictive posterior.
+                 , ,  =    ,    ,  
+
+                                                       
+                                                          
+
+  (  , 2  )
+
+   Remember
+     =  + 
+
+          () = 
+        2  = 2 + n
+
+                                                                      
+
+                                                                                                                                       17
+Parametric regression in a feature space
+
+ If we use a feature space to project the inputs ()
+
+ =    +  ~ 0, 2 one data point {x, y}
+
+ =  +   dataset {X, y} (size n)
+
+ The output is nonlinear, but the problem is still linear in the
+  weights!
+
+                                                                  18
+Parametric regression in a feature space
+
+ If we use a feature space to project the inputs ()
+
+ =    +  ~ 0, 2 one data point {x, y}
+
+ =  +                            dataset {X, y} (size n)
+
+ This is also a neural network!
+
+  Encoder                                       Linear
+                                             activation
+  ()
+                                                           
+
+                                 Last layer
+
+                                     
+
+                                                             19
+Parametric regression in a feature space
+
+ Linear with a feature space ()
+
+ =    +  ~ 0, 2 one data point
+
+ =  +                            dataset (size n)
+
+ For example:   = 1,              = 1 + 2 + 
+
+                                                   20
+Parametric regression
+
+ Priors:  () = 
+
+ Weight prior:      Predictive prior:
+         =   0, )       = ( |0, )
+
+                       Image: Philipp Hennig  21
+Parametric regression
+
+ Prior vs Likelihood vs Posterior
+
+ Weight space      Function predictive space:
+
+              ()                        ( )
+           (|, )                     ( |, )
+
+                                   Image: Philipp Hennig  22
+Parametric regression
+
+ Prior vs Likelihood vs Posterior
+
+ Weight space      Function predictive space:
+
+              ()                        ( )
+           (|, )                     ( |, )
+
+                                   Image: Philipp Hennig  23
+Polynomial features
+
+   = [1, , 2]
+
+                                                                                                                                       24
+Polynomial features
+
+   = [1, , 2, 3]
+
+                                                                                                                                       25
+Polynomial features
+
+   = [1, , 2, ... , 6]
+
+                                                                                                                                       26
+Fourier features
+
+   = [sin  , sin 2 , ... , cos  , cos(2), ... ]
+
+                                                                                                                                       27
+Bell features
+
+   = [-21 -8 , -21 -7 , ... ]
+
+                                                                                                                                       28
+Heaviside features
+
+   = -1 + 2[( - 8), ( - 7), ... ]
+
+                                                                                                                                       29
+Exponential features
+
+   = [-|-8|, -|-7|, ... ]
+
+                                                                                                                                       30
+Can we do better?
+
+ Example: learn the best features
+
+                       = [-|-1|/0, -|-2|/0, ... ]
+
+ The parameters  = {0, ... , } are called
+  hyperparameters.
+
+ Hyperparameters are nonlinear.
+
+    No closed-form. No Gaussian...
+
+ We'll get back to it latter.
+
+                                                                                                                                       31
+Alternative: higher number of features
+
+ Can we use infinite features? Using the kernel trick!
+ The predictive posterior can be written as:
+
+                        =   + 2 -1
+             2 =  -   + 2 -1
+
+ All the operations with features are dot products. The
+  result is always a scalar.
+
+ Kernel function:  1, 2 =  1 (2)
+
+    This type of function is called a Mercer kernel.
+
+                                                                                                                                       32
+Gaussian processes
+
+ Rewrite the predictive posterior:
+                       = (, ) (, ) + 2 -1
+
+          2 = (, ) - (, )  ,  + 2 -1(, )
+
+ If we use a Mercer kernel, we have a covariance matrix,
+  a covariance vector and a variance term.
+
+    (1, 2) measures the correlation/similarity of 1 and 2.
+
+ The predictive posterior is a conditional Gaussian of:
+
+     0,  (, ) + 2  (, )
+            (, )   (, )
+
+                                                            33
+Gaussian processes
+
+Definition: A Gaussian process is a collection of random
+variables, any finite of which have a joint Gaussian
+distribution.
+
+     0,  (, ) + 2   (, )
+            (, )    (, )
+
+                          Image: Eric Brochu              34
+GPs as joint distributions
+
+ Small correlation
+
+  Large correlation
+
+                                                                                                                                       35
+GPs as joint distributions
+
+ Small correlation
+
+  Large correlation
+
+                                                                                                                                       36
+GPs as joint distributions
+
+  Joint
+
+                = 0 0 
+         1 0,9 0,8 0,6 0,4
+       0,9 1 0,9 0,8 0,6
+ = 0,8 0,9 1 0,9 0,8
+       0,6 0,8 0,9 1 0,9
+       0,4 0,6 0,8 0,9 1
+
+   Conditional
+
+                                                                                                                                        37
+GPs as joint distributions
+
+ Joint
+
+=
+  Conditional
+
+                                                                                                                                       38
+Nonparametric models
+
+ Where are the model parameters/weights?
+
+     0,  (, ) + 2  (, )
+            (, )   (, )
+
+ GPs are nonparametric models:
+
+   Bad news: (Computational) complexity increase with the
+     number of data points.
+
+   Good news: (Model) complexity increase with the number of
+     data points.
+
+ GPs are distributions over functions:
+
+                                        ,  , 
+
+                         () = [  ]
+                      (, ) =    -     -   
+
+                                                                                                                                       39
+Kernels
+
+  Commonly-used kernels (Rasmussen and Williams 2006):
+
+     Radial Basis Functions (RBFs):  ,  =  - 
+
+RBFs
+
+  Others: Wiener process, splines...
+  Not only real vectors: strings, paths...
+
+                                                                                                                                        40
+Squared exponential   GPy.kern.RBF
+
+ ,   = exp    | - |2
+            - 22
+
+                      41
+Matérn v=5/2                      GPy.kern.Matern52
+
+ ,   = exp         | - |  1+ 5  | - | 5 | - | 2
+              -  5                +
+                                     3 
+                       
+
+                                                 42
+Matérn v=3/2              GPy.kern.Matern32
+
+ ,   = exp    -    | - |           | - |
+                 3        1+ 3
+
+                                       
+
+              Matérn     Squared exponential
+
+              Matérn v=1/2  Brownian motion model  43
+Linear                        GPy.kern.Linear
+
+                            
+
+         ,  =  2 
+
+                          =1
+
+                                               44
+Periodic                                 GPy.kern.StdPeriodic
+
+                               sin    -  2
+                                    
+           ,  = exp    1              
+                     -2
+                     =1
+
+                                            45
+Neural network                            GPy.kern.MLP
+( ) perceptron with erf activation   = 1, 1, ... , 
+
+ ,  = sin-1           2T
+             1+2T 1+2T
+
+                                                        46
+How many kernels?
+
+ We can combine them!
+
+    Scaled kernel:   (, )
+    Sum of kernels: 1 ,  + 2(, )
+    Product of kernels: 1 ,   2 , 
+
+ Mapped inputs: (  ,   )
+
+                                    Image: Wil Ward & Jasper Snoek
+
+                                                                          47
+Linear + periodical                         GPy.kern.Add
+
+...with adjusted period
+
+                                   sin    -  2
+                                        
+ ,   =  2  + exp           1              
+                         -2
+     =1                  =1
+
+                                                          48
+Kernel hyperparameters
+
+ A kernel might have
+  multiple hyperparameters
+
+    Length-scale
+    Signal variance
+    Signal noise...
+
+            -     2
+              22
+ ,   =   -           + =
+
+                            49
+Matern 5/2
+
+...with different lengthscales
+
+                                  l=5
+
+ ,   = exp  -                5  2
+               5   1+ 5 +
+
+                             3 
+
+      = | - |
+
+                             l=1
+
+                   l=0.3
+
+                                                                                                             50
+Automatic Relevance Determination
+
+ Used in multidimensional RBFs:
+
+ Matern, square exponential...
+
+ Ignore unnecessary dimensions
+
+(like PCA)                                          l=5
+
+ Each dimension has a different
+
+   lengthscale
+
+       = ( - ) ( - )
+
+ = diag(1/1, ... , 1/n)
+
+                                                      l=1
+
+Lengthscale  Correlation 
+
+     Correlation  Relevance                         l=0.3
+
+ Intuition: When the correlation is high, knowing
+    few values gives information about everything.
+    You don't need more data in that dimension.
+
+                                                           51
+Learning hyperparameters
+
+ Kernel hyperparameters are nonlinear.
+
+    No closed-form. No Gaussian...
+
+ We can approximate the solution!
+
+    Empirical Bayes (type-II ML):
+       MLE (or MAP) for the kernel hyperparameters.
+       Warning: Underestimate uncertainty.
+       Expensive.
+       Similar alternative: Cross-validation.
+
+    Sampling (e.g.: MCMC ­ next lesson):
+       Full Bayesian
+       Result in a mixture of GPs
+       Much, much more expensive
+
+                                                                                                                                       52
+ML for kernel hyperparameters
+
+ Maximize the marginal log-likelihood:
+
+log    ,   =  -  1  - 1    1            -     log  2
+                 2       - 2 log           2
+
+                         = arg max log (  , )
+
+                                                       
+
+ Automatically trade-off model complexity and model fit
+
+                                                         53
+Gaussian process regression
+
+ Summary:
+
+    Predict ­ Use predictive posterior:
+
+                       = (, ) (, ) + 2 -1
+          2 = (, ) - (, )  ,  + 2 -1(, )
+
+ Learn ­ Maximize the marginal log-likelihood:
+
+log    ,   =  -  1  - 1    1                      
+                 2       - 2 log                - 2 log 2
+
+           Colab (GP assignment):
+
+           https://drive.google.com/file/d/1FRDhW8y5N3vBfaV
+           m3Yub1ouhe5gZTDND/view?usp=sharing
+
+                                                                                                      54
+Gaussian process regression
+
+ Algorithm 2.1 (Rasmussen and Williams):
+
+    Cholesky decomposition  Faster and numerically stable
+ =  - 1
+
+                 
+
+ =   - 1 =  -1  -1
+ = - 1 =  -1-1
+
+                                                                                                                                 Image: Rasmussen and Williams
+
+                                                                                                                                       55
+Non-zero mean and hierarchical Bayes
+
+ Adding a fixed mean function just shifts the Gaussian
+   process.
+
+    Equivalent to computing the GP on the residuals
+
+      ,  ,   =   + ()
+  =   
+    0,  , 
+
+ Non-zero mean GP = parametric mean + zero mean GP
+
+ We can combine GPs with Bayesian linear regression
+   (it's the same!)
+
+    Sum of GPs is a GP
+    Example: Add a prior on   (0, )
+    The posterior function   is still a GP. Analytical solution.
+
+ We can also set a prior on the covariance 2s K(, ) :
+
+    We need a proper conjugate prior
+    s2  (, ) or K  (, )
+    Results in a Student's t process. Analytical solution!
+
+                                                                  57
+Non-Gaussian likelihood
+
+ No closed-form solution          squash
+                                  function
+    Approximated inference
+      (e.g.: Laplace, EP, MCMC,
+      etc.)
+
+ GPs for classification:
+
+    Concept: Logistic
+      regression meets GPs
+
+ Robust regression                Student's t-likelihood  Unfiltered GP
+                                                             Filtered GP
+    Use long tail likelihoods
+      (e.g.: Laplace, Student-t)                                    58
+
+    Use the 95% quantile for
+      filtering
+
+https://drive.google.com/file/d/1-FzNMgpDixkwM-
+RaER6S5mcd-PCLyTS1/view?usp=sharing
+Beyond supervised learning
+
+ GPs for dimensionality reduction
+
+    Gaussian process latent variable
+      models (GPLVM)
+
+    GP models mapping from latent
+      variables Z to data points X
+
+    GPLVM  Kernel-PCA (nonlinear) +
+      Probabilistic-PCA (Bayesian)
+
+ GPs for decision making
+
+    GPs in reinforcement
+      learning/bandits
+
+    GPs for dynamic systems
+    GPs for experimental design and
+
+      optimization  Meta-learning
+
+                                                                                                                                       59
+Advanced GPs                                 Image: M. Havasi et al.,
+
+ Big data:                                  Image: JMHL
+
+    Sparse Gaussian processes                                                   60
+    Inducing point methods...
+
+ Deep GPs
+
+    Build a model made of layers of GPs
+
+ GPs with deep kernels
+
+    Neural networks and GPs. Best of both!
+Gaussian processes (Kriging)
+
+ It was a Master Thesis (TFM)!
+
+    From geology!
+    In Africa!
+
+ You can do it, too!
+
+                                                                                                                                       61
+     Artificial
+Intelligence
+
+      (62651)
+
+                                    MAICE
+

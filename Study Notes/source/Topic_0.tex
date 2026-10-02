@@ -1,0 +1,236 @@
+\documentclass[11pt]{article}
+\newcommand{\shorttitle}{Topic 0: Mathematical background}
+\input{notes_style.tex}
+\hypersetup{pdftitle={Topic 0 - Mathematical Background for AI}}
+\begin{document}
+\cover{0}{Mathematical background for AI}{Use conditioning, marginalization and Bayes' rule; calculate expectations and Gaussian predictions; connect entropy, KL divergence and cross-entropy to learning; understand how constraints become regularization.}
+\tableofcontents\clearpage
+\newsection{Why these tools appear throughout the course}
+\sources{0.1. Math background, pp. 1--11.}
+Machine learning models must handle incomplete information and noisy measurements. Probability represents uncertainty; information theory measures how well a model describes observations; optimization chooses parameters. These are connected: a probability model defines a likelihood, the negative log-likelihood becomes a loss, and an optimizer minimizes it.
+
+Use $p(x)$ for a probability mass or density, depending on whether $X$ is discrete or continuous. Uppercase $X$ denotes a random variable; lowercase $x$ is one realized value. A vector is written in bold when helpful. $\E$ is expectation, $\Var$ is variance, and $\Sigma$ is a covariance matrix. All logarithms in these notes are natural unless a base is stated.
+\begin{keyidea}{A chain of ideas to remember}
+Probability model $\longrightarrow$ likelihood $\longrightarrow$ negative log-likelihood $\longrightarrow$ loss $\longrightarrow$ optimization. A prior adds assumptions about plausible parameters and can produce a regularization term.
+\end{keyidea}
+\newsection{Conditioning, joint probability and marginalization}
+\sources{0.1. Math background, pp. 1--2.}
+\subsection{Conditioning changes the information available}
+For an event $B$ with positive probability,
+\[
+P(A\mid B)=\frac{P(A\cap B)}{P(B)},\qquad
+P(A\cap B)=P(A\mid B)P(B).
+\]
+Conditioning restricts attention to outcomes where $B$ occurred. It is directional: $P(A\mid B)$ and $P(B\mid A)$ usually differ. Independence means $P(A\cap B)=P(A)P(B)$, so conditioning on $B$ does not change the probability of $A$.
+
+For a sequence, the chain rule gives
+\[
+p(x_1,\ldots,x_n)=p(x_1)\prod_{i=2}^{n}p(x_i\mid x_1,\ldots,x_{i-1}).
+\]
+The chain rule always holds; simplifying each conditional to $p(x_i)$ requires independence. This distinction will matter for RL trajectories, where successive states are dependent.
+\subsection{Worked slide exercise: drawing balls}
+The slides give an urn containing three red balls and one blue ball. Draw without replacement. The chance of two reds is
+\[
+P(R_1,R_2)=P(R_1)P(R_2\mid R_1)=\frac34\frac23=\frac12.
+\]
+The second probability is $2/3$, because one red has already been removed. Using $3/4$ twice would incorrectly assume independence.
+
+To find the chance that the second ball is red, sum over the possible first draws:
+\begin{align*}
+P(R_2)&=P(R_2\mid R_1)P(R_1)+P(R_2\mid B_1)P(B_1)\\
+&=\frac23\frac34+1\frac14=\frac34.
+\end{align*}
+This is marginalization: remove a variable by summing over all its possible values. For a partition $B_1,\ldots,B_K$,
+\[
+P(A)=\sum_jP(A\mid B_j)P(B_j).
+\]
+For densities, replace the sum with an integral: $p(x)=\int p(x,y)\,dy$.
+\newsection{Bayes' rule: reverse a conditional probability}
+\sources{0.1. Math background, p. 2.}
+\[
+P(A\mid B)=\frac{P(B\mid A)P(A)}{P(B)}.
+\]
+In model language, the posterior is proportional to likelihood times prior:
+\[
+p(h\mid D)=\frac{p(D\mid h)p(h)}{\sum_jp(D\mid h_j)p(h_j)}.
+\]
+The \textbf{prior} describes uncertainty before these data; the \textbf{likelihood} describes how the assumed model generates these data; the \textbf{posterior} incorporates both. The denominator, called evidence, normalizes the result. Continuous parameters require integration instead of summation.
+\subsection{Worked model-identification example}
+Choose with equal probability between a fair coin $F$ and a biased coin $B$ with $P(H\mid B)=0.9$. Observe one head. Then
+\[
+P(B\mid H)=\frac{0.9(0.5)}{0.9(0.5)+0.5(0.5)}=\frac9{14}\approx0.643.
+\]
+One head provides evidence for the biased coin but does not identify it with certainty. After two independent heads conditional on the chosen coin,
+\[
+P(B\mid HH)=\frac{0.9^2}{0.9^2+0.5^2}\approx0.764.
+\]
+The two draws are conditionally independent given the coin. Their marginal dependence comes from sharing the same unknown coin.
+\newsection{Random variables, expectation and variance}
+\sources{0.1. Math background, pp. 2--4.}
+\subsection{Mass, density and cumulative probability}
+A discrete variable has probabilities $p(x)\geq0$ that sum to one. A continuous variable has a density $p(x)\geq0$ whose integral is one. For a continuous variable,
+\[
+P(a\leq X\leq b)=\int_a^b p(x)\,dx,\qquad
+F(x)=P(X\leq x)=\int_{-\infty}^{x}p(t)\,dt.
+\]
+At differentiable points, $F'(x)=p(x)$. A density value is not a point probability: for a continuous variable $P(X=x)=0$, and a density can exceed one on a narrow interval.
+\subsection{Expectation is a probability-weighted average}
+\[
+\E[g(X)]=\sum_xg(x)p(x)\quad\hbox{or}\quad
+\E[g(X)]=\int g(x)p(x)\,dx.
+\]
+Linearity gives $\E[aX+bY]=a\E[X]+b\E[Y]$ without needing independence. In contrast, $\E[XY]=\E[X]\E[Y]$ generally needs an assumption such as independence.
+\[
+\mu=\E[X],\qquad \Var(X)=\E[(X-\mu)^2]=\E[X^2]-\mu^2.
+\]
+For two variables,
+\[
+\Var(aX+bY)=a^2\Var(X)+b^2\Var(Y)+2ab\Cov(X,Y).
+\]
+Independence removes the covariance term. Zero covariance alone does not generally imply independence.
+\subsection{Bernoulli and indicator variables}
+For $X\in\{0,1\}$ with success probability $\theta$,
+\[
+p(x)=\theta^x(1-\theta)^{1-x},\quad
+\E[X]=\theta,\quad\Var(X)=\theta(1-\theta).
+\]
+An indicator $I_A$ is one on event $A$ and zero elsewhere, so $\E[I_A]=P(A)$. Logistic classification will use Bernoulli outputs, while nearest-neighbour voting can be written as a sum of class indicators.
+\newsection{Gaussian distributions and linear transformations}
+\sources{0.1. Math background, pp. 4--6.}
+\subsection{Univariate normal}
+\[
+X\sim\mathcal N(\mu,\sigma^2),\qquad
+p(x)=\frac{1}{\sqrt{2\pi\sigma^2}}
+\exp\!\left[-\frac{(x-\mu)^2}{2\sigma^2}\right].
+\]
+The second argument is the \emph{variance}, not the standard deviation. Standardization gives $Z=(X-\mu)/\sigma\sim\mathcal N(0,1)$. Conversely, $X=\mu+\sigma Z$ has mean $\mu$ and variance $\sigma^2$.
+
+Independent Gaussian variables have a Gaussian sum. Its mean is the sum of means and its variance is the sum of variances. More generally, a linear transformation of a jointly Gaussian vector is Gaussian.
+\subsection{Multivariate normal}
+For $\mathbf x\in\R^d$ and positive-definite covariance $\Sigma$,
+\[
+p(\mathbf x)=\frac{\exp[-\tfrac12(\mathbf x-\bm\mu)^T\Sigma^{-1}(\mathbf x-\bm\mu)]}
+{(2\pi)^{d/2}|\Sigma|^{1/2}}.
+\]
+The quadratic form measures distance while accounting for scale and correlations. The log-density is
+\[
+\log p(\mathbf x)=-\frac d2\log(2\pi)-\frac12\log|\Sigma|
+-\frac12(\mathbf x-\bm\mu)^T\Sigma^{-1}(\mathbf x-\bm\mu).
+\]
+For $Y=A\mathbf X+\mathbf b$, mean and covariance become $A\bm\mu+\mathbf b$ and $A\Sigma A^T$. If $\mathbf Z\sim\mathcal N(0,I)$ and $LL^T=\Sigma$, then $\bm\mu+L\mathbf Z\sim\mathcal N(\bm\mu,\Sigma)$. A Cholesky factor $L$ is a valid sampling factor, even though it is generally not the symmetric matrix square root.
+\subsection{Conditioning a joint Gaussian}
+Partition the mean and covariance into blocks for $X_a,X_b$. Then
+\begin{align*}
+X_b\mid X_a=x_a&\sim\mathcal N(\mu_{b\mid a},\Sigma_{b\mid a}),\\
+\mu_{b\mid a}&=\mu_b+\Sigma_{ba}\Sigma_{aa}^{-1}(x_a-\mu_a),\\
+\Sigma_{b\mid a}&=\Sigma_{bb}-\Sigma_{ba}\Sigma_{aa}^{-1}\Sigma_{ab}.
+\end{align*}
+The conditional mean adjusts according to correlation; the covariance decreases because an observation adds information. This identity is the basis of Gaussian-process prediction.
+\begin{careful}{Clarifications of the Gaussian summary on pp. 5--6}
+The conditional covariance uses a \textbf{minus} sign. A weighted mixture of Gaussian densities is generally not Gaussian. Gaussian marginals alone do not guarantee a jointly Gaussian distribution. A linear combination of correlated Gaussian blocks must include cross-covariance terms. Also, $\mu+\Sigma^{1/2}Z$ has covariance $\Sigma$, rather than $\Sigma^2$. These distinctions prevent errors when using the compact slide summary.
+\end{careful}
+\subsection{Worked conditioning example}
+Let $(X,Y)$ have zero means, unit variances and covariance $0.8$. For $X=1$,
+\[
+Y\mid X=1\sim\mathcal N(0.8,1-0.8^2)=\mathcal N(0.8,0.36).
+\]
+The conditional standard deviation is $0.6$. The prediction is uncertain even after $X$ is known, because correlation is not perfect.
+\newsection{Entropy, cross-entropy and KL divergence}
+\sources{0.1. Math background, pp. 6--9.}
+\subsection{Surprise and entropy}
+The surprise of an outcome with probability $p(x)$ is $-\log p(x)$. Entropy is expected surprise:
+\[
+H(p)=-\sum_xp(x)\log p(x).
+\]
+With $\log_2$, units are bits; with natural logs, they are \textbf{nats} (the handout calls them ``nits''). Use the convention $0\log0=0$.
+
+For a Bernoulli variable,
+\[
+H(\theta)=-\theta\log\theta-(1-\theta)\log(1-\theta).
+\]
+A fair coin has entropy $\log2\approx0.693$ nats, or one bit. A deterministic coin has entropy zero. Differential entropy for continuous variables replaces the sum by an integral, but can be negative and depends on the measurement scale.
+\subsection{Cross-entropy evaluates a model against data}
+If data follow $p$ and a model assigns probabilities $q$,
+\[
+H(p,q)=-\sum_xp(x)\log q(x),\qquad
+\mathrm{KL}(p\|q)=\sum_xp(x)\log\frac{p(x)}{q(x)}.
+\]
+Therefore,
+\[
+\boxed{H(p,q)=H(p)+\mathrm{KL}(p\|q)}.
+\]
+KL is nonnegative and is zero when distributions agree, apart from null sets. It is not symmetric and does not satisfy the requirements of a distance metric. If $q$ assigns zero probability to an event with positive $p$, the divergence is infinite.
+\subsection{Worked slide exercise: two coins}
+For $P=(0.5,0.5)$ and $Q=(0.9,0.1)$,
+\begin{align*}
+\mathrm{KL}(P\|Q)&=0.5\log(0.5/0.9)+0.5\log(0.5/0.1)\approx0.511,\\
+\mathrm{KL}(Q\|P)&=0.9\log(0.9/0.5)+0.1\log(0.1/0.5)\approx0.368.
+\end{align*}
+The larger first value reflects the cost of using a model that treats tails as rare when tails actually occur half the time.
+\subsection{Information gain: a careful distinction}
+The handout links posterior-versus-prior KL to entropy reduction. For a \emph{particular} observed $y$, define the realized Bayesian information gain as $\mathrm{KL}(p(X\mid y)\|p(X))$. It is not generally equal to $H(X)-H(X\mid Y=y)$.
+
+The equality holds \emph{after averaging over observations}:
+\[
+I(X;Y)=\E_Y[\mathrm{KL}(p(X\mid Y)\|p(X))]
+=H(X)-H(X\mid Y).
+\]
+This expected entropy reduction is the information-gain idea used in decision-tree splitting. A particular surprising observation can increase posterior entropy; the expected reduction is nonnegative.
+\newsection{Likelihood, estimation and optimization}
+\sources{0.1. Math background, pp. 8--11.}
+\subsection{Maximum likelihood and cross-entropy}
+For independent observations conditional on parameters $w$,
+\[
+L(w)=\prod_{i=1}^n p(x_i\mid w),\qquad
+\hat w_{\mathrm{ML}}=\argmax_w\sum_i\log p(x_i\mid w).
+\]
+Taking logs preserves the maximizer and turns products into sums. Dividing by $n$ does not alter the maximizer either. The negative average log-likelihood is the empirical cross-entropy between the observed distribution and the model. Its population counterpart differs from KL only by the entropy of the true distribution, which is independent of $w$.
+
+Maximum a posteriori estimation instead maximizes $\log L(w)+\log p(w)$. Full Bayesian inference retains $p(w\mid D)$ rather than only its maximizing point.
+\begin{careful}{A qualification to the MLE statement on p. 9}
+MLE need not be unbiased in a finite sample. Consistency and asymptotic normality require regularity and correct-model conditions. With per-observation Fisher information $I(w_*)$, the usual statement is $\sqrt n(\hat w-w_*)\Rightarrow\mathcal N(0,I(w_*)^{-1})$. Identifiability and sample size matter.
+\end{careful}
+\subsection{A norm constraint becomes ridge regularization}
+Start from
+\[
+\min_w f(w)\quad\hbox{subject to}\quad\|w\|_2^2\leq C.
+\]
+The Lagrangian is $\mathcal L(w,\lambda)=f(w)+\lambda(\|w\|_2^2-C)$ with $\lambda\geq0$. For fixed $\lambda$, the term $-\lambda C$ does not depend on $w$, giving a penalized objective $f(w)+\lambda\|w\|_2^2$.
+
+At a differentiable optimum, stationarity is $\nabla f(w)+2\lambda w=0$. The full constraint conditions also require feasibility and complementary slackness: $\lambda(\|w\|^2-C)=0$. An inactive constraint can have $\lambda=0$; the tangency picture describes the active case. The correspondence between $C$ and $\lambda$ is especially useful in convex regression.
+\newsection{Revision sheet and self-test}
+\begin{longtable}{@{}P{.30\textwidth}P{.61\textwidth}@{}}
+\toprule Tool & What to ask yourself\\\midrule\endhead
+Conditioning & What information is fixed, and is the conditioning event possible?\\
+Marginalization & Which variable must be removed by a sum or integral?\\
+Bayes & What are prior, likelihood and normalizing evidence?\\
+Expectation & What outcomes are being averaged, under which distribution?\\
+Gaussian conditioning & Are covariance blocks ordered correctly, with subtraction?\\
+Cross-entropy & Which distribution generates data and which predicts them?\\
+Regularization & What assumption does the penalty impose?\\\bottomrule
+\end{longtable}
+\subsection{Questions}
+\begin{enumerate}
+\item In the urn, what is $P(R_1\mid R_2)$?
+\item Does linearity of expectation need independent variables?
+\item If $X\sim\mathcal N(2,9)$, how do you standardize it?
+\item Can a mixture of two Gaussians have two peaks?
+\item What is cross-entropy for a correct class assigned probability $0.1$?
+\item Why can cross-entropy be minimized without knowing $H(p)$?
+\item Does a smaller norm budget normally correspond to stronger regularization?
+\item Must one particular observation decrease posterior entropy?
+\end{enumerate}
+\subsection{Answers}
+\begin{enumerate}
+\item $P(R_1,R_2)/P(R_2)=(1/2)/(3/4)=2/3$.
+\item No; linearity always holds when the expectations exist.
+\item $(X-2)/3$; divide by SD, not variance.
+\item Yes. A Gaussian mixture need not be Gaussian.
+\item $-\log0.1\approx2.303$ nats.
+\item $H(p)$ is constant with respect to the model parameters.
+\item Yes, in the usual convex constraint--penalty correspondence.
+\item No. Entropy reduction is nonnegative in expectation.
+\end{enumerate}
+\newsection{Source guide}
+\texttt{0.1. Math background.pdf}: probability (pp. 1--6), information theory and MLE (pp. 6--9), constrained optimization (pp. 9--11). These notes derive the handout's urn and coin exercises and clarify its compact Gaussian and information-gain summaries. No external reading is required for the explanations here.
+\end{document}

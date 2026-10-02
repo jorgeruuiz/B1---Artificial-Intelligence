@@ -1,0 +1,509 @@
+           Math background ­ AI/ML Courses
+
+                                Ruben Martinez-Cantin
+                                 rmcantin@unizar.es
+
+                                          Last revision: September, 2026
+
+1 Probability Revision
+
+      It is recommended that you also read Chapter 6 of Mathematics for Machine
+  Learning by Marc Peter Deisenroth, A. Aldo Faisal, and Cheng Soon Ong.
+  https://mml-book.github.io/
+
+OBJECTIVE: Revise the fundamental concepts of probability, including marginaliza-
+tion, conditioning, Bayes' rule and expectation.
+
+Conditional Probability
+
+                                                          P (A  B)
+                                          P (A | B) =
+
+                                                             P (B)
+where P (A | B) is the conditional probability of A given that B occurs; P (B) is the
+marginal probability of B; and P (A  B) is the joint probability of A and B. In
+general, from this we obtain a chain rule:
+
+                           P (A1:n) = P (An | A1:n-1) · · · P (A2 | A1) P (A1)
+
+      Example: Assume we have an urn with 3 red balls and 1 blue ball: U = {r, r, r, b}.
+  What is the probability of drawing (without replacement) 2 red balls in the first 2
+  tries?
+
+Marginalisation
+
+Let the sets B1, . . . , Bn be disjoint and  n    Bi  =  .  Then
+                                             i=1
+
+                                             n
+
+                 P (A) = P (A, Bi)
+
+                                             i=1
+
+                                             1
+    Example: What is the probability that the second ball drawn from our urn will
+be red?
+
+Bayes' Rule
+
+Bayes' rule allows us to reverse probabilities:
+
+                                         P (B | A) P (A)
+                         P (A | B) =
+
+                                               P (B)
+
+Combining this with marginalization, we obtain a powerful tool for statistical modeling:
+
+             P (modeli | data) =  P (data | modeli) P (modeli)
+                                  j P (data | modelj) P (modelj)
+
+That is, if we have prior probabilities for each model and generative data models, we
+can compute how likely each model is a posteriori (in light of our prior knowledge and
+the evidence brought in by the data).
+
+Discrete Random Variables
+
+Let E be a discrete set, e.g. E = {0, 1}. A discrete random variable (r.v.) is map
+from  to E:
+
+                                               X(w) :   E
+
+such that for all x  E, {w | X(w)  x}  F. Since F denotes the measurable sets, this
+condition simply means we can compute (measure) the probability P (X = x).
+
+    Example: Assume we are throwing a die and are interested in the events E =
+{even, odd}. Here  = {1, 2, 3, 4, 5, 6}. Let the r.v.
+
+                                      even, w  {2, 4, 6},
+                         X(w) =
+
+                                      odd, w  {1, 3, 5}.
+
+We  describe this  r.v.  with the probability    distribution p(xi) = P (X  = xi) =  1  ,
+                                                                                     2
+
+i = 1, 2.
+    The cumulative distribution function is F (x) = P (X  x).
+
+      Example: The cumulative distribution for the die example is:
+
+Bernoulli Random Variables
+
+Let E = {0, 1}, with P (X = 1) =  and P (X = 0) = 1 - . Introduce the set indicator
+variable :
+
+                                                       1, w  A,
+                                         IA(w) = 0, otherwise
+Using this notation, the probability distribution of a Bernoulli random variable can be
+written as:
+                                       p(x) = I{1}(x)(1 - )I{0}(x).
+Note, a particular case of the indicator function is the Heaviside function, named after
+Oliver Heaviside, also called the step function. IH : R  {0, 1} where:
+
+                                                         1, x  0,
+                                           IH(x) = 0, x < 0
+Thus, IH(x) = I(x  0).
+
+Expectation of Discrete Random Variables
+
+The expectation of a discrete random variable X is defined as
+                                            E[X] = xi p(xi).
+
+                                                                                 xiE
+
+The expectation operator is linear, so E[ax1 + bx2] = a E[x1] + b E[x2]. More generally,
+for any function f :
+
+                                       E[f (X)] = f (xi) p(xi).
+
+                                                                                 xiE
+
+    Mean µ = E[X]
+    Variance 2 = E[(X - µ)2].
+
+      For the indicator variable IA(w),
+                                                  E[IA(w)] =
+Continuous Random Variables
+
+A random variable X is continuous if there exists a function fX such that fX(x)  0 for
+        
+all x,  -  fX (x)dx  =  1  and  for  every  a    b,
+
+                                                                     b
+
+                                P (a  X  b) = fX(x)dx,
+
+                                                                   a
+
+where the function fX is called the probability density function (PDF).
+    Following the previous definition of cumulative distribution function (CDF) as
+
+F (x) = P (X  x), we have that
+
+                                                         x
+
+                                     F (x) = fX(t)dt
+
+                                                       -
+
+and fX(x) = F (x) at all the points x at which F is differentiable. To simplify the
+notation, we will use p(x) = fX(x) as the PDF notation.
+
+Marginals and Expectation of Continous Random Variables
+
+For continous random variables, the marginal density is
+
+                                            p(x) = p(x, y)dy
+Analogously, the expectation is defined as:
+
+                                            E[X] = x p(x)dx.
+
+which maintain the linear properties and can be extended for any arbitrary function f
+as:
+
+                                        E[f (X)] = f (x) p(x)dx.
+
+Normal (Gaussian) Random Variables
+
+X has a Normal (Gaussian) distribution with parameters µ (mean) and  (standard
+deviation), denoted by X  N (µ, 2), if
+
+                                1                (x - µ)2
+                     p(x) =  exp -                            ,         xR
+                                22                   22
+
+where µ  R and  > 0. If µ = 0 and  = 1, the variable X  N (0, 1) has a standard
+Normal distribution. The PDF and CDF of the standard Normal distribution are
+usually denoted as (z) and (z) respectively.
+
+        For Z  N (0, 1), the PDF is defined as:
+                        p(z) = (z) =
+
+Some properties of the Normal distribution:
+1. If X  N (µ, 2) and Z = (X - µ)/ the Z  N (0, 1).
+
+2. If Z  N (0, 1) and X = µ + Z then X  N (µ, 2).
+
+3. If Xi  N (µi, i2) with i = 1, . . . , n are independent, then
+
+                    n                    n        n
+
+                       Xi  N                 µi, i2
+
+                   i=1                i=1         i=1
+
+Iff (if and only if ) p(x, y) is a Gaussian PDF:
+· p(x) and p(y) are Gaussian PDFs.
+· p(x|y) and p(y|x) are Gaussian PDFs.
+· Linear: a  p(x) + b  p(y) is a Gaussian PDF.
+· Product: p(x)  p(y) is a Gaussian PDF.
+· Convolution: p(x + y) is a Gaussian PDF.
+
+Multivariate Normal distribution
+
+Thanks to the Central Limit Theorem, the multivariate normal distribution is the most
+used distribution in many applications. In this course we are going to use the notation:
+x for scalars, x for vectors and A for matrices.
+
+    A multivariate normal distribution is characterize by mean vector µ and covariance
+matrix . Then, the probability density function (PDF) is:
+
+     p(x) =          1        exp  -  1  (x  -    µ)-1(x          -  µ)
+              (2)d/2 ||1/2            2
+
+    More interestingly in the Machine Learning context is the log-density function that it
+is used for numerical reasons:
+
+log  p(x)  =    d  log(2)  -  1  log||   -   1    -    µ)-1(x        -   µ)
+              -                               (x
+              2               2              2
+
+In this case, if we are estimating the mean vector µ, it only appears in the last term,
+which is a simple cuadratic form (hint: that would lead to the least-squares estimation).
+
+    The standard multivariate Normal distribution is represented as Z  N (0, I). In this
+case:
+
+1. If X  N (µ, ) and Z = -1/2(X - µ) the Z  N (0, I).
+
+2. If Z  N (0, I) and X = µ + 1/2Z then X  N (µ, 2).
+
+3. Because  is a symmetric and positive definite matrix, there always exist a square
+   root matrix 1/2, such that:
+
+· 1/2 is also symmetric
+·  = 1/21/2
+· -1/21/2 = 1/2-1/2 = I
+There are many algorithms to obtain 1/2 like the Cholesky decomposition.
+    Suppose we partition a random Normal vector X  N (µ, ) as X = (Xa, Xb). We
+
+can similarly partition µ = (µa, µb) and
+
+       =  aa ab
+          ba bb
+
+Then:
+
+1. The marginal distribuion of Xa is Xa  N (µa, aa).
+2. The condition distribution of Xb given Xa = xa is
+
+                  Xb|Xa = xa  N (µb + baa-a1(xa - µa), bb + ba-aa1ab)
+
+3. For matrices A and B then AXa + BXb  N (Aµa + Bµb, AaaA + BbbB)
+
+4. V = (x - µ)-1(x - µ)  k2 where 2k is the chi-squared distribution with k
+   degrees of freedom.
+
+2 Information theory
+
+OBJECTIVE: Revise the fundamental concepts of information theory that can be ap-
+plied for machine learning, such as entropy and KL-divergence.
+
+    Information theory provides the mathematical framework for quantifying uncertainty,
+information, and the efficiency of communication. Machine learning can be seen as a form
+of compression as we build models to learn patterns and predictions about probability of
+occurrence. Similarly, a good compression algorithm should encode most likely patterns
+with shorter codes than unlikely appearances. For example, a language-model that is
+able to predict the next word is an excellent way to compress large volumes of text data.
+
+    Concepts like entropy, mutual information, and KL-divergence help us measure
+how much information is contained in data, how surprising an event is, and how different
+two probability distributions are. In machine learning, these tools are fundamental: they
+guide model training (e.g., cross-entropy loss), enable efficient representations of data,
+and underpin algorithms in clustering, feature selection, and generative modeling.
+
+Entropy
+
+In his seminal work, A Mathematical Theory of Communication, Claude Shannon intro-
+duce the log function as a measure of information of random variables as it have some
+interesting properties (most parameters in information systems scale logarithmically, it
+is monotonic, numerically stable, etc.). Intuitively, two identical memories in a com-
+puter should be able to encode twice the information of a single memory. If we use
+log2 the information is computed in bits, while in machine learning for convenience we
+use ln = loge which measure the information in nits. Then, we can clearly see that the
+negative expected information should be a measure of uncertainty, or lack of information.
+
+                                                                         K
+
+                                H(X)  - p(X = k) log p(X = k)
+
+                                                                       k=1
+If the variable X is continuous, each sum in this section is replaced by integral for PDFs.
+
+Another interpretation is that the term - log(p(X)) = log             1   can be interpreted as
+                                                                    p(x)
+
+the surprise of an event. An unlikely event p(X = k)  0 is unexpected when it happens,
+
+resulting in a large surprise log    1    . Meanwhile, a likely event p(X = k)  0
+                                   p(x)
+
+results in no surprise when it happens log         1    . In this context, the entropy is
+                                                 p(x)
+
+the expected surprise which intuitively is related with the associated uncertainty (the
+
+more uncertainty, the larger surprise...).
+
+    Example: For a coin X = (heads, tails) with the probability of landing heads
+defined as , that is,
+
+p(X = heads) = ,                                       p(X = tails) = 1 - 
+
+Then the entropy can be simplified to the binary entropy function,
+
+H(X) = -[ log p(X = heads) + (1 - ) log p(X = tails)]
+
+· If  = 0.5 (fair coin), H(X) =
+· If  = 1 or  = 0 (unfair coin), H(X) =
+· Which one is easier to predict? A fair or unfair coin?
+
+KL-divergence
+
+The Kullback-Leibler divergence, or relative entropy is a way to measure the dis-
+similarity of two probability distributions p and q. This is defined as:
+
+                                   K L(p||q)      K    pk  log  pk
+                                                 k=1            qk
+
+where, again, the sum is replaced by an integral for PDFs. We can rewrite this as:
+
+               K                              K
+
+KL(p||q) = pk log pk - pk log qk = -H(p) + H(p, q)
+
+               k=1                            k=1
+
+where H(p.q) is called the cross entropy:
+
+                                                                                      K
+
+                                           H(p, q) = pk log qk
+
+                                                                                    k=1
+
+which is used extensively in machine learning, as it represents the average number of
+bits/nits1 needed to encode data coming from a source with distribution p when we use
+model q.
+
+    1The use of bits or nits depends on the log used. In classical computer science, log2 is used resulting
+in bits. In machine learning it is more common to use the natural logarithm ln resulting in nits.
+    For p = q, then KL(p||q) = 0. Thus, the KL-divergence can be used as a quantity
+to be minimized for getting a model q close to the data generative process d. Note
+that KL is called a divergence and not a distance metric, because it does not satisfy all
+the properties required to be a distance metric, such as being symmetric. In general,
+KL(p||q) = KL(q||p).
+
+    Example: Let us have two different coins X = (heads, tails) with the probability
+of landing heads defined as , like in the example before:
+
+p(X = heads) = ,  p(X = tails) = 1 - 
+
+Compute the KL-divergence of the distribution P where P = 0.5 (fair coin) and Q
+with Q = 0.9 (unfair coin).
+
+          KL(P ||Q) =
+
+Then, compute the reverse case (remember that KL-diverge is NOT symmetric):
+
+KL(Q||P ) =
+
+Information gain
+
+In many areas of machine learning (such as decision trees, active learning, etc.), it is
+important to keep track on the amount of information that we can obtain from a set of
+observations. For that, we can formulate the concept of information gain, for a random
+variable X, given an observation of random variable Y which took the value y:
+
+                            IG = KL(p(X|y)||p(X)) = H(X) - H(X|y)
+
+If we consider the entropy to represent the amount of uncertainty, the information gain
+represents the amount of uncertainty that we have removed from the system after intro-
+ducing the new data point y.
+
+Maximum-likelihood and cross-entropy
+
+Assume the generative distribution for the data p(x|w), where w represents the true
+parameters of the generative process. Then, the maximum-likelihood estimator (MLE) w
+minimizes the KL-divergence between p(x|w) and p(x|w).
+N
+
+w = arg max p(xi|w)
+                   w
+                         i=1
+
+N
+
+= arg max log p(xi|w)                                                       *take logs, max is the same
+              w
+                     i=1
+
+              1  N                      1  N
+= arg max             log p(xi|w) - N
+                                                log p(xi|w)                    *add term  w
+         wN
+                 i=1                       i=1
+
+              1  N log p(xi|w)                                                        *rearrange
+= arg max             p(xi|w)
+wN
+            i=1
+
+              1  N log p(xi|w)                                              * max[f (z)] = min[-f (z)]
+= arg min
+wN                    p(xi|w)                                               z         z
+            i=1
+
+-N-- arg min p(x|w) log p(x|w) dx                            *law of large numbers, see Monte Carlo slides
+w                               p(xi|w)
+
+= arg min KL (p(x|w)||p(x|w))
+              w
+
+And remember that
+
+                 KL(p(x|w)||p(x|w)) = - H(p(x|w)) + H(p(x|w), p(x|w))
+
+                                                entropy      cross-entropy
+
+where the entropy is about the generative distribution, meaning that it captures the
+entropy on the data about the true generative process and it does not depend on the
+model w. Thus, the cross-entropy term is the only one that depends on w. Therefore,
+minimizing the cross-entropy is equivalent to maximizing the likelihood function.
+
+Properties of MLE
+
+The maximum-likelihood estimator (MLE) w is asymptotically normal. That is, as
+
+N  , we have:
+
+                                w - w  N (0, F -1)
+
+where F is the Fisher Information matrix. As a result of this, as N  , the expected
+value of the error E(w - w) = 0, meaning that the estimator is unbiased.
+
+3 Optimization
+
+      It is recommended that you also read Chapter 7 of Mathematics for Machine
+  Learning by Marc Peter Deisenroth, A. Aldo Faisal, and Cheng Soon Ong.
+  https://mml-book.github.io/
+
+OBJECTIVE: Revise some fundamental concepts of optimization theory that are used
+in many machine learning algorithms.
+Lagrange optimization
+
+In machine learning, we often minimize a loss function f (w) (e.g., Mean Squared Error)
+while constraining model complexity to prevent overfitting:
+
+min f (w)              subject to  w22  C
+  w
+
+where w represents the weights and C > 0 is the maximum allowed budget for the weight
+magnitude.
+
+    Using Lagrange multipliers, we convert this constrained problem into an unconstrained
+objective by introducing a multiplier   0:
+
+L(w, ) = f (w) +  w22 - C
+
+    When solving for w, the constant term C does not affect the argmin. The optimiza-
+tion problem simplifies to:
+
+w^ = arg min           f (w) + w22
+                  w
+
+This is the standard formula for L2 Regularization (Ridge Regression), where:
+    · f (w) forces the model to fit the training data.
+
+· w22 penalizes large weight magnitudes.
+·  acts as the hyperparameter controlling regularization strength.
+
+    As can be seen in Figure 1, at the optimal weight vector w, the gradient of the loss
+function and the gradient of the constraint are aligned in opposite directions:
+
+f (w) = - w22 = f (w) + 2w = 0
+
+This balance prevents the weights from growing further into the constrained region.
+                                Loss Contours f (w)
+
+w2
+
+                             wunconstrained
+
+   Loss Minimization
+          (-f )
+
+                          w
+w22  C
+
+   Regularization Pull       w1
+
+0  (- w22 )
+
+   Tangency Condition:
+   f (w) = - w22
+
+Figure 1: Gradient equilibrium of the unconstrained optimization solution.
+

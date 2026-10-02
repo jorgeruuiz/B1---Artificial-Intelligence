@@ -1,0 +1,244 @@
+Introduction to Reinforcement Learning
+
+             Artificial Intelligence (62651)
+
+                          Rubén Martínez Cantín
+              Dpto. Informática e Ingeniería de Sistemas
+
+                          Universidad de Zaragoza
+
+Artificial Intelligence (62651)  Introduction to RL       1 / 16
+What is reinforcement learning
+
+Artificial Intelligence (62651)  Introduction to RL  Credit: David Silver
+                                                                        2 / 16
+Reinforcement learning vs (un)supervised machine learning
+
+Reinforcement learning is both a subfield and a problem definition.
+      There is an agent that takes actions.
+      No supervision, labels or oracle. Just a reward (good vs bad).
+      Dynamic/sequential problem. Time is always involved.
+      Data and actions are interconected.
+      Noisy movement. Non-deterministic dynamics.
+      The target is a behaviour, policy or controller.
+      Optimal policy: maximize the reward.
+
+Artificial Intelligence (62651)  Introduction to RL  3 / 16
+Examples of reinforcement learning
+
+     Fly stunt manoeuvres in a helicopter
+     Defeat the world champion at Go
+     Manage an investment portfolio
+     Control a power station
+     Make a humanoid robot walk
+     Autonomous driving and parking
+     Play many videogames better than humans
+     Design realistic computer simulations.
+
+      More applications (Csaba Szepesvari live slides)
+      Course introduction slides
+
+Artificial Intelligence (62651)  Introduction to RL     Videos
+
+                                                               4 / 16
+What is a reward?
+
+Reward hypothesis [Sutton and Barto]
+
+That all of what we mean by goals and purposes can be well thought of as
+the maximization of the expected value of the cumulative sum of a
+received scalar signal (called reward).
+
+      A reward Rt is a scalar feedback signal (e.g.: score in a game)
+      Indicates how well agent is doing at step t
+      Objective: maximize cumulative (past, present and future) reward
+      In reinforcement learning, people usually work with rewards
+      In control theory/robotics/engineering, people usually work with costs
+      Maximize reward vs minimize cost  reward = -cost
+
+Artificial Intelligence (62651)  Introduction to RL  5 / 16
+Examples of rewards/costs
+
+      Fly stunt manoeuvres in a helicopter/Autonomous driving and parking
+           + reward for following desired trajectory
+           - reward for crashing/energy/fuel
+
+      Defeat the world champion at Go
+           +/- reward for winning/losing a game
+
+      Manage an investment portfolio
+           + reward for each $ in bank
+
+      Control a power station
+           + reward for producing power
+           - reward for exceeding safety thresholds
+
+      Make a humanoid robot walk
+           + reward for forward motion/smoothness
+           - reward for falling over
+
+      Play many videogames better than humans
+           +/- reward for increasing/decreasing score
+
+      Design realistic computer simulations.
+           +/- reward for similarity to real videos.
+
+Artificial Intelligence (62651)  Introduction to RL  6 / 16
+Markov Decision Processes
+
+New State  Reward              Agent                            Action
+   xt+1       rt           Environment                            at
+
+For a Markov Decision Processes (MDPs):
+
+Markov property xt = f (xt-1, at )          (State as memory)
+
+Action comes from policy and current state at  (xt)
+
+           Artificial Intelligence (62651)  Introduction to RL          7 / 16
+Example. Gridworld
+
+Discrete problem (maze-like):        Rewards at each step:
+                                         Small "living" rewards each
+    The agent lives in a grid.             step (positive or negative).
+      Discrete states = grid cells.      Large rewards at the end.
+
+    Discrete actions = N, E, W,                                 Credit: Dan Klein, Pieter Abbeel
+      S. Walls block motion.
+
+    Terminal states. The game
+      ends in those cells.
+
+Noisy movement. For example,
+if the agent moves North:
+
+    80% of the time, the agent
+      goes North, if there is free
+      space.
+
+    10% of the time goes East
+      and 10% goes West.
+
+    Walls block movement. Agent
+      does not move.
+
+Artificial Intelligence (62651)      Introduction to RL  8 / 16
+Example. Gridworld               Stochastic motion
+
+     Deterministic motion
+
+Artificial Intelligence (62651)  Introduction to RL  Credit: Dan Klein, Pieter Abbeel
+                                                                                           9 / 16
+Generalized Decision Processes (RL optative course)
+
+Observation  Reward                  Agent           Action
+     yt        rt                      bt              at
+
+                                 Environment
+
+The agent indirectly observes the environment. yt  p(yt|xt)
+Partially Observable Markov Decision Processes (POMDPs):
+
+    State is hidden.
+    State can be estimated with beliefs/probabilities bt = p(xt |y1:t , a1:t ).
+    Action at  (bt )
+Non-Markov Decision Processes:
+    Action at  (yt )
+    Policy much more complicated (e.g.: deep neural networks).
+    Maybe ill-posed.
+
+Reward can be stochastic rt  p(rt+1|xt , at )
+
+Artificial Intelligence (62651)  Introduction to RL          10 / 16
+How is everything connected?
+
+Models: environment predictions
+
+      Transition model p(xt+1|xt , at )
+      Observation model p(yt |xt )  We assume perfect observations xt = yt
+      Reward model p(rt+1|xt , at )  We assume deterministic rewards rt = R(xt , at , xt+1)
+
+Artificial Intelligence (62651)  Introduction to RL  Credit: Dan Klein, Pieter Abbeel
+                                                                                          11 / 16
+How is everything connected?
+
+Policy: agent behavior
+
+      Mapping from states xt to actions at. We want the optimal policy.
+      Deterministic at = (xt ) or stochastic (at |xt )  at  p(at |xt )
+
+R = -0.01  R = -0.03                        R = -0.4            R = -2.0
+
+What is the best policy? Why?
+
+           Artificial Intelligence (62651)  Introduction to RL  Credit: Dan Klein, Pieter Abbeel
+                                                                                                     12 / 16
+How is everything connected?
+
+Value function
+
+       Prediction of future rewards for a given policy.
+       Informs about how good/bad is to reach a state.
+
+                      V (x ) = E rt+1 + rt+2 + 2rt+3 + . . . |x
+
+                    Q(x , a) = E rt+1 + rt+2 + 2rt+3 + . . . |x , a
+
+Discounting factor:
+      Do you prefer 5$ now or 10$ in a week?
+      0<1
+      Penalizes procrastination.
+
+Artificial Intelligence (62651)  Introduction to RL  Credit: Dan Klein, Pieter Abbeel
+                                                                                          13 / 16
+Sequential decision making
+
+Planning in MDPs (Offline)       Reinforcement learning (Online)
+
+The agent has a good model of    The agent has minimal
+the environment.                 information of the environment.
+
+Everything is computed with the  Learning by interaction.
+model. No real interaction.      Exploration and exploitation
+
+Artificial Intelligence (62651)  Introduction to RL  Credit: Dan Klein, Pieter Abbeel
+                                                                                          14 / 16
+Video game example: Planning
+
+     Rules of the game are known
+     We can emulate o simulate 
+     Access to perfect model.
+     Given a state xt and an action
+     at :
+
+          We can predict the next state
+            xt+1
+
+          We can predict the reward of
+            the step rt .
+
+     Find optimal policy by planning.
+     For example: tree search for
+     discrete systems.
+
+Artificial Intelligence (62651)          Introduction to RL  Credit: David Silver
+                                                                              15 / 16
+Video game example: Reinforcement learning
+
+Rules of the game are unknown
+
+Learn the rules by interaction
+(playing)
+
+Move joystick (action)  check
+pixels (state) and score (reward)
+
+Choose good actions to improve
+score (exploitation).
+
+Choose new actions to learn
+about game (exploration).
+
+Artificial Intelligence (62651)    Introduction to RL  Credit: David Silver
+                                                                        16 / 16
+

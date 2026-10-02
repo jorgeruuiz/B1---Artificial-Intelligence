@@ -1,0 +1,652 @@
+Artificial Intelligence
+(62651)
+
+Machine Learning
+Fundamentals
+
+Rubén Martínez Cantín
+rmcantin@unizar.es, office 0.09, Ada Byron bldg
+Dpto. Informática e Ingeniería de Sistemas.
+Content
+
+DISCLAIMER: SLIDES WILL BE UPDATED DURING THE COURSE,
+DOWNLOAD THE MOST UPDATED VERSION FROM MOODLE
+
+· Introduction
+· K-nearest neighbours (as a simple example)
+· Regression
+
+          · Linear regression
+          · Non-linear regression
+          · Overfitting, regularization, model selection
+          · Robust regression
+          · Ridge regression
+· Classification
+          · Logistic regression
+          · SVM
+· Unsupervised methods
+           · PCA
+· Evaluation metrics
+
+                                                                                                                                          2
+  Bibliography
+
+ Kevin P. Murphy, Probabilistic Machine Learning: An Introduction, The MIT
+   Press, 2022 (available online https://probml.github.io/pml-book/book1.html)
+
+ Marc Peter Deisenroth, A. Aldo Faisal, Cheng Soon Ong, Mathematics for
+   Machine Learning, Cambridge University Press, 2020 (available online
+   https://mml-book.com/)
+
+ Christopher M. Bishop, Pattern Recognition and Machine Learning, Springer,
+   2006 (available online https://www.microsoft.com/en-
+   us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-
+   Machine-Learning-2006.pdf)
+
+ Aurélien Géron, Hands-On Machine Learning with Scikit-Learn, Keras &
+   TensorFlow, O'Reilly, 2019 (2nd edition)
+
+ Online courses
+
+    Andrew Ng, Stanford CS229: Machine Learning,
+       https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU
+
+    Ayush Singh and @freecodecamp, ML for beginners,
+       https://www.youtube.com/watch?v=NWONeJKn6kc
+
+ Python resources
+
+    The Python tutorial: https://docs.python.org/3/tutorial/
+    numpy tutorial: https://cs231n.github.io/python-numpy-tutorial/
+    scikit-learn tutorials: https://scikit-learn.org/stable/tutorial/index.html
+
+                                                                                                                                              3
+Inteligent Agent
+
+Machine Learning:
+      Field of study that gives computers the ability
+      to learn without being explicitly programmed
+      (Arthur Samuel 1959).
+
+Perception                                             Action
+
+            MENTAL
+            MODEL
+
+            Agent
+                                                                                         4
+Motivation
+
+ Machine learning has a huge presence (and growing)...
+
+    Recommenders, virtual assistants, content generation (intelligent
+      virtual characters, automatic scene creation), spam filtering, search
+      engines, social media, news classification, video surveillance, face
+      recognition, fraud detection, traffic prediction, image retrieval,
+      predictive maintenance, weather forecasting, autonomous driving,
+      speech recognition, automatic translation, medical diagnosis...
+
+ Starting by the fundamentals (and getting deep into
+  math!) is critical for a structured understanding of the
+  field.
+
+                                                                                                                                        5
+Machine learning is NOT magic!
+
+ Careful methodology, iterative
+  design and data analysis can be
+  motivated by the No Free Lunch
+  theorem [Wolpert 96].
+
+    A model is a simplified version of the data
+    Assumptions (~hyperparameters, model
+
+      structure/architecture, inductive bias) are
+      always there, influencing what should be
+      accounted for (signal, pattern) and what
+      should be ignored (noise) in the data
+    No model is guaranteed a priori to be
+      better than others, it just should "fit" our
+      data (or the structure in it)
+    Usual practice: Evaluate a few
+      reasonable models making reasonable
+      assumptions on your data.
+
+                                                                                                                                           6
+   Sometimes it seems magical though...
+
+ Example: Neural Radiance Fields
+
+    Use neural networks (MLPs) for representing scenes and rendering novel
+      views, costly to train and query
+
+Ben Mildenhall, Pratul P Srinivasan, Matthew Tancik, Jonathan T Barron, Ravi Ramamoorthi, Ren
+
+Ng, NeRF: Representing scenes as neural radiance fields for view synthesis, ECCV 2020
+
+Thomas Müller and Alex Evans       and Christoph Schied  and Alexander  Keller,  Instant  Neural  Grap7hics
+Primitives with a Multiresolution  Hash Encoding, ACM    ToG, 2022
+Shallow learning also works!
+
+  Scene representation based on Gaussians in the 3D space
+  Well implemented but standard point-based rendering
+  Enables real-time capabilities at 1080p
+
+Kerbl, B., Kopanas, G., Leimkühler, T., & Drettakis, G., 3D Gaussian Splatting for real-
+
+time radiance field rendering, ACM ToG, 2023                                              8
+                  Machine learning
+
+· The world is immensely rich in data
+
+                                   11  1
+                            =   
+
+                                     
+
+· Goal: Making sense of data
+    · Behavioral function, patterns, etc.
+
+· Different types of learning depending on the problem
+    · Supervised
+    · Unsupervised
+    · Reinforcement
+
+                                                                                                                                            9
+Supervised Learning
+
+· For each element of the set X an associated output value is
+ known, Y
+
+· The output is generated by an unknown function = ()
+
+Features  Output
+
+x11 x12  x1n  y1
+
+x21 x22  x2n  y2     Data
+
+          
+
+xm1 xm2  xmn  ym
+
+· Discover a function () that approximates the real function ()
+ and allows predicting the output for future data  = ()
+
+                                                               10
+        Supervised Learning: Regression
+
+· Continuous output
+
+                                 Data with known output
+
+         Price ($) 400
+         in 1000's
+
+                         300
+
+Predicted
+  output: 215 200
+
+100
+
+0
+
+                              0  500 1000 1500 2000 2500
+
+New Input: 750 Size in feet2
+
+· Features: surface area, number of bedrooms, number of
+
+bathrooms, age,....
+
+                                                          11
+                Regression Examples
+
+· Number of units of a product to be
+ sold
+
+· Stock market value tomorrow based
+ on current conditions and other
+ factors
+
+· Number of days each patient will
+ spend in the hospital next year
+
+· Level of degradation of a machine or
+ product
+
+                                                                                                                                           12
+      Supervised Learning: Classification
+
+· Discrete output
+    · Binary:  = 0,1
+    · Multi-class:  = , , , , ...
+
+                                           1
+                                     0
+Age
+
+     ?
+
+     New input  Tumor Size
+
+                                              13
+Classification examples
+
+· Spam Filter
+· Character Recognition
+· Object Detection
+· Semantic segmentation
+
+                         true class = 7  true class = 2  true class = 1
+
+                         true class = 0  true class = 4  true class = 1
+
+                         true class = 4  true class = 9  true class = 5
+
+documents   100
+            200
+            300          10 20 30 40 50 60 70 80 90 100
+            400                                                words
+            500
+            600
+            700
+            800
+            900
+           1000
+
+                                                                         14
+               Unsupervised Learning
+
+· Also called "knowledge discovery"
+· Training data: inputs only, X
+· Discover "interesting structure" in data
+
+  (patterns)
+
+               Supervised               Unsupervised
+x2                         x2
+
+x1                         x1
+
+                                                      15
+       Examples of unsupervised learning
+
+· Astronomy: the autoclass system (1988) discovered a new type
+  of star by grouping astrophysical measurements
+
+· E-commerce: grouping users based on their browsing and
+  purchases, to send them propaganda
+
+· Recommendation systems: series, news, social networks
+· Text analysis: topic detection, next word prediction...
+
+                                                                                                                                                                                                               Image credit: NASA/JPL-Caltech/E. Churchwell (Univ. of Wisconsin, Madison)
+
+                                                                                                                                            16
+       Examples of unsupervised learning
+
+· Dimensionality reduction, visualization of complex systems
+
+                                                                                                                                            17
+              Reinforcement Learning
+
+· Reinforcement Learning (RL)
+· Learn behavioral policy
+
+    · Robot movement command, strategy games...
+· The algorithm learns based on experiences (interactive)
+· Rewards associated with good actions.
+· Important time component
+
+    · Present actions affect future outcomes
+
+                                                                                                                                       18 18
+      Examples of reinforcement learning
+
+· AlphaGo
+· Robotics
+· Video games
+· Autonomous driving
+
+                                                                                                                                        19 19
+Examples of reinforcement learning
+
+                                                                                                                                    Hide and seek
+
+Character design for games and                                                                                                                     20
+                 movies
+Examples of reinforcement learning
+
+                                                                                                                             21
+Combining ideas
+
+                                                                                                                                       22
+ChatGPT, DeepSeek, Gemini...
+
+                                                                                                                                      23 23
+"tufa"
+
+        "tufa"
+        "tufa"
+
+Find the tufas!
+
+                                                                      24
+Why do we need math and
+
+probabilities?   Partial information
+
+ Abstraction
+
+horse
+
+                 Noise/distortion
+
+                                      25
+Learning correlation
+
+ In this course, we focus on correlation-based learning
+ Causal learning is much harder and still under research.
+
+                                                                                                                                       26
+                            Data
+
+· Critical in any ML problem
+· Have a good training dataset
+
+    · Representative
+    · Diverse
+    · Well labeled (depends on the type of supervision)
+· Beware of bias and discrimination
+· In many cases it is the bottleneck
+
+Orange  Orange  Orange
+
+                                                         27 27
+The fallacy of Big Data
+
+Tesla has 12,000
+ million kilometers of
+ data (in 2016)
+
+                                                                                                                                       28
+Data bias
+
+  Three black/white teenagers
+
+                               blue and black woman's  men's polo shirt with   29
+                               dress                   blue and black stripes
+The problem of choosing features
+
+(Goodfellow et al, 2016)  (Alberto Cairo, 2016)
+
+                                                 30
+                  Data organization
+
+· They are divided into three subsets
+    · Training data (example ~80%)
+         · Compute model parameters
+    · Validation Data (example ~10%)
+         · Evaluate different variations of the model
+         · Tuning hyperparameters
+    · Test data (example ~10%)
+         · Final evaluation of the model with unknown data
+
+                                                                                                                                           31
+                   Learning process
+
+· Training phase
+
+     · Using the starting data X learn the model
+     · Calculating Model-Defining Parameters
+     · Different algorithms and hyperparameters
+
+· Validation phase
+
+     · Using a (different) subset within X to "measure" model quality
+     · Each issue has different metrics
+
+· Test phase
+
+     · Evaluate the model on new unknown data
+
+                                                                                                                                           32
+Introductory example k-NN
+
+ k-Nearest-Neighbor (birds of a feather...)
+ Supervised, classification
+
+    Can be extended for regression using smoothing
+
+ Non-parametric
+
+    "Lazy": keeps the data instead of summarizing it into a parametric
+      model.
+
+    The model complexity increase with the data
+
+ Memory-based learning. Very simple and intuitive.
+ It works reasonably well if the feature space is reasonably
+
+  well sampled by the data.
+ Computationally demanding at test time!
+
+                                                                                                                                       33
+k-Nearest-Neighbor
+
+ We have  sample pairs in our training dataset 
+              =  1 ,  1 ,  ,   ,   ,  ,   ,  
+
+ 1-NN: for a query sample   , we predict the   of the
+  closest element in our dataset 
+                  =  j , j = arg ((  ,   ))
+
+     · distance metric (usually Euclidean, can be learnt)
+
+ In k-NN (usually k odd), the k-nearest neighbours vote for
+
+the class. More formally:
+
+    =    (), , )           =  1   ( = )
+                              
+                                   (  ,)
+
+with (  , ) being the índices of the k nearest points
+and () the indicator function.
+
+                                                             34
+   Let's start coding!
+
+ If you are not familiar with Python,
+  do the tutorial
+  https://docs.python.org/3/tutorial/
+
+ To make things easier at the
+  beginning, use Google Colab
+  https://colab.research.google.com/
+
+ Use sklearn documentation
+  https://scikit-learn.org/ and google
+  for help
+
+ The ML community shares a lot of
+  resources, enjoy!
+
+                                                                                                                                              35
+K-nn examples ­ Iris
+
+ Iris, sepal length and width, k={1, 5, 10, 15}
+
+                                  Colab link:
+                                  https://colab.research.google.com/drive/1Dyov9NO9ySNi3vSphk1JZJzIyqJoF3EG
+
+                                                                                                                                       36
+K-nn examples ­ MNIST
+
+ Written digits
+
+    Training size: 60K
+
+    Training size: 5K
+
+                                  Colab link:
+                                  https://colab.research.google.com/drive/1EdDg6rk23BW7rO9uwhogJf5YSMsZ-zK4
+
+                                                                                                                                       37
+K-nn examples ­ MNIST
+
+ Changing the split:
+
+    Training size: 60K
+
+    Training size: 5K
+
+                                  Colab link:
+                                  https://colab.research.google.com/drive/1EdDg6rk23BW7rO9uwhogJf5YSMsZ-zK4
+
+                                                                                                                                       38
+K-nn examples ­ CIFAR
+
+ For CIFAR images,
+  things get much
+  worse... why?
+
+    Training size: 50K
+
+ We need other
+  models here...
+
+                                  Colab link:
+                                  https://colab.research.google.com/drive/15vcuCEHcPex5Xbm_VhgcHttHqPWJzY7U
+
+                                                                                                                                       39
+ Summary
+
+ Machine Learning:
+    Field of study that gives computers the ability to learn without being
+      explicitly programmed (Arthur Samuel 1959).
+    A computer program is said to learn from experience E with respect to
+      some task T and some performance measure P, if its performance on T,
+      as measured by P, improves with experience E. (Tom Mitchell, 1997)
+    Success stories: Spam filtering, OCR, face detection, search engines...
+
+ Related terms:
+
+    Data mining: The field of study that aims to extract
+      information and structure from raw data.
+
+    Artificial Intelligence: the theory and development
+      of computer systems able to perform tasks
+      normally requiring human intelligence, such as
+      visual perception, speech recognition, decision-
+      making, and translation between languages.
+
+    Knowledge Discovery, Pattern Recognition, ...
+
+                                                                                                                                           40
+   Summary (II)
+
+ Training set: Data samples that machine learning algorithms use
+  to find the model parameters.
+
+ Test set: Data used to assess generalization over samples that
+  are unseen during training.
+
+ Supervised Learning: The training set is composed of labeled
+  data (data + desired output)
+
+ Unsupervised Learning: The training data is unlabeled.
+ Regression: Estimates a function that relates an input vector
+
+  with a continuous output.
+ Classification: Estimates a function that relates an input vector
+
+  with a discrete output.
+ Parametric: The model has a fixed number of parameters (by
+
+  making assumptions on the data distribution)
+ Non-parametric: The number of parameters grow with the data
+
+                                                                                                                                              41
+Methodology (I of III)
+
+1. Frame the Problem (Look at the Big Picture)
+
+    Define the general high-level objective
+    Frame the problem (supervised/unsupervised,
+
+      regression/classification, etc.)
+    Define metrics to evaluate performance (e.g., error, accuracy,
+
+      false positives rate, etc.)
+    What is a minimum/reasonable/maximum performance? Check
+
+      scientific literature and existing similar systems.
+
+2. Get the data
+
+    What data is needed? How much? Which format?
+    How/where do you get the data? Check legal aspects and
+
+      sensitive information!
+    Divide into training/validation/test sets. Never look at the test set!
+    The unreasonable effectiveness of data (size and quality!) 
+
+         https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/35179.pdf
+
+                                                                                                                                       42
+Methodology (II of III)
+
+3. Explore the data
+
+    Visualize the data
+    Study correlations between atributes
+
+4. Prepare the data
+
+    Work in a copy of the data, keep the original data intact
+    Data cleaning: Fix/remove outliers, fill missing values / remove
+
+      rows
+    Feature selection: Drop uninformative attributes (garbage in ­
+
+      garbage out)
+    Feature engineering: Transform the data into more
+
+      descriptive/separable features (e.g., #murders vs.
+      #murders/population)
+    Feature scaling: Standardize or normalize features/data
+    Shuffle the data
+
+                                                                                                                                       43
+Methodology (III of III)
+
+5. Shortlist promising models
+
+    Sample subsets of the training sets for quick exploration of many
+      techniques/models
+
+    Compare models using cross-validation (mean and std over folds)
+    Analyze errors
+
+6. Fine-tune the system
+
+    Fine-tune hyperparameters using cross-validation
+    Try ensemble methods
+    Once finished, evaluate the performance on the test set
+
+7. Present the solution
+
+    Report relevant aspects of the process, not only performance
+    Failure cases might be relevant!
+    Report assumptions, limitations, how the model could be improved
+    Summarize (graphs, key findings)
+
+                                                                                                                                       44
+Artificial Intelligence
+                   (62651)
+
+                                                  MAICE
+

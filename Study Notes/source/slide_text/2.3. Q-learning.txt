@@ -1,0 +1,764 @@
+ Reinforcement Learning
+
+  Artificial Intelligence (62651)
+
+            Rubén Martínez Cantín
+Dpto. Informática e Ingeniería de Sistemas
+
+            Universidad de Zaragoza
+
+Artificial Intelligence (62651)  Reinforcement Learning  1 / 48
+1 Introduction
+      Markov Decision Processes (recap)
+      Learning by interaction
+
+2 Prediction
+      Monte Carlo Evaluation
+      Temporal Differences
+
+3 Control
+      Sampling control
+      Exploration vs Exploitation
+      Q-learning
+      Q-learning with features
+
+Artificial Intelligence (62651)  Reinforcement Learning  2 / 48
+Markov Decision Processes
+
+New State  Reward              Agent                                Action
+   xt+1       rt           Environment                                at
+
+In particular, for Markov Decision Processes (MDPs):                                     3 / 48
+      Markov property xt+1 = f (xt )
+      Full observability yt = xt+1
+      Action at  (xt )
+
+           Artificial Intelligence (62651)  Reinforcement Learning
+Markov Decision Process
+
+A Markov Decision Process is a
+tuple X , A, T , R, 
+
+    A set of states x  X .
+    A set of actions a  A.
+    A transition function
+
+      T (x, a, x) = p(x|x, a)
+    A reward function R(x, a, x)
+    Maybe a start state and a
+
+      terminal state.
+
+                                                          Credit: Dan Klein, Pieter Abbeel
+
+Artificial Intelligence (62651)   Reinforcement Learning  4 / 48
+Markov Decision Process
+
+A Markov Decision Process is a
+tuple X , A, T , R, 
+
+    A set of states x  X .
+    A set of actions a  A.
+    A transition function
+
+      T (x, a, x) = p(x|x, a)
+    A reward function R(x, a, x)
+    Maybe a start state and a
+
+      terminal state.
+
+ Plot twist: Now we don't know the transitions T (·) or rewards R(·)
+     The agent must try actions to see the outcome.
+
+                                                         Credit: Dan Klein, Pieter Abbeel
+
+Artificial Intelligence (62651)  Reinforcement Learning  5 / 48
+Learning by interaction
+
+Model-based reinforcement learning   Model-free reinforcement learning
+
+      Learn an approximate model           Learn the policy and values
+      based on experiences                 directly from interaction
+
+      Assume that the learned model        No explicit model of the
+      is correct and solve it as if        transitions T (·) or rewards R(·)
+      known MDP.
+
+Artificial Intelligence (62651)      Reinforcement Learning  6 / 48
+Example: Compute the expected age
+
+We want to compute the expected age of all the students in the University.
+
+Known Model p(a)
+
+                  E(A) = p(a)  a
+
+                                  a
+
+If we p(a) is unknown we can ask several students for the age [a1, a2, . . .]
+
+Model based                      Model free
+
+                   num(a)            E(A)                i ai
+         p^(a) =                                         N
+
+                      N
+
+      E(A)  p^(a)  a
+
+                         a
+
+Artificial Intelligence (62651)  Reinforcement Learning        7 / 48
+Model based learning
+
+Model-Based Idea:
+
+    Learn an approximate model based on
+      experiences
+
+    Solve for values as if the learned model were
+      correct
+
+Step 1: Learn empirical MDP model
+    Count outcomes x for each x, a
+    Normalize to give an estimate of p^(x|x, a)
+    Discover each R^(x, a, x) when we experience
+      (x, a, x)
+
+Step 2: Solve the learned MDP
+
+    For example, use value iteration, as before
+
+                                                         Credit: Dan Klein, Pieter Abbeel
+
+Artificial Intelligence (62651)  Reinforcement Learning  8 / 48
+Model-free learning
+
+     Model-free Idea: why bother learning the
+     transition or reward model?
+
+          Can we compute V , Q or  without a model?
+          Monte Carlo: Sample episodes, average
+
+            rewards at the end.
+          Temporal differences: Use sampling to
+
+            approximate the Bellman updates, compute
+            new values during each learning step.
+
+                                                         Credit: Dan Klein, Pieter Abbeel
+
+Artificial Intelligence (62651)  Reinforcement Learning  9 / 48
+Model-free learning
+
+      Passive reinforcement learning
+           Evaluation given a policy , find the value V .
+           Learner has no choice. Just follow the policy
+           The agent is doing prediction.
+
+      Active reinforcement learning
+           Find the optimal policy/values: V , Q, .
+           Learner can choose. Exploration vs Exploitation.
+           The agent is doing control.
+
+      Remember: even if the learner can choose or not, it must take actions
+      and interact with the world.
+
+Artificial Intelligence (62651)  Reinforcement Learning  10 / 48
+Monte Carlo Direct Evaluation
+
+      Monte Carlo (MC) passive reinforcement learning.
+      Goal: learn V  from episodes of experience under policy 
+      Act according to .
+
+                            x1, a1, R2, x2, . . . , xn  
+Recall that the utility is the total discounted reward:
+
+                   Ut = Rt+1 + Rt+2 + 2Rt+3 + . . . Rn
+Recall that the value function is the expected return:
+
+                             V (x) = E[Ut |xt = x]
+
+MC policy evaluation uses empirical mean return instead of expected
+
+return
+
+        V (x) =     1 Ut(i) xt(i)=x i  episodes
+
+                 i
+
+        Artificial Intelligence (62651)  Reinforcement Learning  11 / 48
+Monte Carlo Direct Evaluation
+
+      To evaluate state x
+      Every time-step t that state x is visited in an episode,
+      Increment counter N(x)  N(x) + 1
+      Increment total return S(x)  S(x) + Ut
+      Value is estimated by mean return V^(x) = S(x)/N(x)
+      By law of large numbers, V^(x)  V (x) as N(x)  
+
+Artificial Intelligence (62651)  Reinforcement Learning         12 / 48
+Monte Carlo Direct Evaluation
+
+ Input policy   Observed Episodes                                        Estimated values
+Assume:  = 1
+                Episode 1                        Episode 2
+                B, east, C, -1                   B, east, C, -1
+                C, east, D, -1                   C, east, D, -1
+                D, exit, x, +10                  D, exit, x, +10
+
+                Episode 3                        Episode 4
+                E, north, C, -1                  E, north, C, -1
+                C, east, D, -1                   C, east, A, -1
+                D, exit, x, +10                  A, exit, x, -10
+
+How can B and E have different values if both go to C for this policy?
+
+                                                                         Credit: Dan Klein, Pieter Abbeel
+
+                Artificial Intelligence (62651)  Reinforcement Learning  13 / 48
+Incremental Monte Carlo
+
+Do we need to wait until the end of all episodes to compute the
+
+empirical mean?
+
+Remember the expected age example:
+
+ Model free approach: E(A)  A^N =             N     ai
+                                              i =1
+
+                                              N
+
+ Incremental approach:
+
+                            1    N
+                            N
+                 A^N                   ai
+
+                                 i =1
+
+                             1             N -1
+                         =
+                                 aN + ai
+                            N
+                                           i =1
+
+                         =1      aN + (N - 1)A^N-1
+                            N
+
+                         =  A^N-1      +   1  aN - A^N-1
+                                           N
+
+Artificial Intelligence (62651)        Reinforcement Learning    14 / 48
+Incremental Monte Carlo for value function
+
+      Update V (x) incrementally after episode x1, a1, R2, x2, . . . , xn
+      For each state xt with utility Ut
+
+                           N(xt )  N(xt ) + 1
+                                                     1
+
+                           V (xt )  V (xt ) + N(xt ) (Ut - V (xt ))
+      In non-stationary problems, it can be useful to track a running mean,
+      that is, forget old episodes.
+
+                              V (xt )  V (xt ) + (Ut - V (xt ))
+
+Artificial Intelligence (62651)  Reinforcement Learning  15 / 48
+Problems with Monte Carlo Direct Evaluation
+
+      Samples are based on full episodes.
+      The problem needs to be episodic. Not for continuous.
+      It ignores MDP structure.
+      Is there a way to exploit MDP structure and use Bellman equations?
+
+Artificial Intelligence (62651)  Reinforcement Learning  16 / 48
+Monte Carlo Policy Evaluation
+
+We had the Bellman expectation equation to update the value
+function:
+
+V (x) = (a|x)                    p(x|x, a) R(x, a, x) + V (x)
+
+aA             x  X
+
+This approach exploits the MDP structure and is valid for continuous
+problems.
+But it requires p(x|x, a) and R(x, a, x) to do it.
+
+Artificial Intelligence (62651)  Reinforcement Learning        17 / 48
+Sample based policy evaluation
+
+      Instead of sampling full episodes, we can sample the value update.
+
+V (x) = (a|x)                              p(x|x, a) R(x, a, x) + V (x)
+
+          aA   x  X
+
+From one state x, we sample just the next action a1, a2, . . .  (x)
+and the next transition x1  p(x|a1, x), x2  p(x|a2, x), . . ..
+
+Then, we collect the outcome for the action/transition:
+
+              sample1 = R(x, a1, x1 ) + Vk(x1 )
+              sample2 = R(x, a2, x2 ) + Vk(x2 )
+
+                        ...
+
+Finally,
+
+                                             1  N
+                                             N
+              Vk+1(x )                                samplei
+
+                                                i =1
+
+          Artificial Intelligence (62651)    Reinforcement Learning       18 / 48
+Temporal Difference
+
+      Idea: learn from any interaction.
+      Combine the sample based policy evaluation with the incremental
+      Monte Carlo method.
+      Remember: Incremental Monte Carlo updates the value with the
+      actual utility Ut.
+
+                              V (xt )  V (xt ) + (Ut - V (xt ))
+
+      Temporal Difference updates the value with the estimated utility
+      Rt+1 + V (xt+1)
+
+                    V (xt )  V (xt ) + (Rt+1 + V (xt+1) - V (xt ))
+
+Artificial Intelligence (62651)  Reinforcement Learning                 19 / 48
+Temporal Difference
+
+      Temporal Difference (TD) can be learn after any interaction. No need
+      to wait for the end of the episode.
+      It can be used for continuous problems.
+      It can even learn from incomplete sequences.
+      It exploits MDP structure.
+
+                        samplek = R(x, a, x) + Vk(x)
+                        Vk+1(x)  (1 - )Vk(x) +  · samplek =
+
+                                   = Vk(x) + (samplek - Vk(x))
+
+      Remember that   [0, 1] is used to forget.
+                0 ignores the distant future.
+                1 forgets the distant past
+
+Artificial Intelligence (62651)  Reinforcement Learning  20 / 48
+Forgetting the past
+
+Remember, we can use a running mean to forget old updates.
+    In MC, for non-stationary problems
+    In TD, recursive update of Bellman equation:
+
+                           V (xt )  V (xt ) + (updatet - V (xt ))
+A running average z^ of {z}iN=1 elements:
+
+z^k = z^k-1 + (zk - z^k-1) = (1 - )z^k-1 + zk
+
+Weights recent samples more:
+
+z^k  =  zk           + (1 - )zk-1 + (1 - )2zk-2 +        ...
+                       1 + (1 - ) + (1 - )2 + . . .
+
+Artificial Intelligence (62651)  Reinforcement Learning            21 / 48
+MC vs TD
+
+      Both methods converge to the true value if experience  
+      MC requires full episodes.
+      MC is a very simple and general idea. It can be applied for any system.
+      TD exploits the Markov property.
+
+           It is more efficient for Markov environments.
+           It might not converge for certain environments (e.g.: non-Markov).
+
+Artificial Intelligence (62651)  Reinforcement Learning  22 / 48
+Monte Carlo Update
+
+                           V (xt )  V (xt ) + (Ut - V (xt ))
+
+Artificial Intelligence (62651)  Reinforcement Learning       Credit: David Silver
+                                                                               23 / 48
+Temporal Difference Update
+
+                 V (xt )  V (xt ) + (Rt+1 + V (xt+1) - V (xt ))
+
+Artificial Intelligence (62651)  Reinforcement Learning          Credit: David Silver
+                                                                                  24 / 48
+Dynamic Programming Update
+
+                            V (xt )  E [Rt+1 + V (xt+1)]
+
+Artificial Intelligence (62651)  Reinforcement Learning   Credit: David Silver
+                                                                           25 / 48
+Unified view of RL
+
+        The TD algorithm that we have seen is called TD(0), because it considers only
+        one step ahead.
+        The generalization is called TD(), which combines multiple steps ahead.
+
+Artificial Intelligence (62651)  Reinforcement Learning  Credit: David Silver
+                                                                          26 / 48
+Sampling control
+
+      We have seen how to use MC and TD for prediction (policy
+      evaluation).
+      We are going to use MC and TD for control (optimal policy/value).
+      On-policy learning
+
+           Learn on the job
+           Learn about policy  from experience sampled from 
+      Off-policy learning
+           Look over someone's shoulder
+           Learn about policy  from experience sampled from µ
+
+Artificial Intelligence (62651)  Reinforcement Learning  27 / 48
+Quick Parenthesis: Q-values
+
+      Computing the greedy policy from V (x) requires the MDP model
+      p(x|x, a) and R(x, a, x).
+
+                 (x) = arg max p(x|x, a) R(x, a, x) + V (x)
+
+                                               a
+                                                      x
+
+      Computing the greedy policy from Q(x, a) can be done model-free:
+                                   (x) = arg max Q(x, a)
+
+                                                                        a
+
+      Solution: we are going to do control based on Q-functions.
+
+Artificial Intelligence (62651)  Reinforcement Learning  28 / 48
+SARSA
+
+      Iteratively estimate Q and  (similar to policy iteration)
+      Policy evaluation (estimate Q given ):
+       Good: Monte Carlo: run multiple full episodes, then update policy.
+      Better: Improve policy after each episode.
+
+         Best: Do not run full episodes. Use Temporal Differences.
+             Q(xt , at )  Q(xt , at ) + (R + Q(xt+1, at+1) - Q(xt , at ))
+
+      Policy improvement (improve  given Q):
+       Exploit: The optimal policy is greedy to the value function...
+      Explore: ... but remember that we also need to explore!
+
+Artificial Intelligence (62651)  Reinforcement Learning  29 / 48
+Exploration vs Exploitation
+
+      The greedy policy is the best option if we know the model.
+      Now, we are learning by experience.
+
+           The agent must have diverse experiences to learn.
+           But the agent must also find an optimal behavior.
+
+Artificial Intelligence (62651)  Reinforcement Learning           30 / 48
+Regret
+
+     Regret measures your mistakes. The
+     (expected) reward of your actions,
+     including suboptimal choices, against
+     the (expected) optimal reward.
+     Minimizing regret is not only learning to
+     be optimal. It is optimally learning to be
+     optimal.
+     Pure random exploration will always find
+     the optimal policy, but it has very high
+     regret.
+     A good trade-off of exploration and
+     exploitation can provide optimal regret.
+
+Artificial Intelligence (62651)  Reinforcement Learning  31 / 48
+Exploration-exploitation trade-off principles
+
+      The limit cases are the greedy policy (always exploit) and the random
+      policy (always exploit).
+
+           We have seen that both policies have high regret.
+      Random mixing (-greedy)
+
+           The simplest approach: flip a coin and choose greedy or random policy
+              depending on the outcome.
+
+      Optimistic initialization
+           Assume unknown = best. Try everything at least once.
+
+      Optimism in the Face of Uncertainty
+           In case of uncertainty, assume the best possible outcome.
+           For example, upper confidence bound
+           If you are right: you win!
+           If you are wrong: you learn a lot!
+
+Artificial Intelligence (62651)  Reinforcement Learning  32 / 48
+Exploration-exploitation demo
+
+ Exercise/demo: https://drive.google.com/file/d/1xAph2c1P8pPcJudiWBCd9Rrqt4p2EORa/view?usp=sharing
+
+Artificial Intelligence (62651)  Reinforcement Learning                                             33 / 48
+DP vs TD algorithms
+
+                                 Full backup             TD Backup
+
+V (x), Q(x, a)          Policy evaluation                TD learning
+
+(x, a), V (x), Q(x, a)           Policy iteration        SARSA
+
+V (x), Q(x, a)                   Value iteration         ??? Q-learning
+
+Artificial Intelligence (62651)  Reinforcement Learning         34 / 48
+Q-learning
+
+Start with Q-value iteration
+
+Qk+1(xt , at ) =        p(xt+1|xt , at )           R  (xt  ,  at  ,  xt  +1  )  +    max   Qk  (xt  +1  ,  a)
+
+                  xt+1                                                                 a
+
+Consider the sample update
+
+                  sample  =  R(xt , at , xt+1)             +         max     Qk    (xt+1,  a)
+
+                                                                       a
+
+Which, using the running average, can be incorporated as:
+
+Q(xt ,      at )    Q(xt ,  at )  +  (Rt+1            +       max        Q (xt +1 ,  a)    -  Q(xt ,  at ))
+
+                                                                a
+
+                  Artificial Intelligence (62651)     Reinforcement Learning                               35 / 48
+Q-learning algorithm
+
+Algorithm Q-learning algorithm
+
+Input: Step size   [0, 1], policy parameters: e.g., small  > 0.
+      Initialize Q(x, a), for all x  X , a  A, arbitrarily except that Q(terminal, ·) = 0
+      for each episode do:
+          Initialize x0
+          for each step t in episode do:
+               Choose at from xt using a policy derived from Q (e.g.: -greedy)
+               Take action at , observe Rt+1 and xt+1.
+               Q(xt , at )  Q(xt , at ) + (Rt+1 +  maxa Q(xt+1, a) - Q(xt , at ))
+               if xt+1 is terminal then Stop episode
+
+Artificial Intelligence (62651)  Reinforcement Learning  36 / 48
+On-policy vs Off-policy
+
+      SARSA and Q-learning require 2 actions for each update.
+             Q(xt , at )  Q(xt , at ) + (Rt+1 + Q(xt+1, a) - Q(xt , at ))
+
+      This may come from different sources:
+           The behavior policy is how the agent is acting.
+           The target policy is the policy that the agent is learning.
+
+      On-policy vs off-policy
+           On-policy methods use the same policy for the behavior and target.
+           Off-policy methods use a different policy. They can learn the optimal
+              policy even acting suboptimally!
+
+Artificial Intelligence (62651)  Reinforcement Learning  37 / 48
+On-policy vs Off-policy
+
+In SARSA, all actions are selected according to the target policy , for
+example: -greedy.
+
+Q(xt , at )  Q(xt , at ) + (Rt+1 + Q(xt+1, at+1) - Q(xt , at ))
+
+In Q-learning, actions are selected according to the behavior policy µ,
+for example: -greedy, but the agent assumes that in the future it will
+be optimal ( is the greedy policy).
+
+Q (xt  ,  at )    Q (xt  ,  at )  +  (Rt+1       +  max    Q (xt +1 ,    a)  -  Q (xt  ,  at ))
+
+                                                        a
+
+                Artificial Intelligence (62651)  Reinforcement Learning                   38 / 48
+Scaling Q-learning
+
+      How many states does smallGrid Pacman have?
+
+Classic Pacman has: 2405 · 2240 = 1.76684711072 states
+
+Basic Q-learning keeps a table with a Q-value for every state and
+action.
+This idea is not able to scale:
+
+    During training, it is impossible to visit all the states/actions.
+    The table cannot be kept in memory.
+
+Artificial Intelligence (62651)  Reinforcement Learning                 39 / 48
+Generalization Q-learning
+
+      We want to learn from few states and generalize to similar states.
+
+We learn that this is a  Basic Q-learning tell  Or even this state!
+        bad state        us nothing about this
+
+                                  state.
+
+What do they have in common?
+
+                                                         Credit: Dan Klein, Pieter Abbeel
+
+Artificial Intelligence (62651)  Reinforcement Learning                   40 / 48
+Approximate Q-learning
+
+ Idea: exploit certain properties (features) of state.
+
+ A feature is a function from states or (state,action) to numbers.
+
+ We can use features to describe other functions
+
+Examples of features:
+    Distance to a ghost.
+    Distance to a dot.
+    Number of ghost.
+    Is Pacman in a corner/tunnel?
+    1/(distance_to_dot)2
+    ...
+    Is it the state in this slide?
+    ...
+    Does this action get me closer to
+      food?
+
+                                                         Credit: Dan Klein, Pieter Abbeel
+
+Artificial Intelligence (62651)  Reinforcement Learning             41 / 48
+Linear function approximation
+
+      Using a feature representation, we can write a q function (or value
+      function) for any state using a few weights:
+
+                     V (x) = w1f1(x) + w2f2(x) + . . . + wnfn(x)
+                  Q(x, a) = w1 f1(x, a) + w2 f2(x, a) + . . . + wn fn(x, a)
+      Advantage: our experience is summed up in a few powerful numbers
+      Disadvantage: states may share features but actually be very different
+      in value!
+
+Artificial Intelligence (62651)  Reinforcement Learning  42 / 48
+Approximate Q-learning
+
+Take a linear Q-value function:
+           Q(x, a) = w1f1(x, a) + w2f2(x, a) + . . . + wnfn(x, a)
+
+Q-learning update is based on estimation error:
+
+error =  Rt+1           +        max  Q  (xt+1,  a)  - Q(x, a)
+
+                                   a
+
+Basic Q-learning updates each value with the error:
+
+         Q(x, a)  Q(x, a) +  · error
+
+Approximate Q-learning updates the weights of active features:
+
+         wi  wi +  · error · fi (x, a)
+
+Artificial Intelligence (62651)  Reinforcement Learning            43 / 48
+Approximate Q-learning
+
+      Approximate Q-learning updates the weights of active features:
+
+                                 wi  wi +  · error · fi (x, a)
+      Intuitive interpretation:
+
+           If something unexpectedly bad happens, penalize the features that were
+              on  wi .
+
+           If something unexpectedly good happens, reward the features that were
+              on  wi .
+
+      Formal explanation: This is online least squares with gradient descent.
+
+           If error is Gaussian, then least squares = maximum likelihood.
+
+Artificial Intelligence (62651)  Reinforcement Learning  44 / 48
+Example: Q-learning in Pacman                                        Credit: Dan Klein, Pieter Abbeel
+
+Initial value: Q(x, a) = 4.0fDOT (x, a) - 1.0fGST (x, a)
+
+Features:  fi (x, a)   =           1                 = 0.004
+                          dist _pacman_i
+
+                                   R = -500
+
+                                   at = NORTH
+
+fDOT (x, N) = 0.5 fGST (x, N) = 1                                    Q(xt+1, ·) = 0
+
+Qe(xrtr,oNr )==(1R  +    max  Q (xt +1 ,    a))  -  Q(xt ,  at )  =  -501
+
+                           a
+
+wDOT  4.0 + (-501)0.5 wGST  -1.0 + (-501)1.0
+
+Final value: Q(x, a) = 3.0fDOT (x, a) - 3.0fGST (x, a)
+
+           Artificial Intelligence (62651)  Reinforcement Learning                   45 / 48
+Online least squares
+
+Remember gradient descent for logistic regression (see Fundamentals).
+
+Using online least squares we can minimize the error, one point (x, y )p
+
+at  a  time,  by  following  the  gradient     wm       =  wm  +  1        Jp (w  )  .
+                                                                  2        wm
+
+     We have the same problems here: learning rate , overfitting, etc.
+
+                                  2
+
+Jp(w ) = y - wk fk (x)
+
+                            k
+
+Jp(x) = -2        y - wk fk (x)                fm (x )
+ wm
+                           k
+
+wm  wm +  y - wk fk (x) fm(x)
+
+                                      k
+
+                                                               Credit: Alexander Amini, Daniela Rus
+
+              Artificial Intelligence (62651)  Reinforcement Learning                   46 / 48
+The Deadline triad
+
+      With approximate Q-learning we have a system that uses:
+           Function approximation (linear features, neural network, etc.)
+           Bootstrapping (TD updates)
+              Qw (x, a) - [R(x, a, x) +  maxa Qw (x, a)]
+           Off-policy training. E.g.: (at , xt )   - greedy
+
+      If you want convergence guarantees, you must pick ONLY two.
+      It has nothing to do with uncertainty, type of planning or control,
+      model used...
+      If you use all 3, like in Deep Q-learning, you have to take care with
+      stability.
+
+Artificial Intelligence (62651)  Reinforcement Learning  47 / 48
+Bibliography
+
+      Richard S. Sutton, Andrew G. Barto. Reinforcement learning: An
+      Introduction (second edition), 2018
+
+        http://incompleteideas.net/book/the-book.html
+
+      David Silver. Advanced Topics in Machine Learning, 2015
+
+        http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html
+
+      Dan Klein, Pieter Abbeel. Artificial Intelligence CS188
+
+        http://ai.berkeley.edu
+
+Artificial Intelligence (62651)  Reinforcement Learning               48 / 48
+

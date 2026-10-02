@@ -1,0 +1,126 @@
+Artificial Intelligence - Presentation
+
+Master in Artificial Intelligence and Computational Engineering 2026-27
+
+Luis Montesano, Rubén Martínez Cantín, Ana C. Murillo
+Faculty
+
+ Luis Montesano - lmontesan@unizar.es
+ Rubén MartínezCantín - rmcantin@unizar.es
+ Ana C. Murillo - acm@unizar.es
+
+Office hours:
+https://directorio.unizar.es/?#/tutoria?colectivo=PDI&codCent
+ro=110
+Motivation
+AI success
+AI success
+
+            Stanley self driving car (2005)
+             Image Segmentation
+AI success
+
+   Gaussian splatting
+AI success
+
+                                                                                             Robots
+AI success
+
+                                 Skin cancer detection  Protein folding
+
+Prediction of cardiovascular risk factors from retinal
+fundus photographs via deep learning
+Goals
+
+ Study main artificial intelligence and machine learning
+   techniques ,
+
+ understand theirmathematical and algorithmic
+   foundations ,
+
+ apply them in realistic examples.
+
+For specific target competences, skills, and learning
+outcomes please go to the official university course guide
+
+("guia docente")
+Tentative Program
+
+   Introduction to Machine Learning / Shallow methods
+   Bayesian and Reinforcement Learning
+   Intro to Deep Learning / Convolutional Neural Networks
+   Ethics and explainability
+   Attention and transformers
+   Other Deep Learning paradigms and strategies
+Labs (3h sessions during class)- form pairs
+
+ Lab 1 - "Shallow" learning (15/9)                                     Tentative dates.
+ Lab 2 ­ Bayesian+RLlearning (28/9)                                    We'll confirm in
+ Lab 3 ­ DL and CNNs (6/10)
+ Lab 4 ­ Ethics & Explainability (16/10)                                    advance
+ Lab 5 ­ Attention & Transformers (20/10)
+
+Submit one lab report per pair
+
+Labs will be inPython 3.* (and packages):                               please, start
+                                                                       setting up your
+ If you don't have any Python experience :
+                                                                        laptop ASAP
+      Python tutorial:https://docs.python.org/3/tutorial/
+
+ Python+Numpy tutorial:http://cs231n.github.io/python-numpy-tutorial/
+
+ A more detailedtutorial for installing it with Conda in your computer and learning it.
+
+ For your laptop: Use Python 3, andvirtual environments (conda, virtualenv...).
+
+Each lab report will include the packages needed (if any).
+
+ In the cloud: We will also usecolab (python in the browser) for labs and assignments.
+Evaluation (continuous)
+
+ S1: 40% Written test .
+ S2: 50% Results and reports for Lab 1, 2, 3, 4, 5.
+
+  Lab attendance is mandatory.
+ S3: 10% Presentations and debates in class.
+
+To pass the course:
+
+if  S1 >=5 (out of 10) & S2 >= 5 (out of 10)
+
+then final grade computed as:0.4*S1 + 0.5*S2 + 0.1*S3
+
+else min (S1,S2)
+Methodology
+
+ Live lectures . Interactive parts and in-class
+   e xe rc is e s / a s s ig nm e nts / d is c us s io ns .
+
+ Labs  submit short results-form a few days after lab
+ Presentations  presentation of labs or class
+
+   d is c us s io ns
+ Final exam
+
+   Final schedule: check out the official Master/EINA
+   calendar : -)
+Evaluation (global)
+
+If you fail to attend and submit the lab tasks during the
+established deadlines for the continuous evaluation, you can
+opt for a global single evaluation at the official evaluation date:
+
+ S1: 40% Written test .
+ S2: 60% Exam and evaluation of results and reports
+
+  from Lab 1, 2, 3, 4, 5
+
+To pass the course:
+
+if  S1 >=5 (out of 10) & S2 >= 5 (out of 10)
+
+then final grade computed as:0.4 * S1 + 0.6 * S2
+
+else min (S1,S2)
+
