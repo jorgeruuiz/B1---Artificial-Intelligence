@@ -1,0 +1,449 @@
+         Planning in
+Markov decision processes
+
+  Artificial Intelligence (62651)
+
+            Rubén Martínez Cantín
+Dpto. Informática e Ingeniería de Sistemas
+
+            Universidad de Zaragoza
+
+Artificial Intelligence (62651)  Markov decision processes  1 / 26
+Markov decision processes
+
+      Markov decision processes are formal descriptions of the environment
+      for reinforcement learning.
+      The system is Markov  The state fully characterizes the process.
+      The state is fully observable.
+      Almost all RL problems can be formulated as MDPs:
+
+           Control problems can be represented as continuous MDP.
+           Partially observable processes can be modeled as belief-MDPs.
+           Multi-armed bandits1 as one state MDPs.
+
+1Defined in the next lecture.                                    Markov decision processes  2 / 26
+
+                                Artificial Intelligence (62651)
+Markov Decission Process
+
+A Markov Decission Process is a              In this lecture, we assume a
+tuple X , A, T , R,                          discrete MDP, that is, we can
+                                             iterate over all elements (states,
+    A set of states x  X .                   actions, values...).
+    A set of actions a  A.
+    A transition function
+
+      T (x, a, x) = p(x|x, a)
+    A reward function R(x, a, x)
+    Maybe a start state and a
+
+      terminal state.
+
+The dynamic model (states and
+transitions) is a Markov chain.
+
+    "The future is independent of
+      the past given the present"
+
+      p(xt+1|xt ) = p(xt+1|x1, . . . , xt )
+
+                                             Credit: Dan Klein, Pieter Abbeel
+
+Artificial Intelligence (62651)              Markov decision processes  3 / 26
+Example: Racing
+
+Represent the racing problem in tabular form (states, actions, transitions,
+reward and policy)
+
+                                 Credit: Dan Klein, Pieter Abbeel
+
+Artificial Intelligence (62651)  Markov decision processes  4 / 26
+Search tree solution
+
+                                 Credit: Dan Klein, Pieter Abbeel
+
+Artificial Intelligence (62651)  Markov decision processes  5 / 26
+Policies
+
+Definition
+
+A policy  is a distribution over actions given states,
+                               (a|x) = p(at = a|xt = x)
+
+      A policy fully defines the behaviour of an agent
+      MDP policies depend on the current state (not the history)
+
+           Policies are stationary (time-independent), except for finite-horizon
+              problems, at  (·|xt ), t > 0
+
+Artificial Intelligence (62651)  Markov decision processes                        6 / 26
+Utilities
+
+      What preferences should an agent have over reward sequences?
+           More or less? [1, 2, 3] or [2, 3, 4]
+           Now or later? [0, 0, 1] or [1, 0, 0]
+
+Theorem: Stationary preferences
+
+If we assume stationary preferences:
+           [a1, a2, . . .]  [b1, b2, . . .]  [r , a1, a2, . . .]  [r , b1, b2, . . .]
+
+There is only one way to define utilities (returns).
+                      U ([r0, r1, r2, . . .]) = r0 + r1 + 2r2 + . . .
+
+Artificial Intelligence (62651)  Markov decision processes                             7 / 26
+Discounted utility
+
+The utility defined as:
+
+U ([r0, r1, r2, . . .]) = r0 + r1 + 2r2 + . . .
+
+is called a discounted utility or discounted return, for   [0, 1).
+The special case where  = 1 is called additive utility.
+
+Why discount?
+
+    The agent should prefer sooner
+      rewards. Do not procrastinate!
+
+    It helps convergence, specially for
+      infinite horizon problems.
+
+    Biological inspiration (human/animal).
+    Uncertainty about future events.
+      0 represents a myopic agent.
+      1 leads to a far-sighted agent.
+
+                                            Credit: Dan Klein, Pieter Abbeel
+
+Artificial Intelligence (62651)  Markov decision processes          8 / 26
+Quiz: discounting
+
+                   abcde
+
+                   10            1
+
+Given the previous states [a, b, . . .] and rewards (10, 1), where a and e
+are terminal states.
+Actions are left and right.
+Transitions are deterministic (e.g.: left always move left except on
+terminal state)
+
+For  = 1, what is the optimal policy?
+For  = 0.1, what is the optimal policy?
+For which  is left and right equally good in state d?
+
+Artificial Intelligence (62651)  Markov decision processes  9 / 26
+Infinite rewards
+
+The utility or return of a problem must always be finite.
+Finite horizon: episodes terminate after a fixed number of steps T .
+
+                       Nonstationary policies: the action might depend on the
+                       state and time step.
+Discounting: use 0 <  < 1
+                       Smaller  means short term focus.
+Absorbing state: a terminal state that is reached for every policy.
+
+The sequence of states from the starting state to the end (finite horizon or
+terminal state) is called episode.
+
+       episodic (terminating) task vs continuous (running forever) task
+
+Artificial Intelligence (62651)  Markov decision processes  10 / 26
+Value function
+
+Definition
+
+The state-value function V (x) of an MDP is the expected utility starting
+from state x, and then following policy 
+
+                                 V (x) = E[Ut |xt = x]
+
+Definition
+
+The action-value function Q(x, a) is the expected utility starting from
+state s, taking action a, and then following policy 
+
+                          Q(x, a) = E[Ut |xt = x, at = a]
+
+Artificial Intelligence (62651)  Markov decision processes  11 / 26
+Bellman equation for value functions
+
+The value function can be computed recursively. The value function at any
+time V (xt) can be decomposed as:
+
+      the inmediate reward Rt+1
+      the (discounted) future value function V (xt+1)
+
+             V (x) = E[Ut |xt = x] =
+                      = E[Rt+1 + Rt+2 + 2Rt+3 + . . . |xt = x ] =
+                      = E[Rt+1 + (Rt+2 + Rt+3 + . . .)|xt = x ] =
+                      = E[Rt+1 + Ut+1|xt = x ] =
+                      = E[Rt+1 + V (xt+1)|xt = x ]
+
+Artificial Intelligence (62651)  Markov decision processes  12 / 26
+Bellman Expectation Equation
+
+      Similarly, for action-value funcions, we can follow the same procedure
+      to obtain:
+
+                Q(x , a) = E[Rt+1 + Q(xt+1, at+1)|xt = x , at = a]
+      Remember that for discrete distributions:
+
+                                   EZ [f (z)] = p(z)f (z)
+
+                                                                     z Z
+
+      Then we can see how the value functions are related:
+                                V (x) = (a|x)Q(x, a)
+
+                                                             aA
+
+Artificial Intelligence (62651)  Markov decision processes  13 / 26
+Bellman Expectation Equation
+
+Further expanding the expectations que can see that:
+
+                   V (x) = (a|x)Q(x, a)
+
+                                          aA
+
+                Q(x, a) = p(x|x, a) R(x, a, x) + V (x)
+
+                                          x  X
+
+                                 Credit: Dan Klein, Pieter Abbeel
+
+Artificial Intelligence (62651)  Markov decision processes  14 / 26
+Bellman Expectation Equation
+
+Combining the previous equations:
+
+V (x) = (a|x)         p(x|x, a) R(x, a, x) + V (x)
+
+          aA    x  X
+
+Finally:
+
+Q(x, a) = p(x|x, a) R(x, a, x) +  (a|x)Q(x, a)
+
+          x  X                             aA
+
+For small MDPs, these equations can be solved directly, as a system of
+equations.
+
+          Artificial Intelligence (62651)  Markov decision processes    15 / 26
+Optimal Value Functions
+
+Definition
+
+The optimal state-value function V (x) is the maximum value function
+
+over all policies:
+
+                    V (x) = max V (x)
+
+                                      
+
+Definition
+
+The optimal action-value function Q(x, a) is the maximum action-value
+function over all policies:
+
+                               Q(x, a) = max Q(x, a)
+
+                                                                  
+
+The optimal value function is the best an agent can do in the MDP. It is
+the solution.
+
+                    Artificial Intelligence (62651)  Markov decision processes  16 / 26
+Optimal policy
+
+Theorem
+
+For any Markov Decision Process:
+      There is at least one optimal policy .
+      All optimal policies achive the optimal value functions:
+                    V (x) = V (x), Q(x, a) = Q(x, a)
+
+Important: The optimal policy is greedy with respect to the optimal
+value function.
+
+    Deterministic policy:
+
+a = (x) = arg max Q(x, a)
+
+                              aA
+
+ Stochastic policy (without ties):
+
+(a|x) =  1 if a = arg max Q(x, a)
+                                    aA
+
+         0 otherwise
+
+Artificial Intelligence (62651)     Markov decision processes   17 / 26
+Bellman Optimality Equation
+
+      Similarly to what we did for the Bellman expectation equations for
+      V (x) and Q(x), we can use Bellman optimality equations for the
+      optimal values V (x) and Q(x).
+
+                      V (x) = max Q(x, a)
+
+                                                 a
+
+                   Q(x, a) = p(x|x, a) R(x, a, x) + V (x)
+
+                                              x  X
+
+      Compare the result with the equations in slide 14
+
+Artificial Intelligence (62651)  Markov decision processes  18 / 26
+Bellman Optimality Equation
+
+Combining the previous equations:
+
+          V (x) = max        p(x|x, a) R(x, a, x) + V (x)
+          a
+                       x  X
+
+Finally:
+
+          Q(x, a) = p(x|x, a) R(x, a, x) +  max Q(x, a)
+
+                                                                                          a
+                                  x  X
+
+Compare the result with the equations in slide 15
+
+          Artificial Intelligence (62651)  Markov decision processes                         19 / 26
+Solving the Bellman Equations
+
+      MDPs have all the ingredients for dynamic programming.
+           Bellman equations give recursive decomposition.
+           Value function stores and reuses solutions.
+
+      We are going to see three algorithms:
+      Policy evaluation: Use Bellman expectation equation.
+
+                            1. Given a policy   compute V (x) iteratively.
+      Value iteration: Use Bellman optimality equation.
+
+                            1. Compute V (x) recursively.
+      Policy iteration: Evaluate and improve a policy iteratively.
+
+                            1. Given   compute V (x)
+                            2. Given V (x), choose  greedy  compute V  (x)
+                            3. . . .
+                            n. Converges to  and V (x).
+
+Artificial Intelligence (62651)  Markov decision processes                  20 / 26
+Iterative policy evaluation
+
+Prediction problem: Given a policy , compute V (x),  x
+Idea: apply Bellman expectation backups iteratively
+
+Vk+1(x) = (a|x)                    p(x|x, a) R(x, a.x) + Vk (x)
+
+aA                           x  X
+
+Start with a default value V0(x) = 0,  x
+
+Compute V1(x) for all states synchronously using Bellman equation.
+V0  V1  V2  . . .  V 
+Improvements:
+
+    Synchronous version in matrix form: Vk+1(x) = R + PVk (x)
+    Asynchronous version where we backup only one state per iteration
+
+      also converges.
+
+Artificial Intelligence (62651)    Markov decision processes     21 / 26
+Policy evaluation algorithm
+
+Algorithm Policy evaluation algorithm
+
+Input: , the policy to be evaluated. Accuracy threshold  > 0
+
+Initialize V (x), for all x  X , arbitrarily except that V (terminal) = 0
+
+repeat
+
+v V                                       Keep backup value
+
+for all x  X do
+
+        V (x)  aA (a|x) xX p(x|x, a) (R(x, a, x) + v (x))
+
+until max(|v - V |) < 
+
+This algorithm can also be done in-place without backup.
+
+        Artificial Intelligence (62651)  Markov decision processes  22 / 26
+Value iteration
+
+Can we use Bellman optimality equation directly in a recursive way?
+           V (x) = max p(x|x, a) R(x, a, x) + V (x)
+
+                                  a
+                                       x  X
+
+Principle of optimality: An optimal policy is...
+    An optimal first action a.
+    An optimal policy in the successor state x.
+
+Idea: Work backwards iteratively
+
+Vk+1(x )         =  max        p(x|x, a) R(x, a, x) + Vk (x)
+
+                      a  x  X
+
+Artificial Intelligence (62651)  Markov decision processes    23 / 26
+Value iteration algorithm
+
+Algorithm Batch value iteration algorithm
+Input: Accuracy threshold  > 0
+
+     Initialize Vk (x), for all x  X , arbitrarily except that Vk (terminal) = 0
+     repeat
+
+         vk  Vk
+         for all x  X do
+
+              Vk+1(x)  maxa xX p(x|x, a) (R(x, a, x) + vk (x))
+     until max(|vk - Vk |) < 
+
+     Output: (x)  arg maxaA xX p(x|x, a)(R(x, a, x) + Vk (x))
+
+This algorithm can also be computed asynchronously. For example, we can
+do inline updates or use prioritized sweeping. (lab sessions)
+
+Artificial Intelligence (62651)  Markov decision processes  24 / 26
+Demo of dynamic programming
+
+Javascript demo of gridworld using dynamic programming:
+
+https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html
+
+Artificial Intelligence (62651)  Markov decision processes  Credit: Andrej Karpathy
+                                                                                    25 / 26
+Bibliography
+
+      Richard S. Sutton, Andrew G. Barto. Reinforcement learning: An
+      Introduction (second edition), 2018
+
+        http://incompleteideas.net/book/the-book.html
+
+      David Silver. Advanced Topics in Machine Learning, 2015
+
+        http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html
+
+      Dan Klein, Pieter Abbeel. Artificial Intelligence CS188
+
+        http://ai.berkeley.edu
+
+Artificial Intelligence (62651)  Markov decision processes            26 / 26
+

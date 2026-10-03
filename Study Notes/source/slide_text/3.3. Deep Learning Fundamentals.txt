@@ -1,0 +1,484 @@
+Artificial Intelligence - Deep Learning
+fundamentals
+
+Master in Artificial Intelligence & Computational Engineering
+Luis Montesano
+ What's deep learning?
+    Related topics
+    DL pipeline
+
+ Fundamentals of DL
+    Review basic concepts
+    NN and DNN
+Neural Networks and Deep Neural Networks
+
+ Neural Networks
+      Neuron: atomic computational unit in NN.
+       Params: w, b and f.
+      Activation function (f) usually non linear
+      Neural Network: connect several layers, neurons, ...
+      Perceptron: simplest NN. 1 layer - binary linear classifier
+
+data/features                     output
+
+               linear classifier
+Neural Networks and Deep Neural Networks
+
+ Neural Networks
+      Neuron: atomic computational unit in NN.
+       Params: w, b and f.
+      Activation function (f) usually non linear
+      Neural Network: connect several layers, neurons, ...
+      Deep Neural Network: many hidden layers
+
+data/features  output
+Two layers
+
+ What happens if we stack two layers in 1D?
+Some intuition of the composition
+Two layers
+
+ What happens if we stack two layers in 2D?
+Deep network architecture
+
+ K layers = depth of network
+
+ Dk hidden units per layer = width of network
+
+ These are called hyperparameters ­ chosen before
+   training the network
+
+ Can try retraining with different hyperparameters ­
+   hyperparameter optimization or hyperparameter search
+General formulation
+
+ Bias vectors and weight vectors
+Three hidden layers example
+Deep Neural Network
+
+ Deep feed-forward Neural Networks:
+   data propagated through the network to predict the
+   output
+    SoA methods for almost any domain
+    Best results with +50 up to thousand layers
+
+ Deep architectures:
+        What do you think are good/bad properties?
+Shallow vs Deep Networks (I)
+
+ Representation capacity?
+ Number of regions per parameter?
+
+     Deep networks create many more regions per parameters
+     But there are dependencies between them
+
+ 
+Shallow vs Deep Networks (II)
+
+ Depth efficiency
+    Some functions require exponentially more hidden units
+      than a dn for an equivalent approximation
+    There may exist also the same result for shallow networks
+    What functions are in the real world that we want to
+      approximate?
+
+ Structured networks for structured representations
+ Fitting and generalisation
+Deep Neural Network - Summary
+
+ Deep feed-forward Neural Networks:
+   data propagated through the network to predict the output
+
+ Deep architectures:
+     are more efficient than shallow and more powerful (model non-linearity more
+       easily)
+     are a good model for hierarchical data (images and language among others).
+     work well in practice
+     are still difficult to design and train, not always fully understood
+     usually require a lot of infrastructure
+    ...
+Question
+
+ We have now a new family of models
+ Next steps?
+Fundamentals of DL
+
+Many basic concepts should be familiar, related to a simple
+linear classifier
+
+                                                                                                                        source: http://cs231n.github.io
+Fundamentals of DL - score function
+
+Score function: map from data to class scores
+
+ linear image                               parametric-model. weights and biases.
+  classifier example                          (parametric: no need to keep all training
+                                                                                           data)
+
+· image: high-dimensional point.
+           source: http://cs231n.github.io
+· score: weighted sum of all pixel values
+
+· one classifier (template) per row
+Fundamentals of DL
+
+                  What about deep nets?
+
+                               linear classifier
+Fundamentals of DL
+
+                  What about deep nets?
+
+                                                                                                                                                                                                                            source: http://
+
+VXDO9LHZSRLQW cs231n.github.io
+                              ,QWHUSUHWLQJD/LQHDU&ODVVLILHU9LVXDO9LHZSRLQW
+
+   s1
+
+W  = s2
+
+   s3
+
+         linear classifier
+                                                                       s1
+
+Fundamentals of DL - score function                           W  = s2
+
+                                                                       s3
+
+Score function: map from data to class scores
+
+ Deep nets (CNN in particular) also do this with images but much more
+   complex mapping function and params
+
+                                             A bit later ...
+
+L)HL/CLo5mDmQMoDn\p.raULcVtKicQeD: 'DQIHL;X  /HFWXUH                   $SULO
+
+ preprocessing (e.g., substract mean, normalization)
+
+ single multiplication
+                                                                                        s1
+
+Fundamentals of DL - score function   W  = s2
+
+                                                                                        s3
+
+     · Score function: map from data to class scores
+
+HU9LVXDO9LHZSRLQW Deep nets (CNN in particular) also do this with images but much more
+       complex mapping function and params (more details in next classes)
+
+                             learned
+                             weights
+
+L)HL/L5DQMD\.ULVKQD'DQIHL;X  /HFWXUH                                                    $SULO
+
+                                         source: http://cs231n.github.io
+Fundamentals of DL
+
+                      How good are the scores?
+                    Loss [ cost | objective ] function
+Fundamentals of DL - loss
+
+Loss function: How good are the predictions (scores)?
+
+Some exam5pleHsF:DS
+
+                      :HKDYHVRPHGDWDVHWRI[\           formulationHsJ)
+
+  MulticlassSV:MHKD(oYHneDVoFfRtUhHeIXpQFoWsLRsQib le
+
+   :HKDYHDORVVIXQFWLRQ
+
+   wants correct class to 6aRIhWPaDv[e a score higher than incorrect
+
+  classes by some fixed margin
+
+                                690                                     hinge or
+
+                                                                        max-margin loss
+
+  the score of every incorrect class)-XsOcOOoRrVeVof actual class
+Fundamentals of DL - loss
+
+Loss function: How good are the predictions (scores)?
+
+Some examples:
+
+ Cross-entropy/Softmax loss:
+     equivalent to "difference" between perfect and actual distribution
+
+Cross entropy between distributions p, q
+               Softmax Function: score of actual class normalised
+         Ideally only the actual label is true: 
+                                p = [0, ...,1, ...,0]
+
+Fundamentals of DL - loss         :HKDYHVRPHGDWDVHWRI[\
+                                  :HKDYHDVFRUHIXQFWLRQ
+                                  :HKDYHDORVVIXQFWLRQ
+
+                                                           6RIWPD[
+
+                                                                                 690
+
+                                 )XOOORVV
+
+                                 )HL)HL/L5DQMD\.ULVKQD'DQIHL;X                        /HFW
+
+                                 Try to compute the two
+                                     loss functions ...
+
+source: http://cs231n.github.io
+
+                                 https://b.socrative.com/login/student/
+Fundamentals of DL - loss
+
+SVM vs Soft-max loss: comparable        Softmax interprets scores as probabilities
+but different meaning of output values
+                                        Q1: Can we know the min/max possible Li?
+                                        Q2: What loss can we expect at
+
+                                          initialisation?
+
+source: http://cs231n.github.io
+Fundamentals of DL - loss
+
+ How good are the scores?
+
+Many options for loss functions 
+ --> critical to choose a right
+
+                   one
+Fundamentals of DL - loss
+
+Loss function: How good are the predictions (scores)?
+
+· Regularization.          "Regularization is any modification we
+                             make to a learning algorithm that is
+                             intended to reduce its generalization
+                             error but not its training error."
+
+                                                                                                     (Goodfellow 2016)
+
+ improve generalization (less overfitting). L2, L1, Dropout, batch-norm, ...
+
+ models preferences: e.g., L2, d5HisJcXOoDUuL]rDaWLgRQes([lSaUrHgVVeLQvJa3lUuHeIHsUHQFHV
+
+                                                                                                                                                             /5HJXODUL]DWLRQ
+
+                                                                                             What's best with L2?
+                                                                                          :KaLFKnRdIZwRiUtZhZLLO1O ?
+
+                                                                                                                                                                WKH/UHJXODUL]HUSUHIHU"
+
+regularization strength 
+(hyperparameter)
+
+                                                       source: http://cs231n.github.io
+Fundamentals of DL
+
+We can measure how good a set of parameters (W) is
+              How do we find the best W?
+                   Optimisation (training)
+Fundamentals of DL - Optimisation
+
+Optimisation --> best way to find the parameters.
+
+We know how to measure how good a set of parameters is.
+Start with random weights. Iteratively refine to get lower loss.
+
+Some options ...
+
+· Random search or "local" search: not ideal for DL. Used in other problems
+
+· Follow the "gradient": vector of derivatives for each dimension of input space
+
+ compute gradient of loss6fuWRncFtKioDnVwWLiFth*reUsDpGeLcHtQtoW'moHdVeFlHwQeWigh6ts*W'
+
+ step size (learning rate)                                                                  )
+  hyperparameter                                                                            Z
+
+                                                                                            $
+                                                                                            X
+                                                                                            H
+                                                                   source: http://cs231n.github.io
+Fundamentals of DL - Optimisation
+
+Optimisation. Critical points: Zero gradient, and Hessian with...
+
+All positive eigenvalues  All negative eigenvalues     Some positive
+
+
+                                                    and some negative
+
+                                                                                    (Goodfellow 2015)
+Fundamentals of DL - Optimisation
+
+        Optimisation - Gradie6ntWRDFeKscDeVnWtLF(G*DU)D&GDLHeQeWp'LHeVaFrnHinQgW.6*'
+
+        Ideally, find the exact minimum. Actually, not feasible. N is very larg)eXO(O#VsXPamH[pSlHeQsV)L.YHW
+                                                                                       ZKHQ1LVODUJH
+       has too many params (1K-1000K)
+
+                                                                                       $SSUR[LPDWHVXP
+
+                                                                                       XVLQJDPLQLEDWFKRI
+
+                                                                                       H[DPSOHV
+
+        SaddSletpoocihntassatirce agrpardobielenmt .dMesacneynmtethods get stuck there. FRPPRQ
+
+              StochBaasttcich GgrDadhieanst bdeestctenr tc:hances.  Stochastic gradient descent
+
+descent
+
+       Stochasticg=radientdN1esX ic=Ne1nrt Ji ()                    GD: for all sa=mples(rorJBi (at)ch GD)
+
+Ji ()   =  rJi ()                                                   SGD: for one sample (or a few)
+
+        Stochastic GD ()SHLG)DHL)/:Ls5taDrQtMD"\im.UpLVrKoQvDin'gD"QfIrHoL;mX the first sa/mHFpWXlUeHpro cessed. On$eSULO
+
+       step per sample (or per mini-batch: 32, 64, 128, 256, ... No more that you can fit
+
+       in your CPU/GPU memory!).
+
+        Most common training strategy in DL: SGD + Backpropagation (later)
+Visualising GD vs SGD
+Properties of SGD
+
+ Can escape from local minima
+ Adds noise, but still sensible updates as based on part of data
+ Uses all data equally
+ Less computationally expensive
+ Seems to find better solutions
+
+ Doesn't converge in traditional sense
+ Learning rate schedule ­ decrease learning rate over time
+Fundamentals of DL - Optimisation
+
+ Optimisation - SGD - Still many challenges for the vainilla version
+
+¿ ?                                                         BGD SGD
+
+1. redundant computations for similar examples
+2. faster
+3. high variance and high fluctuations during training
+4. converges to the minimum of the "basin" where it starts
+5. needs to shuffle training data
+6. suitable for online or incremental learning
+
+What's true for which variation?
+Fundamentals of DL - Optimisation
+
+ Optimisation - SGD -
+   Many optimization algorithms with different
+   properties
+
+     Loss surface contours and time evolution of
+       different algorithms (behaviours, speeds, stuck-
+       points, ...)
+
+     Adaptive learning-rate - LR per param, adapted
+       at each step) - best compromise in saddle point
+       problems (where Vainilla SGD gets stuck).
+
+     Weight-decay - reduce weight values at each
+       step. Can be equivalent to L2 regularization term.
+       In adaptive approaches use "decoupled" version
+       (as in AdamW)
+
+                                                           Images credit: Alec Radford.
+Fundamentals of DL - Optimisation
+
+ Optimisation - SGD - Many optimization algorithms with different properties
+
+ Momentum
+
+ Average                              Many available optimizers on
+ AdaGrad                                      standard libraries
+
+ RMSProp
+
+ Adam / AdamW
+
+ Nesterov Accelerated gradient (NAG)
+Momentum
+
+ Weighted  sum  of  this <latexitsha1_base64="75TvOUZBRiF+w+fMC2gmLmcN5tw=">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</latexit>  gradient       a) X nd@`ip[ rt]evious  gradient
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @
+                    mt+1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        · mt + (1    i2Bt
+
+                    t+1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     t  · mt+1
+Adam
+
+ Gradient normalisation + Momentum
+ Why normalise the gradient?
+Adam
+
+ Gradient normalisation + Momentum
+
+ Why normalise the gradient?
+
+ How?
+
+<latexit sha1_base64="Y312yhN2056ikfkU4AUGd0cXIoE=">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</latexit>  @L[ t]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @
+mt+1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @L[ t] 2
+ vt+1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @
+
+<latexit sha1_base64="Og9KKu9YcKnfWsVwlfwkgZEIqNM=">AAAW3XiclZhLc900FIDd8irllcKQDRsPmTIMbTMJUx7LNmn6SkqS5tnG6R3ZV/ZVI8uOLSc39dwlO4YtP4nfwI9gC1uObN+r+hxlQWbKFef7rMeRLMsOcylKvbT015Wr77z73vsfXPvw+kcff/LpZ3M3Pt8vs6qI+F6Uyaw4DFnJpVB8Twst+WFecJaGkh+EJ6uGH5zxohSZ2tUXOT9OWaJELCKmITSYY0EY5yMxqPWt5Yn/TSB5rFlRZOe+PyMT/44fMJmPmB9Ew0z7QVywqAaettdN6qA8LbSJnHWRWwHPSyEzNRnMLSwtLjV/Pi0sd4UFr/vbGtz4chgMs6hKudKRZGV5tLyU6+OaFVpEkk+uB1XJcxadsIQfQVGxlJfHdZOLiX8TIkM/zgr4p7TfRN++omZpWV6kIZgp06MSMxN0saNKxz8f10LlleYqahuKK+nrzDeJ9Yei4JGWF1BgUSGgr340YpAoDem/Hih+HmVpytSwDlbWtiFlIU+Eqvlp1UzFZNJ31hqHQ/EyY+XJ7qwWoXkq3nBSSaOYSi4ReDKpa76YLGIgOACxyAnIFC+hTpOfMPaXEYWlJwEDD7OxWQ/+8wmpWmmeQE562kuiQSGXfNyzVokFU5n2lB1QfP+mbwDXBcwCdBV+OJqDnZypyfQ6zce6SOvSxHALBVMJb5qAIUdMmhH1DVVJCZdGPesXbD1n6qRLXJY3XS1MBFm7Rd/RBc2LGvadJoIsWIRJ32oiyJKwUQxZyiDLXXkAA059E3GrQmFVkIW5VWRhv+3cRPDaHOdwv/S9tZqk/4yhjJgA3H3mVzAV8b6+ms1sf5qcs8Y3BT72RzBZ/UtYkbTDmjYCo+piE2o2uUImzRaEYA/tm6Y3DpXnoj9AE8A3XVUIFb+l3W5KsGRNOLgNQy0qyY/uLP7Ax8f1krltzH9INqGisspdFZnw/6hoCI8mvL4ggicvk2jyINBMXiZhf0dTxwq8sE2kmTsoCMWk0Bfo9heJ6l/TRHBnsxT1FQKmXvhlQqFJjuO+bAJGhl94yDoWUIQGGbVjjGRWVgUnmx9azxBpdLMtFsI8rPobqjRCf9/gcnYVlOHhcMYvuTxEGQ3bfIZZpYasQMkcmykdvwpKOAE47/5mytui00r46XrXHvQLZqeKIn46WMfzkRCLOhLVBacaZ12SWI72oK7Zcn27Z/X6q+/I0k4crtuUpN6ul27b4V7SA3664ejtBvGIRR2J6up6SD1iOdqDutx53HCNwuG6TUnqnebRaTvcmYmWf7w74pqZY1Imh+bYl8mgDWFRU1E7xSzlCRLbEBbTqm/B/2NlR8DDo2+1ISxulaKvmQCWhlziIbQhLLa3cN/sYljdcKgbbrV5Q+ibbQiLj1iKR92GsJhQMXGKJyzPkdiGSB5HOI8jmsccS7lLwjOSO2aELCnXgipGWV8yASyNUWtjR2PdC1e/wS6I5ZKuvNK58hRaxYqu4j1Xw3uXNKwZqtAEsLRJ7jE/2HTeZCFOMRyzXEnOBbJymsAt7GxRZ3r6C+OanOTC+MLSC0rPLT2n9MDSA0oLS8kbQRg/t5S8ncA7uaVnlO5buk9pZWlF6Z6le5TGlsaUPrT0IaWRpRGlq5auUqotJSdSeCJYukvpyNIRpYeWHlL6wtIXlD629DGlLy19SekbS99Qet/S+5QySxmla5auUcotJZ8OwnjF0hVKQ0vJux/ca5ZuUZpbmlP6wNIHlA4tJW/F8DyzlBxv4MFoqaT0iaVPKBWWkve3MH5m6TNKU0tTSp9a+pTS15a+pvSRpY8oTSwl3wbgdGLpDqX2K1BdUrpt6Talp5aeur8L8Nk0hq6FuWkr2KQ0szSjdN1S8qYARwlLT8h5Mlbdrjb92kT2tVjNuIN1GZ9eTXIeqxl3sG53ml5N9qdYzfiIdH1tf/YhBVIKO/1gbmEZf4Wlhf3vF5d/XLy7fXfh3kr3hfaa95X3tfett+z95N3zHntb3p4XeX96f3v/eP/OD+Z/nf9t/vdWvXqlu+YLr/c3/8d/Qa/2oQ==</latexit>  t  · pvmt+t+1 1+ 
+
+  t+1
+ Gradient normalisation + Momentum
+
+ Compute momentum                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <latexit sha1_base64="/rFjEWLOJfo7Y2pGRxjmVSHWthQ=">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</latexit>  · mt + (1  ) @L[ t]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            · vt + (1  @
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        mt+1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    t] 2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @L[
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         vt+1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       )
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @
+
+ Moderate at the start
+
+<latexit sha1_base64="GqgASwG/Rx9X51GY53Y9n0EoARA=">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</latexit>    mt+1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                1 t+1
+m~ t+1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  vt+1
+ v~t+1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          1 t+1
+Fundamentals of DL - a few key concepts
+
+                                     LABEL (Y)     INPUT (x)
+
+ Score function --> map from
+
+data to class scores.  This is what
+
+Weights and biases (w, b) we learn                 LAYER           weights
+
+                                                                    W1
+
+                                                                   W2
+
+ Loss function --> how good                              LAYER
+                                                compute score
+are the predictions (scores).                                                  OPTIMIZER
+                                                  PREDICTION (Y')           update weights
+SVM, SoftMax, ...      This is how                                           of each layer
+                       we learn
+
+ Optimisation --> best way to
+
+find the parameters (w, b): Train    compute loss                  LOSS
+Fundamentals of DL - a few key concepts
+
+ We have added more hyper parameters
+    Choice of learning algorithm
+    Learning rate
+    Momentum
+
+ What's next?
+

@@ -1,0 +1,247 @@
+\documentclass[11pt]{article}
+\newcommand{\shorttitle}{Topic 4: Convolutional neural networks}
+\input{notes_style.tex}
+\hypersetup{pdftitle={Topic 4 - Convolutional Neural Networks and Transfer Learning}}
+\begin{document}
+\cover{4}{Convolutional neural networks and transfer learning}{Calculate convolution sizes, parameter counts and receptive fields; explain pooling and common architecture modules; choose between feature extraction and fine-tuning; interpret training curves; distinguish classification, detection, segmentation and field regression.}
+\tableofcontents\clearpage
+\newsection{Why images benefit from a structured network}
+\sources{4.1. CNNs, pp. 3--11.}
+A color image is an array with height, width and channels. A $32\times32$ RGB image has $3072$ scalar entries. Flattening it into a vector for a fully connected layer loses the explicit grid structure and gives a separate parameter for every input-to-output connection.
+
+Nearby pixels often jointly describe an edge or texture, and the same pattern can occur in different locations. Convolutional networks encode these assumptions using \textbf{local connectivity} and \textbf{shared weights}. A small filter searches for a pattern across the grid, producing a feature map. Later layers combine patterns over larger receptive fields.
+
+These are inductive biases rather than universal facts about all data. A convolution usually responds to a translated pattern with a translated feature map: this is translation \emph{equivariance}. It does not automatically make the whole network invariant to position. Striding, image boundaries and a fully connected head can change how that behavior works.
+\begin{keyidea}{Track four different quantities}
+Spatial size describes the grid; channel count describes features at each location; trainable parameters describe learned coefficients; receptive field describes which input locations can affect one output. Changing one need not change the others in the same way.
+\end{keyidea}
+\newsection{The convolution operation}
+\sources{4.1. CNNs, pp. 12--19, 24--28.}
+\subsection{One dimension first}
+Slide a filter over neighboring input values and take a weighted sum. For an input $(1,2,3,4,5)$ and three weights $(1,0,-1)$, stride one and no padding, the outputs are
+\[
+(1-3,\ 2-4,\ 3-5)=(-2,-2,-2).
+\]
+The same three weights are used at all positions. A bias can be added, followed by an activation such as ReLU. Strict mathematical convolution reverses the filter; common neural-network layers perform cross-correlation instead. For learned filters, this naming distinction does not prevent learning the desired patterns.
+\subsection{Two dimensions with channels}
+For output channel $o$ and output location $(i,j)$,
+\[
+z_{i,j,o}=b_o+\sum_{c=1}^{C_{\mathrm{in}}}\sum_{u=0}^{K_h-1}\sum_{v=0}^{K_w-1}
+W_{u,v,c,o}\,x_{iS_h+uD_h-P_h,\,jS_w+vD_w-P_w,\,c}.
+\]
+Interpret input locations outside the valid grid using the stated padding rule. A standard output filter sums across \emph{all} input channels. For an RGB input, one $3\times3$ output filter contains $3\times3\times3$ weights, not merely nine. Different output filters learn different features.
+
+The preactivation $z$ and activated feature map $a(z)$ have the same shape. Spatial width and height tell where features occur; the output channel index tells which filter produced them.
+\newsection{Stride, padding, dilation and output size}
+\sources{4.1. CNNs, pp. 15--18.}
+\subsection{What each setting changes}
+\textbf{Kernel size} determines how many learned positions a filter has. \textbf{Stride} determines how far the filter moves between output locations. \textbf{Padding} extends the grid at the boundary. \textbf{Dilation} spaces filter positions apart, covering a larger area without adding learned weights.
+
+For one spatial dimension, let input size be $W$, kernel size $K$, stride $S$, dilation $D$, and symmetric padding $P$ on each side. Effective kernel width is
+\[
+K_{\mathrm{eff}}=D(K-1)+1.
+\]
+Then
+\[
+\boxed{W_{\mathrm{out}}=\left\lfloor\frac{W+2P-K_{\mathrm{eff}}}{S}\right\rfloor+1}.
+\]
+Apply this separately to height and width. A valid output requires an effective kernel that fits the padded input. If padding is asymmetric, replace $2P$ by the sum of the two side paddings.
+\begin{careful}{Clarification of the slide size formula}
+The displayed formula on p. 17 omits the floor. Use integer floor when the division is not exact. Dilation $D=1$ means no gaps. ``Same'' padding preserves size with stride one under the usual conventions; for larger strides, output is typically a rounded-downsampling size, not unchanged input size.
+\end{careful}
+\subsection{Worked size examples}
+\begin{longtable}{@{}P{.31\textwidth}P{.34\textwidth}P{.26\textwidth}@{}}
+\toprule Input and settings & Calculation & Output\\\midrule\endhead
+$W=8,K=3,S=2,P=1,D=1$ & $\lfloor(8+2-3)/2\rfloor+1$ & $4$\\
+$W=8,K=5,S=1,P=2,D=1$ & $(8+4-5)+1$ & $8$\\
+$W=8,K=3,S=1,P=0,D=2$ & $K_{\mathrm{eff}}=5$; $(8-5)+1$ & $4$\\
+$W=32,K=3,S=1,P=1,D=1$ & $(32+2-3)+1$ & $32$\\\bottomrule
+\end{longtable}
+The first two reproduce the arithmetic of the slide examples with the floor made explicit. Dilation changes the effective footprint, not the number of learned filter positions.
+\newsection{Parameter counts and activation memory}
+\sources{4.1. CNNs, pp. 27--28, 46--48, 93.}
+\subsection{Standard convolution}
+For $C_{\mathrm{in}}$ input channels and $C_{\mathrm{out}}$ output channels, with one bias per output channel,
+\[
+N_{\mathrm{params}}=C_{\mathrm{out}}(K_hK_wC_{\mathrm{in}}+1).
+\]
+Omit the $+1$ if there is no bias. Stride, padding, dilation and spatial image size do not directly change this count. They change activation sizes and computation.
+
+For $3\times3$ filters taking RGB to 48 channels, the count is $48(9\cdot3+1)=1344$. A second $3\times3$ layer taking 48 channels to 48 has $48(9\cdot48+1)=20784$. Identical spatial filter size does not imply identical parameter count.
+\subsection{Fully connected comparison}
+A dense mapping from a flattened $32\times32\times3$ image to 64 units has $64(3072+1)=196672$ parameters. A convolution from 3 to 64 channels with $3\times3$ filters has $64(27+1)=1792$. The outputs differ: the convolution creates a spatial feature map rather than only a 64-entry vector.
+\subsection{Memory is not only weights}
+For batch size $B$, an activation tensor contains $BHWC$ scalar values. With float32 storage, its raw footprint is $4BHWC$ bytes. Training also stores intermediate activations, gradients and optimizer state. For $B=16$, $H=W=120$, $C=48$, just this tensor contains 11,059,200 values, about 42.2 MiB.
+
+Downsampling can reduce activation memory even while later layers increase channels. This explains why the slides ask about memory and batch size separately from parameter counts. A small parameter count does not imply that a high-resolution model is cheap to train.
+\newsection{Receptive fields grow across layers}
+\sources{4.1. CNNs, pp. 20--23.}
+The receptive field of an output is the part of the original input that can affect it. A second local layer sees combinations of first-layer receptive fields, so its effective input footprint grows.
+
+Track $r_\ell$, receptive-field width, and $j_\ell$, spacing between adjacent outputs measured in original input pixels. Start with $r_0=1$, $j_0=1$. For effective filter size $K_{\mathrm{eff},\ell}$ and stride $S_\ell$,
+\[
+r_\ell=r_{\ell-1}+(K_{\mathrm{eff},\ell}-1)j_{\ell-1},\qquad
+j_\ell=j_{\ell-1}S_\ell.
+\]
+This calculation explains the slide diagrams for a simple sequential stack; branching architectures require tracing each path.
+\subsection{Worked stack}
+Take $3\times3$ convolution with stride 1; $2\times2$ pooling with stride 2; then $3\times3$ convolution with stride 1:
+\begin{center}
+\begin{tabular}{lrr}
+\toprule Stage & $r$ & $j$\\\midrule
+Input & 1 & 1\\
+Conv $3$, stride $1$ & 3 & 1\\
+Pool $2$, stride $2$ & 4 & 2\\
+Conv $3$, stride $1$ & 8 & 2\\\bottomrule
+\end{tabular}
+\end{center}
+The final nominal receptive field is $8\times8$, and neighboring outputs are centered two original pixels apart. With padded boundaries, part of that nominal field may consist of padding rather than observed pixels. The learned influence inside the theoretical footprint need not be uniform.
+\newsection{Downsampling, upsampling and 1-by-1 filters}
+\sources{4.1. CNNs, pp. 29--34.}
+\subsection{Pooling and strided convolution}
+Max pooling takes the largest value in each local region; average pooling takes their mean. Ordinary pooling acts separately by channel and has no trainable weights. Strided convolution instead learns a local weighted reduction while downsampling.
+
+For the patch $\begin{bmatrix}1&4\\3&2\end{bmatrix}$, max pooling gives 4 and average pooling gives 2.5. Pooling reduces spatial detail; it can improve robustness to small shifts but does not guarantee complete translation invariance.
+\subsection{Upsampling}
+The slides show duplication, interpolation, max-unpooling and transposed convolution. Duplication repeats values; interpolation estimates values between existing grid points; max-unpooling can place values according to stored pooling positions. Transposed convolution uses a learnable operation related to the transpose of the convolution's linear map. It is not generally an inverse that recovers information lost by downsampling.
+
+Upsampling is needed when the output must return to a fine spatial grid, as in segmentation. It enlarges the representation but cannot recover discarded detail without information learned or retained elsewhere.
+\subsection{Pointwise convolution mixes channels}
+A $1\times1$ convolution takes the channel vector at each location and applies the same affine mapping at every location. Its count is $C_{\mathrm{out}}(C_{\mathrm{in}}+1)$ with biases. It can reduce or increase channel dimension without directly mixing neighboring spatial pixels.
+
+For 48 input and 16 output channels, a pointwise layer has $16(48+1)=784$ parameters. It can serve as a bottleneck before a more expensive spatial convolution.
+\newsection{Common architectures: learn the design idea}
+\sources{4.1. CNNs, pp. 35--53.}
+\begin{longtable}{@{}P{.21\textwidth}P{.70\textwidth}@{}}
+\toprule Architecture or module & Main idea emphasized in the slides\\\midrule\endhead
+AlexNet & A layered convolution/pooling classifier illustrating the large-scale image-recognition breakthrough.\\
+DeConvNet visualization & Inspect feature-map activations and map selected activity back toward image space to understand learned responses.\\
+VGG & Deeper stacks using small spatial filters. Several small filters build a large receptive field with intermediate nonlinearities.\\
+Inception / GoogLeNet & Parallel branches with different operations, combined into a feature representation; bottlenecks can reduce cost.\\
+ResNet & Residual connection $y=x+F(x)$, providing a direct path for information and gradients.\\
+DenseNet & Concatenate earlier feature maps into later layers, encouraging reuse rather than adding only one residual branch.\\
+MobileNet & Depthwise spatial filtering followed by pointwise channel mixing.\\
+EfficientNet & Scale depth, width and input resolution together in a coordinated way.\\
+ViT and ConvNeXt & The slides contrast patch-based attention with a modernized convolutional design; they do not supply a transformer derivation.\\\bottomrule
+\end{longtable}
+Do not memorize these as interchangeable deeper versions of the same model. Their connectivity and computation differ. For a residual sum, tensor shapes must agree or a projection must align them. Concatenation instead increases channel count. Both alter gradient paths, but neither guarantees successful training on every task.
+\subsection{Why small filters can be efficient}
+Two stride-one $3\times3$ layers have a $5\times5$ receptive field. If input, intermediate and output widths are all $C$, their kernel weights total $18C^2$, compared with $25C^2$ for one $5\times5$ layer. They also include an extra activation. This comparison assumes equal channel widths and ignores biases; other widths can change the trade-off.
+\subsection{Depthwise-separable convolution}
+For a depthwise layer with one filter per input channel, followed by pointwise mixing to $C_{\mathrm{out}}$ channels, the weight count is
+\[
+K^2C_{\mathrm{in}}+C_{\mathrm{in}}C_{\mathrm{out}},
+\]
+instead of $K^2C_{\mathrm{in}}C_{\mathrm{out}}$ for standard convolution. For $K=3,C_{\mathrm{in}}=32,C_{\mathrm{out}}=64$, this is $288+2048=2336$ rather than 18432 weights. Bias choices add separate terms. Lower arithmetic cost does not by itself guarantee proportional wall-clock speedup on every device.
+\newsection{Transfer learning: reuse a useful representation}
+\sources{4.1. CNNs, pp. 54--61, 89.}
+\subsection{Frozen feature extraction}
+Take a pretrained network, remove or bypass its original task-specific output, and use a feature vector to train a new classifier or regressor. Keep the feature extractor's weights fixed. The slides illustrate a 4096-dimensional AlexNet feature vector used by a later learning algorithm.
+
+This can be attractive with few labeled target examples or limited compute. It still requires matching input preprocessing and choosing a representation appropriate to the new task. Pretraining does not make every feature suitable for every domain.
+\subsection{Fine-tuning}
+Replace the output head for the new classes and update some or all pretrained layers on target data. A practical strategy is to fit the new head first, then gradually unfreeze useful layers with a suitably small learning rate. This refines the representation rather than only learning a new readout.
+\begin{longtable}{@{}P{.30\textwidth}P{.61\textwidth}@{}}
+\toprule Situation & Reasonable starting point\\\midrule\endhead
+Few examples, similar domain & Freeze much of the representation and fit a small head.\\
+More data, similar domain & Fine-tune later blocks, then validate whether broader adaptation helps.\\
+Different domain & Investigate which features transfer; adapt more layers if data supports it.\\
+Large suitable dataset and sufficient resources & Compare fine-tuning with training from scratch.\\\bottomrule
+\end{longtable}
+These are starting points, not guarantees. Use the target validation split to choose frozen layers, learning rates and training duration. Inference-mode behavior also matters: dropout and batch-normalization statistics can change when a backbone is run in training mode.
+\subsection{A worked transfer-learning setup}
+Suppose a pretrained extractor returns $d=512$ features and the target has $C=5$ classes. A new affine head has $5(512+1)=2565$ trainable parameters. Freezing the backbone leaves that count trainable, but its stored weights and forward computation remain necessary. Unfreezing a block increases the trainable count and requires backward activation storage.
+\newsection{Training checks and learning curves}
+\sources{4.1. CNNs, pp. 62--68.}
+\subsection{Initial sanity checks}
+For $C$ equally likely classes with near-uniform initial predictions, mean cross-entropy should be around $\log C$. This is a reference point, not a requirement for an imbalanced or nonuniform initial setup. Check that increasing a nonnegative penalty increases the reported total objective when predictions and parameters are fixed.
+
+Try to overfit a tiny training subset with weak regularization. Failure can reveal an unsuitable optimizer configuration, wrong labels, shape errors, disconnected gradients or inadequate capacity. Success shows basic ability to fit those samples; it does not demonstrate good validation performance.
+\subsection{Interpreting the plots}
+\begin{longtable}{@{}P{.32\textwidth}P{.59\textwidth}@{}}
+\toprule Observation & What to investigate\\\midrule\endhead
+Training loss stays flat & Learning rate, labels, gradient flow, frozen weights or loss choice.\\
+Loss explodes or is nonfinite & Excessive step size, input scale, unstable calculations or problematic samples.\\
+Training improves, validation worsens & Overfitting, distribution mismatch, leakage in the experiment or inappropriate augmentation.\\
+Both training and validation remain poor & Insufficient capacity or optimization, wrong representation or a difficult task.\\
+Noisy but decreasing training loss & Small batches may explain noise; compare epoch averages and validation trend.\\\bottomrule
+\end{longtable}
+Inspect first-layer filters and activations for additional clues, but an attractive filter image is not a performance metric. The slides recommend learning-rate decay and a coarse-to-fine hyperparameter search when resources allow. Choose configurations using validation results and reserve final test evaluation.
+\newsection{CNNs beyond whole-image classification}
+\sources{4.1. CNNs, pp. 69--92.}
+\subsection{Task determines output structure}
+\begin{longtable}{@{}P{.25\textwidth}P{.33\textwidth}P{.33\textwidth}@{}}
+\toprule Task & Output & Slide examples\\\midrule\endhead
+Classification & A class distribution for the image & ImageNet-style classifier.\\
+Detection & Object labels and bounding boxes & R-CNN family; YOLO.\\
+Pose regression & Continuous position and orientation & PoseNet.\\
+Semantic segmentation & A category at every pixel & FCN; encoder--decoder / SegNet.\\
+Instance segmentation & A separate object mask for each instance & Mask R-CNN.\\
+Field regression & Continuous values on a grid & Simulation surrogate for flow fields.\\\bottomrule
+\end{longtable}
+The feature extractor can be similar while the head, target labels and loss change substantially. One classification label per image does not directly train a pixelwise segmentation model.
+\subsection{Detection: boxes and categories}
+Detection combines recognition and localization. Bounding-box coordinates are regression outputs; classes are classification outputs. Faster R-CNN learns region proposals through a proposal network; YOLO predicts detections in one main pass. The slide's $448\times448$ input and $7\times7$ grid refer to the historical YOLO example shown, not all models carrying that name.
+
+Nonmaximum suppression removes redundant overlapping predictions according to a heuristic and a chosen score/overlap rule. It is postprocessing, not the same thing as the network learning a box. A detector can be correct about category and wrong about localization, which is why whole-image accuracy alone is insufficient.
+\subsection{Pose regression}
+PoseNet replaces a classification output with position and orientation estimates. The slides use three position coordinates and a four-component orientation quaternion: seven output numbers representing a six-degree-of-freedom pose. Quaternion representation imposes normalization and sign-equivalence considerations; seven numbers do not mean seven independent physical degrees of freedom.
+\subsection{Semantic and instance segmentation}
+Semantic segmentation assigns a class to each pixel. Two adjacent cars can belong to one semantic category without the output separating their identities. Instance segmentation distinguishes individual objects as well as categories.
+
+An encoder compresses spatial resolution and builds features; a decoder restores a dense output grid. Upsampling and retained spatial information help produce fine predictions. FCNs and encoder--decoder networks replace a fixed global classification readout with spatial outputs. Mask R-CNN adds per-instance masks to object detection.
+\subsection{Video, multiple modalities and engineering data}
+The slides explore combining frames and combining appearance with pose or motion information. Simply aggregating frame features can discard ordering; sequential architectures are mentioned as later topics. The supplied deck does not yet derive RNNs, temporal convolutional networks or transformers.
+
+Convolution also applies to one-dimensional sensor signals and three-dimensional volumes. Engineering examples include defect recognition, climate-event detection, grid-based flow-field prediction and mapping material microstructure to properties. For a simulation surrogate, train on simulated input--output pairs and predict a continuous field. A surrogate's speed is useful only alongside accuracy on relevant held-out geometries and conditions; it inherits limitations of its data coverage.
+\newsection{Worked slide exercise: a 240-by-240 input}
+\sources{4.1. CNNs, p. 93.}
+The teacher asks for the feature-map size after Conv1, pooling and Conv2, using a $240\times240\times3$ input and 48 filters of size $3\times3$ in each convolution. The slide does not fully specify padding or the pooling window. State assumptions before giving a single size.
+\subsection{Case A: valid convolutions and 2-by-2 pooling}
+Assume both convolutions use stride 1 and no padding; pooling uses window 2, stride 2, no padding:
+\begin{center}
+\begin{tabular}{lrl}
+\toprule Stage & Spatial calculation & Tensor shape\\\midrule
+Input & -- & $240\times240\times3$\\
+Conv1 & $240-3+1=238$ & $238\times238\times48$\\
+Pool & $\lfloor(238-2)/2\rfloor+1=119$ & $119\times119\times48$\\
+Conv2 & $119-3+1=117$ & $117\times117\times48$\\\bottomrule
+\end{tabular}
+\end{center}
+Parameter counts are 1344 for Conv1, zero for pooling and 20784 for Conv2, totaling 22128 with biases. The final receptive field is $8\times8$ under these assumptions.
+\subsection{Case B: same-size convolutions}
+If each $3\times3$ convolution uses padding 1, sizes become $240\times240\times48$, then $120\times120\times48$, then $120\times120\times48$. The parameters are unchanged: padding adds no learned coefficients.
+
+For the question about the fifth convolution's parameters, its input and output channel counts must be known from the architecture. A layer's index alone is insufficient to calculate the number. Use the same formula with the actual channels, kernel size and bias setting.
+\newsection{Revision questions and answers}
+\subsection{Questions}
+\begin{enumerate}
+\item What assumptions distinguish convolution from a dense image layer?
+\item For $W=15,K=3,S=2,P=1,D=1$, what is output width?
+\item How many parameters are in a biased $3\times3$ convolution from 8 to 16 channels?
+\item Does doubling image width double convolutional parameter count?
+\item What changes when dilation goes from 1 to 2 for a three-position kernel?
+\item Do two stride-one $3\times3$ filters have only a $3\times3$ receptive field?
+\item Does ordinary max pooling mix channels or learn weights?
+\item What does a $1\times1$ convolution do?
+\item What is the difference between feature extraction and fine-tuning?
+\item Which output distinguishes two adjacent cars as separate objects?
+\end{enumerate}
+\subsection{Answers}
+\begin{enumerate}
+\item Local connectivity and weights shared across spatial locations.
+\item $\lfloor(15+2-3)/2\rfloor+1=8$.
+\item $16(9\cdot8+1)=1168$.
+\item No; activation size and computation change instead.
+\item Effective width changes from 3 to 5 while there are still three learned positions.
+\item No; their nominal receptive field is $5\times5$.
+\item Neither. It reduces each channel's spatial map independently.
+\item Applies a shared affine channel mixing at every spatial location.
+\item Feature extraction freezes the pretrained representation; fine-tuning updates some of it using target data.
+\item Instance segmentation; semantic segmentation alone assigns only a category per pixel.
+\end{enumerate}
+\newsection{Source guide and study connection to Lab 3}
+\texttt{4.1. CNNs.pdf}: operations and geometry (pp. 3--34), architectures (pp. 35--53), transfer learning (pp. 54--61), training diagnostics (pp. 62--68), task extensions and engineering applications (pp. 69--92), exercises and demonstrations (pp. 93--94), and the Lab 3 outline (pp. 95--97).
+
+The lab outline emphasizes understanding a network, implementing a toy CNN and fine-tuning a pretrained architecture. The shape calculations, transfer-learning choices and training checks here support those objectives. Dataset and setup instructions in the slides are course-time instructions; these notes do not infer additional assignment requirements or current deadlines.
+\end{document}

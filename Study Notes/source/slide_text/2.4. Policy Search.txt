@@ -1,0 +1,442 @@
+       Policy Search
+
+  Artificial Intelligence (62651)
+
+            Rubén Martínez Cantín
+Dpto. Informática e Ingeniería de Sistemas
+
+            Universidad de Zaragoza
+
+Artificial Intelligence (62651)  Searching methods  1 / 19
+Policy-Based Reinforcement Learning
+
+      In the last lecture we approximated the value or action-value function
+      using parameters ,
+
+                                         V(x)  V (x)
+                                      Q(x, a)  Q(x, a)
+      A policy was generated directly from the value function
+           e.g. using -greedy
+      In this lecture we will directly parametrise the policy
+
+                                      (x, a) = p(a|x, )
+      We will focus again on model-free reinforcement learning
+
+Artificial Intelligence (62651)  Searching methods  2 / 19
+Advantages of Policy-Based RL
+
+Advantages:
+      Better convergence properties in complex scenarios
+      Effective in high-dimensional or continuous action spaces
+      Can learn stochastic policies (which can be useful in competitive
+      scenarios: self-driving cars, games, etc.)
+
+Disadvantages:
+      Typically converge to a local rather than global optimum
+      Evaluating a policy is typically inefficient and high variance
+
+Artificial Intelligence (62651)  Searching methods                       3 / 19
+Parenthesis: Probabilities and Markov chains
+
+      Remember that for any two random variables1:
+
+                p(a, b) = p(a|b)p(b) , p(a) = p(a, b)
+
+                                                                                   b
+
+And if a and b are independent:
+
+          p(a, b) = p(a)p(b) , p(a|b) = p(a)
+
+Also, for any function f (·):
+
+                 Ex [f (x)] = f (x)p(x)
+
+                                       x
+
+  log  f  ()  =  f ()                                              f () = f () log f ()
+                  f ()
+
+1if b is continuous then, b ·  b ·db                               Searching methods     4 / 19
+
+                                Artificial Intelligence (62651)
+Parenthesis: Probabilities and Markov chains
+
+If we have a Markov decision process, with initial probability p(x0),
+transition function p(xt+1|at , xt ) and policy (at |xt ); the probability
+of an episode  = {x0, a0, x1, a1, . . . , xn, an} is:
+
+p( ) = p(x0)(a0|x0)p(x1|x0, a0) . . . (an-1|xn-1)p(xn|xn-1, an-1)
+
+If we marginalize the actions, we get the probability of the Markov
+chain P:
+
+                                 n
+
+P = p(x0:T ) = p(x0) (ai |xi )p(xi+1|xi , ai )
+
+a                                i =0
+
+                                                    n
+
+= (a0:T |x0:T )p(x0) p(xi+1|xi , ai )
+
+a                                      i =0
+
+Artificial Intelligence (62651)  Searching methods                   5 / 19
+Objective function
+
+Goal: given policy (x, a) with parameters , find best 
+
+But how do we measure the quality of a policy ?
+For simplicity, assume an episodic2 environment with horizon T and
+ = 1:
+
+                    T
+
+J() = E                   R(xt , at , xt+1)
+
+                    t =0
+
+                                                                 T
+
+= Ep(x0)                  n     (ai  |xi  )p(xi  +1 |xi  ,ai  )        R(xt , at , xt+1)
+                          i =0
+
+                                                                 t =0
+
+                                T
+
+= EP                                     R(xt , at , xt+1) (a0:T |x0:T )
+
+                    a0:T t=0
+
+2It can also work for continuous problems, assuming the MDP is an aperiodic and
+
+irreducible Markov chain, like in MCMC.
+
+Artificial Intelligence (62651)           Searching methods                               6 / 19
+Policy Gradient
+
+Policy gradient algorithms search for a local
+maximum in J() by ascending the gradient
+of the policy, w.r.t. parameters 
+
+k+1 = k + J()
+
+where J() is the policy gradient
+
+                         J() 
+
+ J               ()  =    ... 1  
+                                 
+
+                                 
+
+                           J ()
+
+                          n
+
+and  is a step-size parameter
+
+Artificial Intelligence (62651)    Searching methods  7 / 19
+Follow the gradient
+
+                                   T                                           
+                                                         (a0:T |x0:T )
+J() = EP                              R(xt , at , xt+1)
+
+                            a0:T  t =0
+
+                                   T                                                                  
+                                                         (a0:T |x0:T ) log (a0:T |x0:T )
+= EP                                  R(xt , at , xt+1)
+
+             a0:T                 t =0
+
+                                   T                                                                 
+
+= EP                                  R(xt , at , xt+1)                            T
+
+             a0:T                 t =0                   (a0:T |x0:T )  log (at |xt )
+
+                                                                                 t =0
+
+                                     T                   T                                              
+
+= EP  (a0:T |x0:T )                                         R(xn, an, xn+1)  log (at |xt ) 
+
+       a0:T                          t=0 n=0
+
+       T                          T
+
+= E                                  R(xn, an, xn+1)  log (at |xt )
+
+     t=0 n=0
+
+       T                          T
+
+= E                                  R(xn, an, xn+1)  log (at |xt )
+
+     t=0 n=t
+
+       T
+
+= E                               Ut  log (at |xt )
+
+     t =0
+
+     Artificial Intelligence (62651)                     Searching methods                                8 / 19
+The policy gradient
+
+We start with the episodic objective:
+
+                     T
+
+J() = E                       R(xt , at , xt+1) = E [U0]
+
+                     t =0
+
+with the following gradient:
+
+                                 T
+
+J() = E                                Ut  log (at |xt )
+
+                                 t =0
+
+which can be approximated using Monte Carlo from N episodes:
+
+              1N                 T
+J()  N
+                                    Ut(i) log (at(i)|xt(i))
+
+                     i=1 t=0
+
+Artificial Intelligence (62651)        Searching methods      9 / 19
+The policy gradient algorithm
+
+                                 Ut =  T    R (xn ,  an ,  xn+1 )
+                                       n=t
+
+                                 Compute returns
+
+ = {x0, a0, . . . , xn}
+
+   Generate data
+  using the policy
+
+                                 Update the policy
+
+                         J() = E       T     Ut       log   (at    |xt  )
+                                       t =0
+
+Artificial Intelligence (62651)  Searching methods                         10 / 19
+Softmax policy
+
+We will use a softmax policy as a running example
+Weight actions using linear combination of features i i i (x, a),
+which using vector notation is (x, a)T .
+Probability of action is proportional to exponentiated weight
+
+                       (a|x) =   e(x,a)T 
+                                 b e(x,b)T 
+
+The score function is
+
+ log (a|x) = (x, a) - (b|x)(x, b)
+
+                                                 b
+
+Artificial Intelligence (62651)  Searching methods                 11 / 19
+Policy gradient with automatic differentiation
+
+Remember MLP classification with Pytorch.
+Maximum likelihood of class/label action given input state.
+
+# Given :
+
+# a c t i o n s - (NT) x Da t e n s o r o f a c t i o n s
+
+# s t a t e s - (NT) x Ds t e n s o r o f s t a t e s
+
+# Build the graph :
+
+# Categorical distribution of action probabilities
+
+act_probs = Categorical ( policy . forward ( states ))
+
+l o g i t s = act_probs . log_prob ( actions ) # Likelihood of the labels
+
+l o s s = - l o g i t s . mean ( )                     # Negative likelihood
+
+optimizer . zero_grad ()
+loss . backward ()
+optimizer . step ()
+
+                               1N           T
+                     J() 
+                                               log (at(i)|xt(i))
+                              N
+                                    i=1 t=0
+
+           Artificial Intelligence (62651)   Searching methods                12 / 19
+Policy gradient with automatic differentiation
+
+Policy gradient with Pytorch.
+
+# Given :
+
+# a c t i o n s - (NT) x Da t e n s o r o f a c t i o n s
+
+# s t a t e s - (NT) x Ds t e n s o r o f s t a t e s
+
+# u t i l i t i e s - (NT) x 1 t e n s o r o f f u t u r e u t i l i t i e s
+
+# Build the graph :
+
+# Categorical distribution of action probabilities
+
+act_probs = Categorical ( policy . forward ( states ))
+
+l o g i t s = act_probs . log_prob ( actions ) # Likelihood of the labels
+
+weighted_logits = logits  u ti l i t ie s
+
+l o s s = -w e i g h t e d _ l o g i t s . mean ( )    # Negative likelihood
+
+optimizer . zero_grad ()
+loss . backward ()
+optimizer . step ()
+
+                     1N                              T
+           J() 
+                                                        Ut(i) log (at(i)|xt(i))
+                    N
+                          i=1 t=0
+
+           Artificial Intelligence (62651)           Searching methods           13 / 19
+REINFORCE algorithm
+
+Update parameters by stochastic gradient ascent
+
+Approximate the episode return Ut =   T    Rn            as  an  approximation  of
+                                      n=t
+
+the expected return.
+
+Algorithm REINFORCE
+
+Initialize  arbitrarily.
+
+for each episode do:
+
+Generate episode R  {x0, a0, R1, x1, a1, . . . xn-1, an-1, Rn}
+
+for each step t in episode do:
+
+Ut   T                    Rt
+     i =t +1
+
+   +  log (at |xt )Ut
+
+     Artificial Intelligence (62651)  Searching methods          14 / 19
+REINFORCE is stochastic gradient descent
+
+Remember that the objective is to follow the gradient of J()
+which requires an expectation over all possible episodes E [F ()].
+
+Instead, we compute a Monte Carlo approximation of the expectation
+
+ J ()  based  on  N  episodes   J ()      1  N               Ji  ().
+                                          N  i =1
+
+But we can update the policy parameters after each episode (N = 1)!
+
+We have seen it before. This is, just stochastic gradient descent.
+
+                     1N                 Ji ()   - Ji ()
+                -
+                           N  i =1
+
+where we need to guarantee that we cycle through the values of i. In
+our case, that we use a different episode each time.
+
+       Artificial Intelligence (62651)  Searching methods             15 / 19
+Alternative Policy Objective Functions
+
+If we are learning the Q-values, we can also include them in the
+objective function, using an approximation Q^(x, a)  Q(x, a):
+
+J() = E        T
+           E
+                  Q (xt , at ) log (at |xt )
+
+              t =0
+
+               T
+
+                  Q^ (xt , at ) log (at |xt )
+
+              t =0
+
+The approximation of Q^(x, a) can be:
+    Monte Carlo approximation from multiple episodes:
+
+           Requires perfect resets. Impractical in many cases.
+    Function approximations:
+
+           For example: with features as we did in approximate Q-learning
+              Q(x, a) = i wi · fi (x, a)
+
+Artificial Intelligence (62651)  Searching methods                         16 / 19
+Actor-Critic algorithm
+
+Policy (a|x) = (x, a)T 
+Action-value function Qw (x, a) = f (x, a)T w
+Lower variance than Monte-Carlo policy gradient, but might have bias.
+
+Algorithm Actor-Critic
+
+Initialize  and w arbitrarily. Initialize x0. Sample a0  .
+
+for each step do:
+
+Sample transition xt+1  p(xt+1|at , xt ) and collect reward Rt+1,
+
+Sample action at+1  
+
+ =  + 1 log (at |xt )Qw (xt , at )                     Update policy
+
+Qerror = (Rt+1 + Q(xt+1, at+1)) - Q(xt , at )
+
+w = w + 2 · Qerror · f (xt , at )                      Update Q-function
+
+Artificial Intelligence (62651)    Searching methods        17 / 19
+Policy Optimization
+
+      Policy search is an optimization problem
+           Find  that maximizes J()
+
+      Some approaches do not use gradient
+           Hill climbing / Local search
+           Evolutionary algorithms (e.g.: genetic)
+           Bayesian optimization
+
+      Evolutionary and Bayesian approaches find global optimum.
+      Gradient methods are more efficient for high dimensional problems.
+
+           Deep neural networks allow high dimensional parametric policies and
+              value functions.
+
+           Open research to get the best of both worlds.
+
+Artificial Intelligence (62651)  Searching methods  18 / 19
+Global vs local optimization                                       Example (Video):
+                                                                   Resilient robot
+                 Figure: Bayesian optimization
+
+Figure: Gradient method/local search            Figure: Evolutionary algorithm
+
+Artificial Intelligence (62651)                 Searching methods                    19 / 19
+

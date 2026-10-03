@@ -1,0 +1,1467 @@
+Artificial Intelligence
+(62651)
+
+Machine Learning
+Fundamentals ­ part II
+
+Rubén Martínez Cantín
+rmcantin@unizar.es, office 0.09, Ada Byron bldg
+Dpto. Informática e Ingeniería de Sistemas.
+Content
+
+· Introduction
+· K-nearest neighbours (as a simple example)
+· Regression
+
+           · Linear regression
+           · Non-linear regression
+           · Overfitting, regularization, model selection
+           · Ridge regression
+           · Robust regression
+· Classification
+           · Logistic regression
+           · SVM
+· Evaluation metrics
+· Unsupervised methods
+            · Dimensionality reduction: PCA
+            · Clustering: K-means, GMM
+· Trees and ensemble methods
+
+                                                                                                                                          2
+  Bibliography
+
+ Kevin P. Murphy, Probabilistic Machine Learning: An Introduction, The MIT
+   Press, 2022 (available online https://probml.github.io/pml-book/book1.html)
+
+ Marc Peter Deisenroth, A. Aldo Faisal, Cheng Soon Ong, Mathematics for
+   Machine Learning, Cambridge University Press, 2020 (available online
+   https://mml-book.com/)
+
+ Christopher M. Bishop, Pattern Recognition and Machine Learning, Springer,
+   2006 (available online https://www.microsoft.com/en-
+   us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-
+   Machine-Learning-2006.pdf)
+
+ Aurélien Géron, Hands-On Machine Learning with Scikit-Learn, Keras &
+   TensorFlow, O'Reilly, 2019 (2nd edition)
+
+ Online courses
+
+    Andrew Ng, Stanford CS229: Machine Learning,
+       https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU
+
+    Ayush Singh and @freecodecamp, ML for beginners,
+       https://www.youtube.com/watch?v=NWONeJKn6kc
+
+ Python resources
+
+    The Python tutorial: https://docs.python.org/3/tutorial/
+    numpy tutorial: https://cs231n.github.io/python-numpy-tutorial/
+    scikit-learn tutorials: https://scikit-learn.org/stable/tutorial/index.html
+
+                                                                                                                                              3
+Regression
+
+ Learns a function that relates an input vector with a continuous
+  output.
+
+ Examples: depth prediction, weather forecasting, time-to-
+  destination estimation...
+
+                                                                                                                                        4
+Linear regression               For more details, check Murphy chapter 11,
+                                Deisenroth chapter 9
+
+ The input/output relation is linear in the model parameters
+
+             =  +  ~ 0, 2 one data point
+             =  +  ~ 0, 2 dataset (size n)
+
+ Example: Housing prices and size
+
+                       500
+
+                       400
+
+  output      Price    300
+ variables  (in 1000s  200
+
+            of dollars) 100
+
+                       0
+
+                             0  1000  2000    3000
+
+                                Size (feet2)
+
+                                  independent/explanatory variables  5
+Linear regression
+
+ Frequentist approach
+
+    Assume there is one true model 
+    If we had infinite data, we would get the exact model.
+    With finite data, we get an approximation .
+
+ How?  By Maximum-likelihood (ML)
+
+      = argmax log   , 
+
+                     
+
+ If data is independent  = {1, ... , } and  = {1, ... , }
+
+                            
+
+  =  argmax log      ,   =  argmax  log                    , 
+
+                                    
+     =1                     =1
+
+                                                               6
+How do we get ?
+
+  What is the likelihood?
+             (|, ) = ( |, 2) one data point
+
+        ,  =   , 2) joint distribution dataset
+
+Ignore all the   argmax  log        (|, )  =
+terms without w
+                         
+                               
+
+= argmax  log                  exp      1   -  2         =
+                                    - 22
+            
+                 
+
+                 = argmin       -   2  =   argmin     2
+
+                                                  
+                                                    
+Assume 2 is
+constant                                              Least squares!
+
+                                                                      7
+ML = Least squares
+
+                                                                                                                                        8
+How do we get ?
+
+ Minimize Negative Log-Likelihood (NLL).
+
+    Follow the gradient!
+
+ Rewrite NLL as a function easy to derivate
+
+      1   -    - 
+   =
+
+      2
+
+  =  - 
+
+ = arg       = 0
+
+ For the linear-Gaussian case  Analytical solution
+                                 = ()-1
+
+                                                    9
+Simple linear regression example
+
+ Colab link:
+  https://colab.research.google.com/drive/1EXDJHTIvp4zK3
+  qavGsXO03NMwYRr59JM
+
+                                                                                                                                       10
+Nonlinear Regression (linear in )
+
+ Basis function expansión
+
+    Linear regression can be made to model non-linear relations by
+      using a feature space   ()
+
+ =    +  ~ 0, 2 one data point {x, y}
+
+ =  +   dataset {X, y} (size n)
+
+ Example:
+
+    In the previous example, we were computing the intercept
+                                               = 1,  
+
+ =    +  = 0 + 11 + 22 +  +  + 
+
+                                                                    11
+Nonlinear Regression (linear in !)
+
+ Example:
+
+    Polinomial basis function   = 1, , 2,  ,   (  1,    )
+     =    +  = =1  +  = 0 + 11 + 22 +  +  + 
+    Polynomia of degree 14 and 20 fit by LS (which one is better?)
+
+                                                                                      Example and figures taken from Murphy's book
+
+ We can use exponentials, sinusoids, step-functions...
+
+    We'll see more examples in the Bayesian slides.
+
+                                                                                                                                       12
+Overfitting
+
+ The function    fits the
+  noise in addition to the
+  underlying patterns. It
+  "memorizes" the data instead
+  of "learning to generalize".
+
+ The function does not capture
+  the structure of the data.
+
+ The predictive capability of an
+  overfitted model is poor.
+
+ Techniques:
+
+    Cross-validation
+    Regularization
+
+                                                                                                                                       13
+Regularization
+
+ Bias-variance trade off.
+
+    ML is unbiased  If data   then   -   0
+    Overfitting results in large variance
+
+       If we fit slightly different data, the model is completely different
+
+                           Polynomial regression d=12 for data generated by  = 33 + 10 +  with    0,7
+
+ Constrain the model while learning.
+
+    Model restrictions  Lower variance
+    ML+restrictions is biased  If data   then   -   0
+
+                                                                                                                                       14
+Regularization
+
+ For complex models  Get more data
+
+    Same polynomial d=8
+
+ If more data is not possible. Many variants:
+
+ L2-regularization (Ridge regression), Weight decay
+
+ L1 (Lasso)
+
+ Early stopping
+
+ Data augmentation    Check deep
+ Dropout              learning slides
+
+ Batch normalization
+
+...
+
+                                                     15
+Ridge regression
+
+ Different ways to reach the same idea.
+
+ We want to constraint the weights
+
+argmin        1           -         2
+
+                 
+
+            subject to    2    
+                          2
+
+ Equivalent: Lagrange optimizer
+
+argmin   1         -           2 +   22;
+
+            
+
+          = ( + )-1
+
+ Which is equivalent to assuming a
+  Gaussian prior on w and do maximum a
+  posteriori (MAP)
+
+                                                                                                                                       16
+Bayesian interpretation
+
+ Remember the Maximum Likelihood
+                           = argmax log   , 
+
+                                                     
+
+ We can specify a prior over the model parameters ()
+
+    For example, avoid large values    N(0, 2)
+
+ Use Bayes's rule to compute the posterior
+
+ |,   =   ,  ()             ,  ()
+
+                  ()
+
+ Maximum a posteri                                     with:    =  2
+                            = argmax log  |,                       2
+
+                                                     
+
+                            = ( + )-1
+
+                                                                      17
+Ridge Regression     Colab link:
+                     https://drive.google.com/file/d/1EnrFqx8Ks0L
+ Avoids overfitting  3-Uy99IB6DJ4DdEHyP5pl
+
+  =   2 similar to "weight decay" in deep learning
+
+   1 LASSO (Least Absolute Shrinkage and Selection Operator)
+
+    Assumes a Laplacian distribution prior for the weights (then  = 222)
+
+ Can assign zero values to some coefficients (feature selection)
+
+                                                                  18
+L1 norm leads to sparse models
+
+ Sparse models
+
+    Some coefficients are equal to zero
+    Feature selection  uninformative features are given zero weight
+    Geometrical interpretation: Fig. 3.11, Hastie et al., The Elements of
+
+      Statistical Learning
+
+                                                                                                                                       19
+ Data regularization        Colab link:
+                            https://colab.research.google.com/drive/1j3k
+ BTW, in this example,      YQAHeGSbEFf66U_f2P9wISatT1Erl
+  check the regularization
+  effect of adding more
+  data
+
+    15 data samples
+
+ 20 data samples
+
+                                                                                                                                      20
+Summary: avoiding overfitting
+
+ Do cross-validation to select the best model
+ Add constraints that do not involve training data (e.g., weight
+
+  decay)
+ Add more training data!
+
+                                                                                                                                       21
+Hyperparameter and model selection
+
+ How do we select  regularizer?                                * Hyperparameters are all the
+                                                               model/algorithm numbers that we
+    ... or the model complexity?                               select that are not part of the
+    ... or other hyperparameters* of the learning process?     trainable parameters w
+
+ Remember to partition the data: train/validation/test!
+
+ The training set is used to estimate the model parameters 
+
+ The validation set is used to decide among a set of hyperparameters (models)
+
+ What we care about is generalization!  Final performance metrics should be given for
+   a test set
+
+()    ()                                                       Training data
+                                                               Validation data
+
+                                                             
+
+                                                                                       22
+Cross-validation
+
+ Compute evaluation metrics (e.g. : prediction error) on the validation
+   data for different hyperparameters/models
+
+ How do we explore the hyperparameter space?
+
+    Randomly
+    Exhaustively
+    Intelligently  Check Bayesian optimization slides!
+
+                                                                                                                                       23
+K-fold cross-validation
+
+ Common practice to have a higher degree of invariance to
+  the validation/test split.
+
+    Separate the data into k folds
+    Do k training-validation rounds. A usual value for k is 10.
+    The validation/training sets are changed each round.
+    Metrics are averaged over all folds.
+    If k=N, the we have leave-one-out cross-validation or LOOCV
+
+                                                                                                                                       24
+Test characterization Model selection and fittingRemainder: data splits
+
+                                                     Training data (~80% of the data)
+
+                                                        Used to learn the model parameters
+
+                                                     Validation (~10% of the data)
+
+                                                        Used to select the hyper-parameters
+                                                        After used, can be added to the training data to train the final model
+                                                        Training/validation splits can change during training (k-fold cross-
+
+                                                          validation)
+
+                                                     Test (~10% of the data)
+
+                                                        Never used at the training stage!
+                                                        Used to obtain the final specs of our model
+                                                        After used, can be added to the training data to train the final model
+
+                                                                                                                                                                                        25
+Analytical solution may not work...
+
+ Most algorithms in Machine Learning do not have an
+  analytical solution.
+
+ Large datasets  Huge  matrix
+
+    Minimization avoids computing inverse ()-1
+    Follow the gradient  
+    We can even optimize one
+
+      data point at a time
+
+                                                                                                                                       26
+ Gradient descent
+
+ Gradient descent  Iterative weight updates in the
+  downward direction,+1 =  -  
+
+ In general, it converges to a local minimum
+
+                                                                                                                                           27
+ Gradient descent
+
+ Issues:
+
+    Select the initial seed 0
+    Select the learning rate 
+
+       Small   slow convergence, large   fail to converge
+
+                                                                                                                                           28
+Stochastic gradient descent
+
+ Remember:                                                   
+
+                                     
+
+  =  argmax log                          ,       =  argmax  log     , 
+
+                                                            
+     =1                                                  =1
+
+ We are computing a loss based on an expectation
+
+       =                               argmax    log     , 
+
+                                               
+
+ Then, we can optimize one
+  data at a time and still find
+  the optimum.
+
+ One of the most important
+  algorithms in the last decades!
+
+                                                                        29
+Stochastic gradient descent
+
+ In our linear-Gausssian case
+           = -2( - )
+
+ Highly efficient for large datasets.
+
+ WARNING!
+
+    At each iteration, we must use data
+      independent from previous iterations.
+
+    For example, select data randomly
+      from training set.
+
+ Random  Might avoid local
+  minima and saddle points!
+
+ Every time we go over all data
+  points is called an epoch.
+
+                                                                                                                                       30
+GD vs SGD                               Stochastic gradient descent
+
+ Batch gradient descent                    Cheap but more grad steps
+                                           Might avoid local optima
+    Expensive for large datasets           High variance/fluctuations
+    N  whole dataset
+    Low variance                             +1 =  -  
+
+                                    
+
+    +1 =  -    
+
+                                   =1
+
+ SGD with mini-batch
+
+    Best of both worlds
+    Choose a small batch size ( =
+
+      2, 4, 8, ... , 128, 256, ...)
+
+                                               
+
+           +1 =  -    
+
+                                             =1
+                                                                                                        31
+SGD variants
+
+ Momentum can stabilize/smooth SGD variance
+ Adaptive methods adapt the learning rate for each
+
+  feature depending on the estimated geometry of the
+  problem.
+ Many in ML libraries: AdaGrad, AdaDelta, RMSProm,
+  Adam,...
+
+                                                                                                                                       32
+Other optimization algorithms
+
+ They are ALL very computationally intensive for large models/data.
+ Bayesian optimization  Later in the course. 
+ Evolutionary algorithms
+
+    No need for gradient. Global optimization. Poor dimensional scaling.
+
+ Second order methods:
+
+    Newton, Conjugate Gradient, BFGS, L-BFGS,...
+    They approximate the Hessian (second derivative of cost)
+
+                                                                                                                                       33
+Robust Regression
+
+ The quadratic error penalty from the Gaussian noise gives
+  a high weight to outliers
+
+Colab link:
+
+https://drive.google.com/file/d/1G5E6QHihfK1TyaYe6dxlF2FF5XC1
+
+kXn-         34
+Robust Regression
+
+ Probabilistic view: The low tolerance of Gaussian pdfs for
+  high-noise data samples causes problems with outliers
+
+ One possible solution: assume longer-tailed distributions,
+  e.g., Laplace, Student's t, etc.
+
+ Other: detect outliers and remove them
+
+    You will learn about RANSAC in the data science course
+
+                                                                                                                                       35
+Robust Regression
+
+ Laplace distribution:
+
+      ,   = exp                 1     -     
+                            - 22
+
+       =  1                   -       =   
+          2
+                                      
+
+ Non-linear, hard to optimize!
+
+                                              36
+Robust Regression: Huber loss function
+
+ Equivalent to L2 near zero, to L1 for large errors
+
+                    =       2
+                            2    
+                               2
+
+                         - 2   > 
+
+ Differentiable!
+
+                       Recommended     2
+
+                                            = 1.4826 · MAD,
+                             MAD = median  1 -  , ... ,   -  ,
+
+                                        = median  1 , ... ,  
+
+                       Figure taken from Murphy's book
+
+                                                                                                37
+Robust regression example
+
+ The Huber loss and RANSAC are robust to outliers
+
+                                                                                                                                       39
+Robust regression example
+
+ But RANSAC can tolerate a higher outlier ratio!
+
+                                                                                                                                       40
+  Regression metrics
+
+  Mean  absolute     error    1  = 1       -  
+                              
+   Small influence of large errors
+
+  Mean  squared      error    1  = 1       -          2
+                              
+   Highly influenced by large errors
+
+ Root mean squared error              1  = 1       -          2
+                                      
+
+ Median absolute error  median  1 -  1 , ... ,   -  
+
+    Robust to outliers!
+
+  R2  score    1  -  = 1   -          2  -, 1  ,   =  1  = 1     
+                        = 1   - 2                     
+                                       
+
+   Proportion of variance in  explained by the variables of the model
+
+ Many others! Maximum error, Mean absolute percentage error,
+  explained variance score, etc.
+
+ Compare against dumb baseline (mean of the training predictions?)
+
+                                                                       41
+Regression example: The diabetes dataset
+
+ Colab links:
+Simple:
+https://drive.google.com/file/d/1EIKbBCWetqEVKumrTX4GEpxdbRSFXwVw
+With cross_validation, grid search and pipelines:
+https://colab.research.google.com/drive/1xAhcsXMqoJD-sFRfGfMk-pB4FBuZE2Gf
+
+                                                                                                                                       42
+Bayesian Ridge Regression and ARD?
+
+ They show the best performance in the Diabetes dataset!
+ In the MAP estimate, we have a prior and likelihood with
+
+  some parameters (noise, prior variance, etc.)
+ Can we set up a prior on those parameters?
+
+ Yes! That is called hierarchical Bayesian model!
+
+    Turtles all the way down...
+    We'll come back in the Bayesian learning, part
+
+                                                                                                                                       43
+Data standardization
+
+ Many ML algorithms (SVM, L2/L1 regularization) assume all
+  dimensions of  = 1, ... ,   has zero-mean and similar
+  covariance.
+
+ It also helps numerically.
+
+ Most usual standardization:  = 1,  ,     = 1 ,  ,  
+
+       -                            1  
+                                    
+  =         with   =             =     ( - )2
+
+                           =1          =1
+
+ For more details, you can check https://scikit-
+  learn.org/stable/modules/preprocessing.html
+
+    For example, for data with outliers, you should use robust estimates
+      for mean and covariance
+
+                                                                          44
+Exercise: Fit a polynomial model
+
+ Link to Colab: https://drive.google.com/file/d/1G1N9C9Yry-
+   3Lc9A1mL5yawM1rDB6TnKM
+
+ Link to data:
+   https://drive.google.com/file/d/1G_XseoB0lhII21jGdEkSYQyaEtMoSfQy
+
+                                                                                                                                       45
+Linear Classification
+
+ Classification: The output of the learned model is discrete
+ Linear classification: The model is based on a linear
+
+  combination of the input features
+ Intuition: there is an hyperplane   -1 (e.g., a line for a
+
+  2D space) that separates the two classes/categories.
+
+                                                                                                                                       46
+Binary Classification (intuition)
+
+ We can get a discrete output   -1, +1 by taking the sign of
+   the signed point-to-hyperplane distance
+
+ The linear decision boundary is perpendicular to 
+ The formulation can be extended easily to multi-class
+
+Heaviside (step)
+function if   {0,1}
+
+                                                                                                                                       47
+Perceptron (McCulloch-Pitts, 1943)
+
+                                                                                                                                       48
+Activation functions
+
+ Heaviside and sign()
+  functions are not continuous.
+
+    Not differentiable!
+
+ We can use continuous
+  functions that approximate
+  the sign function.
+
+    The sigmoid function
+    The tanh function
+   ...
+
+                                                                                                                                       49
+Logistic Regression (probabilistic interpretation)
+
+ We can write the likelihood function as (see Math notes):
+
+                      ,  = Ber(|  )
+
+where ( = 1|) =   and   = 0  = 1 -  
+
+ The probability of the positive class is output of the
+
+sigmoid.
+
+                       =            1
+                            = 1 + -
+
+Remember the trick     Probability of
+                       being class 1
+to add a bias term
+  = 1,  
+
+                    For more details, check Murphy chapter 10  50
+Logistic Regression (probabilistic interpretation)
+
+ We can write the likelihood function as (see Math notes):
+
+         1                       1  1-
+                      1 - 1 + - 
+  ,   =  1 + -                                =     (1 -            )1-
+
+                      
+
+                      ,  =    , 
+
+                                          =1
+
+assuming iid data.
+
+ Then, we can compute logs:
+
+              log   ,  =  log   + 1 -  log(1 -   )
+
+                                                                  
+
+                          log   ,  =  log   , 
+
+                                                                =1
+
+         For more details, check Murphy chapter 10                       51
+Learning the parameters
+
+ Remember maximum likelihood:
+
+                                   1  
+
+ = argmax log   ,     =  argmax           log      , 
+
+                                      =1
+
+ It is the same as minimize NLL:
+
+                                   1  
+
+ = argmin - log   ,   =  argmin           -log       , 
+
+                                      =1
+
+ What is -log   ,  ? Cross-entropy! (Check Math notes)
+
+  - log   ,  = - log   - 1 -  log(1 -   )
+
+  is the true value (probability) of the class 1 ( = 1) = 1
+   is our model probability of class 1
+ log   is the information of our model for class 1
+
+                                                             52
+Cross entropy vs ML
+
+ Maximize likelihood = minimize cross-entropy
+
+    We want to find the model that minimizes the uncertainty of our
+      predictions with respect to the true world.
+
+                                                             log(1 -   )
+
+         1                       1                 1
+   = -   log   ,   = -     log              +   1 - 
+
+               =1           =1                  =1  
+                                    =1                   =0
+
+ Intuition (check math notes):
+
+    Cross-entropy is the expected
+      surprise of our model predictions
+      averaged over the true probabilities
+      of the elements in the world.
+
+       - log () is the surprise of an
+         event/observation.
+
+                                                                          53
+Cross-entropy optimization
+
+ To find the optimal model, we can use the same strategy
+
+as linear regression
+
+            1   
+
+  = -    log   + 1 -  log(1 -   )
+               =1
+                                                    
+         1                         1
+   =  -          (      - )  =  -                      (    - )
+
+            =1                        =1                    Hessian has a
+
+ Unfortunately, there is no closed form solution!           quadratic form
+                                                            (positive definite)
+
+ ... but, the loss is convex and has a single minimum!
+
+ (Stochastic) Gradient Descent will take us to it.
+
+                                                                           54
+Generalize to multi-class problems
+
+ Logistic regression works for binary classification problems
+
+                                          = 0,1
+
+ What if we had multiple classes?
+
+                             = , , , , ...
+
+ Solutions:
+
+    OVR: One-vs-Rest
+
+       Perform logistic regression for class 1 vs
+          not class 1 (hotdog/not hotdog)
+
+       Repeat for all classes.
+
+    Replace Bernouilli  Multinomial
+       Distribution for k categories and n trials
+       It models throwing a k-sided dice n-times.
+       Multinomial(k=2, n=1) = Bernouilli
+       Bernouilli distribution models a coin flip.
+
+                                                                                                                                       55
+Multinomial logistic regression
+
+                                                                                                                                       56
+Logistic regression in the Iris dataset
+
+ Take-home messages:
+
+    Slightly outperforms k-nn (remember from our plots in
+      slide 18, class boundaries are quite linear)
+
+    More sophisticated methods (SVM) do not improve,
+      again class boundaries are quite linear
+
+    k-fold cross-validation IS relevant in this case!
+
+                                  Colab link:
+                                  https://drive.google.com/file/d/1GftP9OQDIe6_7dP-AhIe_QgIZGiGPOjm
+
+                                                                                                                                       57
+Welcome to deep learning
+
+ Multilayer perceptron
+
+    Feedforward neural network
+    Trained using SGD
+    Forward inference, backward loss/gradient
+
+                                                                                                                                       58
+Welcome to deep learning
+
+ General purpose architecture
+
+    Classification, regression
+    Unsupervised learning...
+
+                                                                                                                                       59
+Activation functions
+
+ Nonlinear component
+
+https://colab.research.google.com/github/probml/pyprobml/blob/master/no
+
+tebooks/book1/02/activation_fun_plot.ipynb                               60
+Types of error (binary classification)
+
+ True Positive (TP): Positive data (correctly) classified
+  as positive data.
+
+ True Negative (TN): Negative data (correctly)
+  classified as negative data.
+
+ False Positive / Type I Error (FP): Negative data (not
+  correctly) classified as positive data.
+
+ False Negative / Type II Error (FN): Positive data (not
+  correctly) classified as negative data.
+
+                      Ground Truth
+
+                      Positive Negative
+
+Prediction  Positive  TP            FP
+
+            Negative  FN            TN
+
+                                                           61
+Metrics: Precision and Recall
+
+  Accuracy,  success  rate,      hit  rate          +
+                                              +++
+   Limitation: Not every error is equally important...
+
+   Best and worst success rate?
+
+ Precision            [0,1]
+             +
+   Ratio of the true positives over all the positive classifications.
+
+   Fraction of retrieved elements that are relevant.
+
+  Recall           0,1
+            +
+   Ratio of the true positives over all the positive samples.
+
+   Fraction of relevant elements that are retrieved.
+
+ Both depend on the classification threshold.
+
+ They are dependent, if one increases the other decreases.
+  Sometimes given in pairs (e.g., precision at recall X).
+
+                                                                       62
+Precision and Recall (some intuition)
+
+   The girlfriend/boyfriend example:
+
+      Your girlfriend/boyfriend makes birthday presents for you every
+        year.
+
+      One year she/he asks: Do you remember all my presents from
+        the last 10 years?
+
+      Precision is how many are correct from the ones you said you
+        remember.
+
+      Recall is how many correct you can remember from all correct
+        ones.
+
+      How can we have 100% precision or recall? What happens to
+        the other?
+
+      What is the relation to the classification threshold?
+
+   The airport security example:
+
+      FP and FN: Have both errors the same consequences?
+      How can we have 100% precision or recall?
+
+   Do you need precision, recall or both?
+
+      The solution is, most often, a compromise...
+
+                                                                                                                                       63
+Precision-Recall and thresholds
+
+ Two-class problem
+
+                                                                                                           
+                                                                                                           
+                                                                                                           
+
+ What happens to the TP, TN, FP, FN, precision and recall if we
+  move the boundary from  to 1 or 2?
+
+                                                                                                                                       64
+Precision-Recall curve
+
+ 2D plot, recall in x-axis and precision in y-axis.
+ It shows the precision-recall pairs when we change the classifier
+
+   threshold 
+            1    0
+            0    1
+ Changing a classifier threshold  it operates in different modes. We
+
+   have to select the more appropriate for our purposes.
+ For general purposes, the area under the curve (AUC) is usually taken
+
+   as a general metric (the higher the better).
+ What curve and AUC would have a perfect classifier? What curve and
+
+   AUC would have the worst possible classifier?
+
+                                                                                                                                       65
+F1 score, confusion matrix
+
+ F1 score
+
+ Harmonic mean of precision and
+   recall (the higher the better)
+
+1  =      2  =  2                  [0,1]
+      1/+1/                  + 
+                   
+
+ It can be weighed to give  times
+more importance to precision than
+                                   
+recall  1    =  (1  +    2)  2     + 
+
+ Confusion matrix                         Confusion matrix for action
+                                          recognition from videos
+    Rows: true categories.
+    Columns: predicted categories.        Taken from Qiu, Jiang, and Chellappa, "Sparse
+    Cells: number/frequency of            Dictionary-based Representation and Recognition of
+                                          Human Action Attributes", ICCV 2011
+      ocurrence.
+    More information than other
+
+      metrics (for example, typical
+      classification mistakes)
+    Difficult to display if many
+      categories.
+    Difficult to summarize...
+
+                                          66
+ TP, TN, FP and FN from the confusion matrix
+
+ Remember:
+
+    Rows: true categories.
+    Columns: predicted categories.
+
+ True positives per class:
+
+    Diagonal elements [4, 6, 1]
+
+ False positives per class:
+
+    Sum of the off-diagonal elements
+      of each column [0, 3, 0]
+
+ False negatives per class:
+
+    Sum of the off-diagonal elements
+      of each row [0, 0, 3]
+
+ True negatives per class:
+
+    Sum of all matrix elements except
+      the row and column of the class
+      [10, 5, 10]
+
+                                                                                                                                           67
+Multiclass Precision/Recall
+
+ True positives per class: [4, 6, 1], True negatives per class: [10, 5, 10]
+ False positives per class: [0, 3, 0], False negatives per class: [0, 0, 3]
+
+                                                    Accuracy   Precision     Recall
+
+Class 1      4 + 10                                              4           4
+         4 + 6 + 1 + 3 = .                                    4 + 0 = .   4 + 0 = . 
+
+Class 2       6+5                                               6            6
+         4 + 6 + 1 + 3 = .                                    6 + 3 = .   6 + 0 = . 
+
+Class 3      1 + 10                                              1          1
+         4 + 6 + 1 + 3 = .                                    1 + 0 = .   1 + 3 = . 
+
+ Overall accuracy =  = 4+6+1 = 0.78
+
+                                                4+6+1+3
+
+ Average accuracy = 1.0+0.79+0.79 = 0.86                    If data is imbalanced, average
+                                                              metrics may be weighted...
+                                                         3
+
+ Average Precision = 1.0+0.66+1.0 = 0.89
+
+                                                      3
+
+ Average Recall = 1.0+1.0+0.25 = 0.75
+
+                                                 3
+
+                                                                             68
+  Dimensionality reduction (unsupervised learning)
+
+ PCA  Principal Component Analysis.
+
+    Motivation: in high dimensional data, some dimensions are redundant, or
+      are highly correlated...
+
+    Intuition: Project the data into a low-dimensional space preserving the
+      dimensions of maximum variance
+
+    SVD decomposition ( = ) of the training matrix  =  1 ...   ,
+      the columns of  are the unit vectors of the principal components.
+
+    The low-d data is computed as  = ;   [1: ]
+
+For more details, check Deisenroth chapter 10  69
+ 1-NN with and without PCA in MNIST
+
+ Time per 10,000 queries in the test set
+ Full-size input,   784:
+ Removing lowest-variance dimensions with PCA, up
+
+   to 98% time reduction and same accuracy!
+
+                                    Colab link:
+                                    https://colab.research.google.com/drive/1EdemME5vbZr01Q6CijYh0eo3hnRsjjKE
+
+                                                                                                                                         70
+ Assignment: Logistic regression in MNIST
+
+   Spoilers:
+
+       Excruciatingly slow!
+          Due to high
+            dimensionality
+            and large
+            dataset size
+          Shortlist promising
+            models using a
+            reduced version
+            of the data!
+          Use PCA!
+
+       1-NN better than
+         logistic regression...
+          why?
+
+https://colab.research.google.com/drive/1
+HS9988xVWD6yqw9FRbe4z7qQfAFejL_V
+
+                                                                                                                                           71
+Clustering (unsupervised learning)
+
+ K-means:
+
+    Start with K random points
+      (cluster means).
+
+    Repeat until convergence:
+       Assign each data point to the
+         closest mean.
+       Recalculate means based on
+         the new assignments
+
+ Isotropic: clusters are spheres
+
+    Alternative: Gaussian mixture
+      model (GMM) with expectation-
+      maximization (EM)
+
+ Requires knowing K
+
+    Alternative: X-means
+
+                                                                                                                                       72
+Support Vector Machines (SVM)
+
+ Recap: Linear classification consists of finding an
+  hyperplane in the feature space that separates the
+  training data
+
+                                                                = 0
+                                       > 0
+
+ < 0
+
+      Remember to
+      add bias b or
+      make x = [1, x]
+
+For more details, check Deisenroth chapter 12                        73
+Support Vector Machines (SVM)
+
+ But... which one of these hyperplanes would be the best
+  one?
+
+                                                                                                                                       74
+Support Vector Machines (SVM)
+
+ SVM idea: let's take the one with maximum margin 
+ Maximum margin:
+
+    The closest samples to the hyperplane are the support vectors 
+    The margin is the distance between the support vectors
+    Only support vectors matter! (which seems reasonable...)
+
+                                                                    
+
+                                                                          
+
+                                                                                                                                       75
+Geometrical interpretation (separable case)
+
+      More details: https://www.cs.princeton.edu/courses/archive/fall18/cos324/files/max-margin.pdf
+      Also in Deissenroth, chapter 12
+
+                       
+       =  +   
+
+                  1    2
+ = arg  2
+
+s.t.    1                             
+                          
+ ,   
+                                
+
+    = 1
+for support points
+
+                                        Scale data for  = 1
+                                                                                                                                   76
+Geometrical interpretation (non-separable case)
+
+ More: https://www.cs.princeton.edu/courses/archive/fall18/cos324/files/max-margin.pdf
+
+ Also in Deissenroth, chapter 12
+
+                  1               
+ = arg min 2
+                                  2 +   max{0, 1 -   }   ,   
+
+                                  =1
+
+ Hinge loss
+
+ This loss is used a lot in advanced topics:              
+    self-supervised learning,
+    transfer learning                                                                       77
+   ...
+Learning SVM
+
+ Lagrange optimization
+
+ Similar to what we did with ridge regression (ridge)  (svm)
+
+ Combine loss with penalty:
+
+                 1                 
+              =
+       ,                     2  -             -1
+                 2           2
+
+                                   =1
+ = 0
+                                1   
+                                2
+              =              -             
+
+                 =1                =1 =1
+
+   with  = = 1 , 0 = = 1  and 0    
+
+  is a hyperparameter (amount of slack)  Cross-validation
+
+                                                                                                                                       79
+Support Vector Machines
+
+ We can use non-linear features    
+
+    Example: make data separable
+
+                                  = [, ,  + ]
+
+           
+            1
+   =      - 2        () 
+
+      =1  =1 =1    
+
+                                               80
+Kernel trick
+
+ How many features? Maybe infinite!
+
+      () is a scalar, independent of number of features.
+
+    Kernel function  ,  =   ()
+
+ Some kernel functions
+
+ Linear kernel:    ,   =    
+
+ Polynomial kernel:    ,   =     +  
+
+                                      -     2
+                                         2
+ Gaussian kernel:    ,    = exp  -
+
+ Radial basis function:    ,   = exp -   -   2
+
+ Sigmoid kernel:    ,   = tanh     + 
+
+ More in the Gaussian processes part...
+
+                                                                                                                                       81
+ Assignment: SVM in MNIST??
+
+https://colab.research.google.com/drive/1
+HS9988xVWD6yqw9FRbe4z7qQfAFejL_V
+
+                                                                                                                                           82
+Classification and regression trees (CART)
+
+ Split features with thresholds or categories
+ Select which feature top-down and split with metric:
+
+    Information Gain (check math notes).
+    Gini inequality...
+
+                                                                                                                                       83
+ Ensembling
+
+ The machine learning equivalent to the wisdom of the crowd
+
+    Aggregating predictions from several models improve over the individual ones
+
+ Example (from Géron 2019):
+
+    Aggregating the votes of 1,000 binary classifiers with individual accuracies of 51%
+      gives us an accuracy of 75%!
+
+ Practical trick: when, at the end of a machine learning project, you
+  trained several good models, combine their predictions to obtain
+  an even better one.
+
+     Aurélien Géron,
+     Hands-on Machine
+     Learning with Scikit-
+     Learn, Keras and
+     TensorFlow, O'Reilly,
+     2nd edition, 2019
+
+                                                                                                                                          84
+Ensemble I ­ Bootstrapping/Bagging
+
+ Random forest
+
+    Select a random subset of the training data. (bootstrapping)
+    Select a random subset of features/input dimensions and classes/outputs.
+    Train decision tree only with the subsets. (bagging)
+    Repeat with other subsets/dimensions/trees
+    Take decisions based on ensemble of trees
+
+                                         , 
+                                            
+
+          , 
+         
+
+    , 
+ 
+
+                                                                              85
+Ensemble II - Boosting
+
+ AdaBoost:
+
+    Train weak model 1 (tree, linear, etc.)
+    Increase weight of points wrongly
+
+      classified by model 1
+    Train weak model 2 on
+
+      weighted data
+    Repeat process and build
+
+      a cascade of models.
+    Take decisions based on
+
+      ensemble of models.
+
+ Gradient boosting:
+
+    Generalized to any loss (regression,
+      classification...)
+
+    Fit residuals of previous model,
+      use learning rate to combine models-
+
+    Popular example: XGBoost
+
+                                                                                                                                       86
+     Artificial
+Intelligence
+
+      (62651)
+
+                                    MAICE
+
