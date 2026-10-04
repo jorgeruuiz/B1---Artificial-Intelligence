@@ -26,42 +26,43 @@ def question2():
 
 # 1. Prefer the close exit (+1), risking the cliff (-10)
 def question3a():
-    answerDiscount = 0.2 # The model gives much more value to the immediate cells, as the forward rewards lose 80% of its value with each step. This way, it prefers to stay on the first end besides having a more valuable one 2 steps aside.  
-    answerNoise = 0.001 # Having a small noise allows the model to go through a more risky path, having a fewer probability of stepping into the cliff with an error. 
-    answerLivingReward = -0.2 # Having a negative living reward makes the model try the shortest paths in order to achieve the objective. This is due to the decrease of it's reward with each step, which promotes arriveng earlier. 
+    answerDiscount = 0.2       # Strong discounting favours the close +1 exit over the distant +10 exit.
+    answerNoise = 0.001        # Almost no unintended movement makes the short route near the cliff preferable.
+    answerLivingReward = -0.2  # A penalty for each step encourages reaching the exit sooner.
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
 # 2. Prefer the close exit (+1), but avoiding the cliff (-10)
 def question3b():
-    answerDiscount = 0.2
-    answerNoise = 0.1 # Having higher noise makes it less probable to achieve crossing the cliff. 
-    answerLivingReward = 0.1 # The positive living reward makes choosing a longer path a better idea, as it'll be rewarded as long as it keeps alive. 
+    answerDiscount = 0.2       # Strong discounting still favours the close exit.
+    answerNoise = 0.1          # More unintended movement increases the risk of falling near the cliff.
+    answerLivingReward = 0.1   # Rewards for non-exit steps make the longer safe route less costly.
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
 # 3. Prefer the distant exit (+10), risking the cliff (-10)
 def question3c():
-    answerDiscount = 0.95 # With a higher discount, we give more importance to the cells which are further, so in this case, it'll try to arrive to the most rewarding ending besides it being further. 
-    answerNoise = 0.001 # Allows the model to cross the cliff with a tiny probability of falling. 
-    answerLivingReward = -0.2 # Encourages to take the shortest path (cliff), as the model is penaliced for each step it takes. 
+    answerDiscount = 0.95      # Weak discounting preserves the value of the distant +10 exit.
+    answerNoise = 0.001        # Almost no unintended movement makes the short route near the cliff preferable.
+    answerLivingReward = -0.2  # A penalty for each step favours the shorter route to that exit.
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
 # 4. Prefer the distant exit (+10), avoiding the cliff (-10)
 def question3d():
-    answerDiscount = 0.95           # High discount factor to make the agent "ambitious" and value more future rewards
-    answerNoise = 0.1               # Low noise to make the agent more confident to cross the bridge
-    answerLivingReward = 0.2        # Slightly positive living reward to encourage the agent to continue moving
+    answerDiscount = 0.95      # Weak discounting favours the distant +10 exit.
+    answerNoise = 0.1          # Risk of unintended movement towards the cliff favours the longer safe route.
+    answerLivingReward = 0.2   # Rewards for non-exit steps support taking the longer route.
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
 # 5. Avoid both exits and the cliff (so an episode should never terminate)
 def question3e():
-    answerDiscount = 0.01           # Very low discount factor so the agent values inmediate rewards versus future ones
-    answerNoise = 0.2               # Standard value for noise
-    answerLivingReward = -0.2       # Negative living reward to make the agent prefer to stay alive and avoid exits
-                                    # and the cliff (better to keep moving and getting "free" rewards than to take risk)
+    answerDiscount = 0.01      # Very strong discounting makes distant exit rewards almost irrelevant.
+    answerNoise = 0.2          # Transition risk discourages approaching the cliff.
+    answerLivingReward = -0.2  # Penalizes each step; it does not itself encourage staying alive.
+    # Together, these values produce a cycle between (0, 1) and (0, 2)
+    # on the required noiseless path. With actual noise, survival is not guaranteed.
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
