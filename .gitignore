@@ -1,3 +1,11 @@
 *.mp4
 *.pyc
 *.jpg
+/.lab3-runtime/
+/Lab Sessions/Lab3/.runtime/
+/Lab Sessions/Lab3/tmp/
+/Lab Sessions/Lab3/frozen_head.weights.h5
+/Lab Sessions/Lab3/report/*.aux
+/Lab Sessions/Lab3/report/*.log
+/Lab Sessions/Lab3/report/*.out
+/Lab Sessions/Lab3/report/*.toc
