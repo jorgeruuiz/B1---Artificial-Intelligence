@@ -1,0 +1,91 @@
+# MANOLO workflow for the Innovation Lab workshop.
+#
+# Section 8.3 of the notebook loads this file, fills in the fields marked
+# "set by the notebook", and submits it with POST /workflow/ingest.
+# Edit the tasks and their parameters freely; `GET /tasks/<task>/schema` on the
+# controller lists every parameter of a task.
+#
+# How the tasks run: in order, on every node in resource_mapping. Tasks that
+# produce a model (pruning, quantization) pass it to the next task, so the
+# quantization below receives the pruned model. Inference evaluates the model
+# you registered.
+#
+# Rules that are easy to break:
+#   - explainability.num_samples must be <= inference batch_size: the
+#     explanations are computed on the first inference batch only.
+#   - pruning and quantization require epochs (>= 1), batch_size and
+#     learning_rate: the fine-tuning budget that recovers accuracy.
+#   - pruning_method: magnitude | random | structured; 0 < pruning_ratio < 1.
+#   - qz_weights / qz_activations: 2, 4, 8 or 16 bits.
+
+header:
+  project: MANOLO Innovation Lab
+  workflow_name: innovation-lab            # set by the notebook
+  workflow_version: '1.0'
+  owner: innovation-lab
+
+info:
+  metadata:
+    use_case: Innovation Lab image classification
+    description: Evaluate, explain and compress the ResNet-18 trained in the workshop notebook.
+    mlflow_experiment: innovation-lab      # set by the notebook
+
+resource_mapping:
+  nodes:
+    - name: node-alpha                     # ask the organisers which node to use
+      endpoint: http://node1:8000
+
+ai_workflow_payload:
+  - node: ALL
+    dataset_id: null                       # set by the notebook (section 8.1)
+    base_model_id: null                    # set by the notebook (section 8.2)
+    metrics:
+      - acc
+      - f1
+      - prec
+      - rec
+    tasks:
+      # 1. Evaluate the registered model and explain some of its predictions.
+      - name: inference
+        provider: ceadar
+        params:
+          batch_size: 32
+          track_latency: true
+          track_confidence: true
+          store_confusion_matrix: true
+          explainability:
+            enabled: true
+            provider: ceadar
+            method: gradcam
+            target_layer: layer4           # last residual stage of the ResNet-18
+            num_samples: 8                 # must be <= batch_size
+            save_html_report: true
+            modality: vision
+
+      # 2. Magnitude pruning, then a short fine-tune to recover accuracy.
+      - name: pruning
+        provider: ceadar
+        params:
+          epochs: 2
+          batch_size: 32
+          learning_rate: 0.0001
+          pruning_ratio: 0.5
+          pruning_method: magnitude
+          num_workers: 0
+
+      # 3. 8-bit quantization of the pruned model.
+      - name: quantization
+        provider: ceadar
+        params:
+          epochs: 1
+          batch_size: 32
+          learning_rate: 0.0001
+          qz_weights: 8
+          qz_activations: 8
+          calibration_samples: 512
+          num_workers: 0
+
+monitoring:
+  enabled: true
+  track_energy: true
+  track_emissions: true

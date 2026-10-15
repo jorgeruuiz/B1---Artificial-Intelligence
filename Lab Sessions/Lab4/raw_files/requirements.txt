@@ -1,0 +1,23 @@
+# Packages needed to run the workshop notebook (Python 3.10 or later).
+# Versions follow the pins of the MANOLO repository's pyproject.toml.
+# For a CPU-only machine, install torch and torchvision first from
+# https://download.pytorch.org/whl/cpu to avoid the large CUDA download.
+
+# Model, training and int8 quantization (torch.ao.quantization ships with torch)
+torch>=2.12.1,<2.13.0
+torchvision>=0.27.1,<0.28.0
+
+# Grad-CAM (imported as pytorch_grad_cam)
+grad-cam>=1.5.5,<1.6.0
+
+# Data handling and plots
+numpy>=1.26.4,<2.0.0
+pandas>=2.3.3,<2.4.0
+matplotlib>=3.10.8,<3.11.0
+
+# MANOLO REST API (section 8)
+requests>=2.34.2,<3.0.0
+pyyaml>=6.0,<7.0
+
+# Notebook
+jupyter
