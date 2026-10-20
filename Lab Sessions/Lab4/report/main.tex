@@ -142,4 +142,66 @@ similar to the notebook. Pruning alone left its size unchanged.
 Grad-CAM was enabled in the workflow, but its heatmap report is missing from
 the saved files. We could not visually compare it with the notebook results.
 
+\subsection{Extra measurements}
+MANOLO also recorded energy use, estimated CO$_2$ emissions, hardware
+utilization, confidence and inference throughput.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Resource measurements recorded by MANOLO.}
+\begin{tabular}{lrrr}
+\toprule
+Step & Duration (s) & Energy (Wh) & CO$_2$ (g)\\
+\midrule
+Inference & 10.6 & 0.36 & 0.063\\
+Pruning & 12.1 & 0.52 & 0.090\\
+Quantization & 11.6 & 0.46 & 0.080\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+These measurements include compression and fine-tuning, so they do not show
+the energy saved during future use. Average inference batch latency was
+about 4 ms on the MANOLO node. This cannot be directly compared with the
+notebook's CPU timing because the hardware and setup differ.
+
+\subsection{What MANOLO adds}
+The notebook was useful for trying things and inspecting images. MANOLO
+registered the data and models, ran the workflow and stored results in
+MLflow. This makes experiments easier to repeat and compare, and helps keep
+track of which model was used.
+
+Quantization was the most useful compression method here. Pruning recovered
+good accuracy after fine-tuning, but did not make the dense model smaller or
+faster. We worked on one dataset and did not carry out the optional task.
+
+\clearpage
+\subsection{MLflow screenshots}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth,height=0.35\textheight,keepaspectratio]{../manolo/model.jpeg}
+\caption{Model registered in MLflow. Version 2 was used in our workflow.}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth,height=0.43\textheight,keepaspectratio]{../manolo/inference.jpeg}
+\caption{Inference results: 97.8\% accuracy on the 1,000 test images.}
+\end{figure}
+
+\clearpage
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth,height=0.43\textheight,keepaspectratio]{../manolo/pruning.jpeg}
+\caption{Pruning results: 96.8\% accuracy after two fine-tuning epochs.}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth,height=0.43\textheight,keepaspectratio]{../manolo/quantization.jpeg}
+\caption{Quantization of the pruned model: 96.6\% accuracy and about four times smaller size.}
+\end{figure}
+
 \end{document}

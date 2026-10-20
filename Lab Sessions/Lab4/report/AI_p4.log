@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.9.17)  20 OCT 2026 16:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.9.17)  20 OCT 2026 16:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -346,7 +346,7 @@ Package hyperref Info: Link coloring OFF on input line 15.
 \@outlinefile=\write3
 \openout3 = `AI_p4.out'.
 
-<logo.png, id=24, 1204.5pt x 343.2825pt>
+<logo.png, id=36, 1204.5pt x 343.2825pt>
 File: logo.png Graphic file (type png)
 <use logo.png>
 Package pdftex.def Info: logo.png  used on input line 19.
@@ -363,27 +363,53 @@ Package hyperref Info: Option `pageanchor' set `true' on input line 35.
 
 ] [3
 
-] (./AI_p4.aux)
+]
+<../manolo/model.jpeg, id=83, 1606.0pt x 737.75626pt>
+File: ../manolo/model.jpeg Graphic file (type jpg)
+<use ../manolo/model.jpeg>
+Package pdftex.def Info: ../manolo/model.jpeg  used on input line 184.
+(pdftex.def)             Requested size: 455.2397pt x 209.12573pt.
+<../manolo/inference.jpeg, id=84, 1190.4475pt x 788.9475pt>
+File: ../manolo/inference.jpeg Graphic file (type jpg)
+<use ../manolo/inference.jpeg>
+Package pdftex.def Info: ../manolo/inference.jpeg  used on input line 190.
+(pdftex.def)             Requested size: 455.24478pt x 301.70522pt.
+ [4
+
+ <../manolo/model.jpeg> <../manolo/inference.jpeg>]
+<../manolo/pruning.jpeg, id=91, 1205.50375pt x 791.95876pt>
+File: ../manolo/pruning.jpeg Graphic file (type jpg)
+<use ../manolo/pruning.jpeg>
+Package pdftex.def Info: ../manolo/pruning.jpeg  used on input line 197.
+(pdftex.def)             Requested size: 455.22665pt x 299.0623pt.
+<../manolo/quantization.jpeg, id=92, 1190.4475pt x 794.97pt>
+File: ../manolo/quantization.jpeg Graphic file (type jpg)
+<use ../manolo/quantization.jpeg>
+Package pdftex.def Info: ../manolo/quantization.jpeg  used on input line 203.
+(pdftex.def)             Requested size: 452.53824pt x 302.20091pt.
+ [5
+
+ <../manolo/pruning.jpeg> <../manolo/quantization.jpeg>] (./AI_p4.aux)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-08-10>
  ***********
 Package rerunfilecheck Info: File `AI_p4.out' has not changed.
-(rerunfilecheck)             Checksum: 210CAF66524507EF5A5F23E881E6F4E1;795.
+(rerunfilecheck)             Checksum: AF9B408C1029258777D0FA1E8EF18CEB;1238.
  ) 
 Here is how much of TeX's memory you used:
- 11060 strings out of 469071
- 177014 string characters out of 5456526
+ 11105 strings out of 469071
+ 178131 string characters out of 5456526
  599371 words of memory out of 5000000
- 40017 multiletter control sequences out of 15000+600000
+ 40052 multiletter control sequences out of 15000+600000
  640103 words of font info for 66 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 74i,7n,79p,255b,461s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfcc1440.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on AI_p4.pdf (4 pages, 264475 bytes).
+ 74i,8n,79p,255b,461s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfcc1440.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/Users/JORGE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
+Output written on AI_p4.pdf (6 pages, 735361 bytes).
 PDF statistics:
- 126 PDF objects out of 1000 (max. 8388607)
- 91 compressed objects within 1 object stream
- 13 named destinations out of 1000 (max. 500000)
- 46 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 170 PDF objects out of 1000 (max. 8388607)
+ 124 compressed objects within 2 object streams
+ 23 named destinations out of 1000 (max. 500000)
+ 90 words of extra memory for PDF output out of 10000 (max. 10000000)
 

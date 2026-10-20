@@ -1,0 +1,63 @@
+header:
+  project: MANOLO Innovation Lab
+  workflow_name: innovation-lab-826685-875455-xray
+  workflow_version: '1.0'
+  owner: innovation-lab
+info:
+  metadata:
+    use_case: Innovation Lab image classification
+    description: Evaluate, explain and compress the ResNet-18 trained in the workshop
+      notebook.
+    mlflow_experiment: innovation-lab
+resource_mapping:
+  nodes:
+  - name: node-alpha
+    endpoint: http://node1:8000
+ai_workflow_payload:
+- node: ALL
+  dataset_id: runs:/14b80b9a4c464bcb909f4941abbee072/datasets/826685-875455-xray
+  base_model_id: models:/innovation-lab-826685-875455-xray/2
+  metrics:
+  - acc
+  - f1
+  - prec
+  - rec
+  tasks:
+  - name: inference
+    provider: ceadar
+    params:
+      batch_size: 32
+      track_latency: true
+      track_confidence: true
+      store_confusion_matrix: true
+      explainability:
+        enabled: true
+        provider: ceadar
+        method: gradcam
+        target_layer: layer4
+        num_samples: 8
+        save_html_report: true
+        modality: vision
+  - name: pruning
+    provider: ceadar
+    params:
+      epochs: 2
+      batch_size: 32
+      learning_rate: 0.0001
+      pruning_ratio: 0.5
+      pruning_method: magnitude
+      num_workers: 0
+  - name: quantization
+    provider: ceadar
+    params:
+      epochs: 1
+      batch_size: 32
+      learning_rate: 0.0001
+      qz_weights: 8
+      qz_activations: 8
+      calibration_samples: 512
+      num_workers: 0
+monitoring:
+  enabled: true
+  track_energy: true
+  track_emissions: true

@@ -3,3 +3,6 @@
 \contentsline {section}{\numberline {3}Task 3: Compression}{2}{section.3}%
 \contentsline {section}{\numberline {4}Task 4: MANOLO workflow}{3}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Results and comparison}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Extra measurements}{3}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}What MANOLO adds}{3}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}MLflow screenshots}{4}{subsection.4.4}%
