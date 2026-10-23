@@ -1,5 +1,14 @@
 # Artificial Intelligence study notes
 
+## Exam practice — questions only
+
+The new practice bank covers modules 0–5.5 from the current local lecture PDFs, including sequence models, transformers, foundation models, unsupervised learning and generative models. It contains 120 core questions plus 8 supplementary questions from the Lab 4 explainability/compression briefing. No answers are included.
+
+- [Question bank (PDF)](AI_EXAM_PRACTICE_QUESTIONS.pdf) · [Editable Markdown](AI_EXAM_PRACTICE_QUESTIONS.md)
+- [Two one-hour mock papers (PDF)](AI_EXAM_MOCK_PAPERS.pdf) · [Markdown](AI_EXAM_MOCK_PAPERS.md)
+
+Each mock contains 20 multiple-choice questions and 8 short questions, including 2 small calculations. Rebuild instructions are in [exam_practice_source](exam_practice_source/README.md). The older explanatory volumes below cover modules 0–4; their original coverage description does not describe the new practice bank.
+
 English explanatory notes based on the teacher PDFs supplied in **Lecture Slides**, following the style of the Data Science and Computational Engineering notes.
 
 Read the PDFs in order, or jump to the topic you are revising:
