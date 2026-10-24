@@ -1,5 +1,13 @@
 # Artificial Intelligence study notes
 
+## Exam slide index
+
+- [Slide index (PDF)](AI_SLIDES_EXAM_INDEX.pdf) · [Editable LaTeX](AI_SLIDES_EXAM_INDEX.tex) · [Markdown](AI_SLIDES_EXAM_INDEX.md)
+
+The 12-page locator groups concepts and methods by main topic 1–5, then by exact slide PDF title, with a separate Lab 4 briefing supplement. The first page provides quick routes to common calculations and comparisons. References use physical PDF pages starting at 1, including the title page; printed slide numbers sometimes differ. Local links require keeping the index in `Study Notes` beside the existing course folders; jumping to a particular page depends on the PDF reader. Presentation and mathematical-background decks are excluded.
+
+Edit `source/build_slide_index.py` to maintain the concept mappings, then run it with Python (with `pypdf` installed or available in `.study_build/deps`) and `pdflatex` on PATH. It validates source PDF lengths and page bounds, generates the Markdown and standalone LaTeX, and compiles the index. Alternatively, edit and compile the standalone `.tex` directly; regeneration replaces those direct edits. This build does not modify the answer workbook.
+
 ## Exam practice — questions only
 
 The expanded practice bank is organized by exact slide PDF title, with **10 multiple-choice questions, 7 short-answer questions, and 3 easy calculation problems per deck**. It contains **360 questions across 18 teaching PDFs**, including the separate LSTM extra material, plus a **20-question Lab 4 explainability/compression supplement**: **380 questions total**. The administrative presentation and mathematical-background PDFs are excluded. Each question includes its source PDF page reference. No answers are included.

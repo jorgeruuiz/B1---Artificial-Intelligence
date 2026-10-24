@@ -1,0 +1,486 @@
+\documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=16mm,headheight=14pt]{geometry}
+\usepackage{array,longtable,booktabs,xcolor,fancyhdr,titlesec,microtype}
+\usepackage{hyperref}
+\definecolor{navy}{HTML}{163653}
+\definecolor{teal}{HTML}{007F86}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal,filecolor=teal,
+pdftitle={Artificial Intelligence - Exam Slide Index}}
+\pagestyle{fancy}\fancyhf{}
+\newcommand{\currenttopic}{Quick lookup}
+\fancyhead[L]{\small\sffamily Artificial Intelligence: slide index}
+\fancyhead[R]{\small\sffamily\currenttopic}
+\fancyfoot[C]{\small\thepage}
+\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}
+\setlength{\emergencystretch}{3em}
+\setlength{\LTpre}{3pt}\setlength{\LTpost}{5pt}
+\setcounter{secnumdepth}{0}
+\titleformat{\section}{\Large\sffamily\bfseries\color{navy}}{}{0pt}{}
+\titleformat{\subsection}{\normalsize\sffamily\bfseries\color{teal}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{4pt}{5pt}
+\titlespacing*{\subsection}{0pt}{9pt}{3pt}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\deckheading}[1]{\par\begingroup\skip0=\pagegoal\advance\skip0 by-\pagetotal\ifdim\skip0<7\baselineskip\newpage\fi\endgroup\subsection{#1}}
+\begin{document}
+\section{Exam slide index}
+\textbf{Find a concept, its exact slide PDF, and the page to open.}
+Organized by main topics 1--5, with individual slide decks inside each topic.
+
+\textbf{All numbers are PDF pages, starting at 1 and including the title slide.}
+They are not necessarily the numbers printed on the slides. For example, PDF page 40
+in 1.2 is printed slide 41; PDF page 51 in 1.3 is printed slide 54.
+Use the PDF reader's page counter. Ranges include repeated reveal slides.
+
+The detailed tables cover the lecture theory and exercises. Lab 4 briefing material
+has a separate final section. \textbf{5.1E} means \textbf{5.1. Extra Material.pdf}.
+Page references link to the local slide files when this index stays in Study Notes;
+whether a link opens directly at the requested page depends on the PDF reader.
+
+\begin{tabular}{@{}P{.84\linewidth}r@{}}
+\toprule\textbf{Main topic / detailed index} & \textbf{Index page}\\\midrule
+\hyperref[topic1]{1. Learning fundamentals, shallow and Bayesian learning} & \pageref{topic1}\\
+\hyperref[topic2]{2. Reinforcement learning} & \pageref{topic2}\\
+\hyperref[topic3]{3. Neural networks and deep learning fundamentals} & \pageref{topic3}\\
+\hyperref[topic4]{4. CNNs and transfer learning} & \pageref{topic4}\\
+\hyperref[topic5]{5. Advanced deep learning} & \pageref{topic5}\\
+\hyperref[topicL4]{Lab 4 supplement: deployment, explainability and compression} & \pageref{topicL4}\\
+\bottomrule\end{tabular}
+
+\subsection{Common calculations and distinctions}
+\begin{longtable}{@{}P{.62\linewidth}P{.34\linewidth}@{}}
+\toprule\textbf{Find} & \textbf{Deck: PDF pages}\\\midrule\endhead
+Training / validation / test; cross-validation & \textbf{1.1}: \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf\#page=31}{31--32, 41}; \textbf{1.2}: \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=21}{21--25}\\[3pt]
+Regression errors; classification metrics / confusion matrix & \textbf{1.2}: \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=40}{40, 60--67}\\[3pt]
+Bayesian posterior / prediction; Gaussian-process equations & \textbf{1.3}: \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=13}{13--14, 51--52}\\[3pt]
+Discounted returns and Bellman equations & \textbf{2.2}: \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=8}{8--19}\\[3pt]
+MC / TD update; SARSA versus Q-learning & \textbf{2.3}: \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=23}{23--24, 29, 35--38}\\[3pt]
+Dense-network dimensions and parameter counts & \textbf{3.2}: \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=39}{39--42}; \textbf{3.3}: \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=8}{8--10}\\[3pt]
+Hinge / softmax loss; backpropagation exercise & \textbf{3.3}: \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=23}{23--26}; \textbf{3.4}: \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=8}{8--17}\\[3pt]
+Convolution output size, parameters and receptive field & \textbf{4.1}: \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=17}{17, 20--23, 30, 106}\\[3pt]
+Residuals; BN count and train/eval; normalization variants & \textbf{4.1}: \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=52}{52--59, 62}\\[3pt]
+LSTM dimensions, parameter counts and one-step update & \textbf{5.1E}: \href{../Lecture\%20Slides/5.1.\%20Extra\%20Material.pdf\#page=5}{5--7}\\[3pt]
+Attention calculation, shapes and classroom A/B exercise & \textbf{5.2}: \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=11}{11--13, 42}\\[3pt]
+Causal mask, cross-attention, KV cache and image patches & \textbf{5.2}: \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=31}{31--40}\\[3pt]
+PCA / t-SNE; k-means / topic mixtures & \textbf{5.4}: \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=9}{9--22}\\[3pt]
+Pretraining / SFT / RL; CLIP, DINOv2 and SAM & \textbf{5.3}: \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=14}{14, 19--22}\\[3pt]
+AE / VAE / GAN / diffusion: meanings and comparisons & \textbf{5.5}: \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=7}{7--13, 17--22}\\[3pt]
+\bottomrule\end{longtable}
+
+\clearpage\renewcommand{\currenttopic}{Topic 1}
+\section{1. Learning fundamentals, shallow and Bayesian learning}\label{topic1}
+\deckheading{1.1. Fundamentals.pdf}
+{\small 45 PDF pages. \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{1.1. Fundamentals -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Machine learning, models, assumptions, inductive bias; No Free Lunch & \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf\#page=4}{4--6}\\[3pt]
+Supervised learning; regression versus classification & \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf\#page=10}{10--14}\\[3pt]
+Unsupervised learning; dimensionality reduction and clustering & \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf\#page=15}{15--17}\\[3pt]
+Reinforcement learning and combinations of learning strategies & \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf\#page=18}{18--23}\\[3pt]
+Abstraction, partial information; correlation versus causation & \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf\#page=24}{24--26}\\[3pt]
+Data quality, sampling bias, Big Data limitations, feature choice & \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf\#page=27}{27--30}\\[3pt]
+Training, validation and test sets; model selection and evaluation & \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf\#page=31}{31--32, 41}\\[3pt]
+k-nearest neighbours (k-NN): prediction, distance and choice of k & \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf\#page=33}{33--34, 36}\\[3pt]
+k-NN examples: dataset size, splits, digits and image difficulty & \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf\#page=37}{37--39}\\[3pt]
+ML workflow: frame problem, explore data, compare and tune models & \href{../Lecture\%20Slides/1.1.\%20Fundamentals.pdf\#page=40}{40--44}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{1.2. Shallow Learning.pdf}
+{\small 85 PDF pages. \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{1.2. Shallow Learning -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Linear regression, Gaussian noise, likelihood and least squares & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=4}{4--8}\\[3pt]
+Negative log-likelihood; gradient descent and stochastic updates & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=9}{9, 26--31}\\[3pt]
+Basis-function expansion; polynomial regression & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=11}{11--12}\\[3pt]
+Overfitting, bias-variance trade-off and model complexity & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=13}{13--15}\\[3pt]
+Ridge / L2 regularization; Gaussian prior and MAP interpretation & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=16}{16--18}\\[3pt]
+Lasso / L1 regularization; sparsity and coefficients set to zero & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=19}{19--20}\\[3pt]
+Hyperparameters, validation splits and cross-validation & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=21}{21--25}\\[3pt]
+Learning rate; batch GD versus SGD; mini-batches and momentum & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=27}{27--32}\\[3pt]
+Other optimization algorithms: overview & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=33}{33}\\[3pt]
+Outliers; robust regression, L1/Laplace, Huber and RANSAC & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=34}{34--39}\\[3pt]
+Regression metrics: MAE, MSE, RMSE, median error and R-squared & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=40}{40}\\[3pt]
+Bayesian ridge and ARD: regression comparison & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=42}{42}\\[3pt]
+Feature scaling / standardization and its importance & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=43}{43}\\[3pt]
+Linear classification, decision boundary, perceptron and sigmoid & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=45}{45--48}\\[3pt]
+Logistic regression: Bernoulli likelihood, cross-entropy and training & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=49}{49--53}\\[3pt]
+Multiclass / multinomial logistic regression and softmax & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=54}{54--56}\\[3pt]
+MLP preview; hidden layers and nonlinear activations & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=57}{57--59}\\[3pt]
+True/false positives and negatives; TP, TN, FP, FN & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=60}{60}\\[3pt]
+Accuracy, precision and recall: definitions and interpretation & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=61}{61--62}\\[3pt]
+Classification threshold; precision-recall trade-off and PR curve & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=63}{63--64}\\[3pt]
+F1 / F-beta; confusion-matrix orientation & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=65}{65}\\[3pt]
+Read a multiclass confusion matrix; per-class and aggregate metrics & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=66}{66--67}\\[3pt]
+PCA; dimensionality reduction and its effect on a classifier & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=68}{68--70}\\[3pt]
+K-means clustering & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=71}{71}\\[3pt]
+SVM: separating hyperplanes, maximum margin and support vectors & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=72}{72--75}\\[3pt]
+Soft-margin / non-separable SVM & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=76}{76}\\[3pt]
+SVM optimization: Lagrange formulation & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=77}{77}\\[3pt]
+Nonlinear feature maps and the kernel trick & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=78}{78--79}\\[3pt]
+Classification and regression trees (CART) & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=81}{81}\\[3pt]
+Ensembles; bootstrap sampling, bagging and random forests & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=82}{82--83}\\[3pt]
+Boosting; AdaBoost and gradient boosting & \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=84}{84}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{1.3. Bayesian Learning.pdf}
+{\small 58 PDF pages. \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{1.3. Bayesian Learning -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Bayesian reasoning; prior, likelihood, posterior and Bayes rule & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=4}{4--6}\\[3pt]
+Bayesian prediction versus ML/MAP point estimates & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=7}{7--8}\\[3pt]
+Bayesian linear regression; Gaussian prior, likelihood and posterior & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=9}{9--13}\\[3pt]
+Multivariate Gaussians; covariance, marginals and conditioning & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=10}{10--12}\\[3pt]
+Posterior predictive distribution; prediction uncertainty & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=14}{14}\\[3pt]
+Regression in feature space; weight-space versus function-space views & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=15}{15--20}\\[3pt]
+Polynomial, Fourier, bell, Heaviside and exponential basis functions & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=21}{21--27}\\[3pt]
+Learned/many features; kernel trick and transition to Gaussian processes & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=28}{28--30}\\[3pt]
+GP definition, joint distributions, correlation and conditioning & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=31}{31--35}\\[3pt]
+Nonparametric models; training data versus fixed parameter vectors & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=36}{36}\\[3pt]
+Kernel families: squared exponential, Matern, linear, periodic, neural & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=37}{37--43}\\[3pt]
+Combining kernels; linear plus periodic structure & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=44}{44--45}\\[3pt]
+Kernel hyperparameters: lengthscale, signal variance and noise & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=46}{46--47}\\[3pt]
+Automatic Relevance Determination (ARD); per-dimension lengthscales & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=48}{48}\\[3pt]
+Hyperparameter learning; marginal likelihood and complexity/fit trade-off & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=49}{49--50}\\[3pt]
+GP predictive mean and variance; regression summary equations & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=51}{51}\\[3pt]
+Cholesky-based GP computation & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=52}{52}\\[3pt]
+Nonzero means, hierarchical Bayes, non-Gaussian likelihoods and GP extensions & \href{../Lecture\%20Slides/1.3.\%20Bayesian\%20Learning.pdf\#page=53}{53--56}\\[3pt]
+\bottomrule\end{longtable}
+
+\clearpage\renewcommand{\currenttopic}{Topic 2}
+\section{2. Reinforcement learning}\label{topic2}
+\deckheading{2.1. Introduction to Reinforcement Learning.pdf}
+{\small 16 PDF pages. \href{../Lecture\%20Slides/2.1.\%20Introduction\%20to\%20Reinforcement\%20Learning.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{2.1. Introduction to Reinforcement Learning -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+What RL is; agent interaction versus supervised/unsupervised learning & \href{../Lecture\%20Slides/2.1.\%20Introduction\%20to\%20Reinforcement\%20Learning.pdf\#page=2}{2--3}\\[3pt]
+Rewards, costs and the reward hypothesis & \href{../Lecture\%20Slides/2.1.\%20Introduction\%20to\%20Reinforcement\%20Learning.pdf\#page=5}{5--6}\\[3pt]
+Agent-environment loop; deterministic/stochastic gridworld & \href{../Lecture\%20Slides/2.1.\%20Introduction\%20to\%20Reinforcement\%20Learning.pdf\#page=7}{7--9}\\[3pt]
+Partial observation and generalized decision-process introduction & \href{../Lecture\%20Slides/2.1.\%20Introduction\%20to\%20Reinforcement\%20Learning.pdf\#page=10}{10}\\[3pt]
+Transition/reward model, policy and value function & \href{../Lecture\%20Slides/2.1.\%20Introduction\%20to\%20Reinforcement\%20Learning.pdf\#page=11}{11--13}\\[3pt]
+Planning with a known model versus learning through interaction & \href{../Lecture\%20Slides/2.1.\%20Introduction\%20to\%20Reinforcement\%20Learning.pdf\#page=14}{14--16}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{2.2. Markov decision processes.pdf}
+{\small 26 PDF pages. \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{2.2. Markov decision processes -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Markov property; MDP tuple: states, actions, transitions, rewards, discount & \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=2}{2--3}\\[3pt]
+Racing example and search-tree representation & \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=4}{4--5}\\[3pt]
+Policy: probability of an action given a state & \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=6}{6}\\[3pt]
+Return, discount factor gamma, finite/infinite horizon; discounting quiz & \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=7}{7--10}\\[3pt]
+State value V and action value Q & \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=11}{11}\\[3pt]
+Bellman expectation equations; recursive value evaluation & \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=12}{12--15}\\[3pt]
+Optimal V/Q functions and optimal policy & \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=16}{16--17}\\[3pt]
+Bellman optimality equations; maximization over actions & \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=18}{18--19}\\[3pt]
+Dynamic programming: why the model is required & \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=20}{20}\\[3pt]
+Iterative policy evaluation and stopping criterion & \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=21}{21--22}\\[3pt]
+Value iteration and greedy action selection & \href{../Lecture\%20Slides/2.2.\%20Markov\%20decision\%20processes.pdf\#page=23}{23--24}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{2.3. Q-learning.pdf}
+{\small 48 PDF pages. \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{2.3. Q-learning -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+MDP recap and unknown transition/reward models & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=3}{3--5}\\[3pt]
+Model-based versus model-free learning; passive prediction versus control & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=6}{6--10}\\[3pt]
+Monte Carlo policy evaluation from complete episodes & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=11}{11--13}\\[3pt]
+Incremental mean and incremental Monte Carlo update & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=14}{14--15}\\[3pt]
+MC limitations; bootstrapping and temporal-difference learning & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=16}{16--20}\\[3pt]
+Constant learning rates and forgetting old observations & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=21}{21}\\[3pt]
+MC versus TD versus dynamic programming; update equations & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=22}{22--26}\\[3pt]
+Monte Carlo value-update formula & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=23}{23}\\[3pt]
+TD(0) value update and TD error & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=24}{24}\\[3pt]
+Control and Q-values; greedy action selection without a transition model & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=27}{27--28}\\[3pt]
+SARSA update: sampled next action & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=29}{29}\\[3pt]
+Exploration versus exploitation; epsilon-greedy and regret & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=30}{30--33}\\[3pt]
+Q-learning target, update formula and algorithm & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=34}{34--36}\\[3pt]
+On-policy versus off-policy; SARSA versus Q-learning & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=37}{37--38}\\[3pt]
+Large state spaces, features and linear value-function approximation & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=39}{39--42}\\[3pt]
+Approximate Q-learning; TD-error-based weight updates & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=43}{43--44}\\[3pt]
+Worked Pacman feature/Q-value/weight-update example & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=45}{45}\\[3pt]
+Online least squares / gradient interpretation & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=46}{46}\\[3pt]
+Deadly triad: function approximation, bootstrapping and off-policy learning & \href{../Lecture\%20Slides/2.3.\%20Q-learning.pdf\#page=47}{47}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{2.4. Policy Search.pdf}
+{\small 19 PDF pages. \href{../Lecture\%20Slides/2.4.\%20Policy\%20Search.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{2.4. Policy Search -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Policy-based versus value-based RL; advantages and limitations & \href{../Lecture\%20Slides/2.4.\%20Policy\%20Search.pdf\#page=2}{2--3}\\[3pt]
+Trajectory probability and its factorization & \href{../Lecture\%20Slides/2.4.\%20Policy\%20Search.pdf\#page=4}{4--5}\\[3pt]
+Expected-return objective; gradient ascent on policy parameters & \href{../Lecture\%20Slides/2.4.\%20Policy\%20Search.pdf\#page=6}{6--7}\\[3pt]
+Policy-gradient derivation and sampled update & \href{../Lecture\%20Slides/2.4.\%20Policy\%20Search.pdf\#page=8}{8--10}\\[3pt]
+Softmax policy over action scores & \href{../Lecture\%20Slides/2.4.\%20Policy\%20Search.pdf\#page=11}{11}\\[3pt]
+Automatic differentiation and REINFORCE; return-weighted log probability & \href{../Lecture\%20Slides/2.4.\%20Policy\%20Search.pdf\#page=12}{12--15}\\[3pt]
+Actor-critic: actor policy, critic value/Q estimate & \href{../Lecture\%20Slides/2.4.\%20Policy\%20Search.pdf\#page=16}{16--17}\\[3pt]
+Local/global policy optimization; gradient-free alternatives & \href{../Lecture\%20Slides/2.4.\%20Policy\%20Search.pdf\#page=18}{18--19}\\[3pt]
+\bottomrule\end{longtable}
+
+\clearpage\renewcommand{\currenttopic}{Topic 3}
+\section{3. Neural networks and deep learning fundamentals}\label{topic3}
+\deckheading{3.1. Introduction to Deep Learning.pdf}
+{\small 41 PDF pages. \href{../Lecture\%20Slides/3.1.\%20Introduction\%20to\%20Deep\%20Learning.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{3.1. Introduction to Deep Learning -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+AI, ML and deep learning; what deep learning means & \href{../Lecture\%20Slides/3.1.\%20Introduction\%20to\%20Deep\%20Learning.pdf\#page=6}{6--10}\\[3pt]
+Application examples: language, vision, control, science and engineering & \href{../Lecture\%20Slides/3.1.\%20Introduction\%20to\%20Deep\%20Learning.pdf\#page=11}{11--25}\\[3pt]
+Deep learning and Big Data; opportunities and limitations & \href{../Lecture\%20Slides/3.1.\%20Introduction\%20to\%20Deep\%20Learning.pdf\#page=26}{26--29}\\[3pt]
+DL pipeline, learning methodology and overfitting & \href{../Lecture\%20Slides/3.1.\%20Introduction\%20to\%20Deep\%20Learning.pdf\#page=30}{30--32, 36--37}\\[3pt]
+Collecting and labeling data; coverage, classes and variability & \href{../Lecture\%20Slides/3.1.\%20Introduction\%20to\%20Deep\%20Learning.pdf\#page=33}{33--35}\\[3pt]
+Handcrafted versus learned features; representation learning & \href{../Lecture\%20Slides/3.1.\%20Introduction\%20to\%20Deep\%20Learning.pdf\#page=38}{38--39}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{3.2. Shallow NN.pdf}
+{\small 51 PDF pages. \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{3.2. Shallow NN -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Linear regression versus a shallow neural-network model & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=4}{4--6}\\[3pt]
+ReLU activation; example network and its ten parameters & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=7}{7--9}\\[3pt]
+Hidden-unit construction; weighted sums and piecewise-linear output & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=10}{10--17}\\[3pt]
+Activation patterns / active hidden units & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=18}{18}\\[3pt]
+Network diagrams, weights and hidden width & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=19}{19--22}\\[3pt]
+Universal approximation theorem & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=23}{23--24}\\[3pt]
+Multiple outputs; shared hidden representation and output-specific weights & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=26}{26--28}\\[3pt]
+Multiple inputs; activation boundaries and regions in 2D & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=30}{30--37}\\[3pt]
+General input/hidden/output dimensions; parameter-count exercise & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=39}{39--42}\\[3pt]
+Number of linear regions; dependence on input dimension and hidden width & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=44}{44--47}\\[3pt]
+Terminology: layers, units, biases and weights & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=49}{49--50}\\[3pt]
+Alternative activation functions & \href{../Lecture\%20Slides/3.2.\%20Shallow\%20NN.pdf\#page=51}{51}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{3.3. Deep Learning Fundamentals.pdf}
+{\small 44 PDF pages. \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{3.3. Deep Learning Fundamentals -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Neuron/perceptron recap; composition of nonlinear layers & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=3}{3--7}\\[3pt]
+Depth, width, matrix formulation and deep-network parameter shapes & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=8}{8--11}\\[3pt]
+Shallow versus deep capacity; depth efficiency and linear regions & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=12}{12--14}\\[3pt]
+Scores / logits; mapping inputs to class scores & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=16}{16--21}\\[3pt]
+Loss functions; multiclass SVM / hinge loss & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=22}{22--23}\\[3pt]
+Softmax cross-entropy; score/probability interpretation and loss exercise & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=24}{24--26}\\[3pt]
+Choosing a task loss; adding regularization & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=27}{27--28}\\[3pt]
+Optimization, gradient descent, SGD and mini-batch noise & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=29}{29--35}\\[3pt]
+Local minima, saddle points and optimization difficulties & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=31}{31, 36}\\[3pt]
+Momentum and optimizer variants & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=37}{37--39}\\[3pt]
+Adam: moment estimates, normalization and bias correction & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=40}{40--42}\\[3pt]
+Parameters, hyperparameters and the training pipeline & \href{../Lecture\%20Slides/3.3.\%20Deep\%20Learning\%20Fundamentals.pdf\#page=43}{43--44}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{3.4. Deep Learning Fundamentals II.pdf}
+{\small 53 PDF pages. \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{3.4. Deep Learning Fundamentals II -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Forward pass, backward pass, gradients and chain rule & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=3}{3--7}\\[3pt]
+Scalar backpropagation examples and classroom exercise & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=8}{8--17}\\[3pt]
+Computation graphs; local backward operations and autograd & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=18}{18--22}\\[3pt]
+Input normalization; random initialization, He and gradient scale & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=23}{23--25}\\[3pt]
+Generalization gap; explicit L2 regularization / weight decay & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=26}{26--29}\\[3pt]
+Implicit regularization; SGD and early stopping & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=30}{30--31}\\[3pt]
+Dropout; randomly disabling hidden units during training & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=32}{32, 34}\\[3pt]
+More data, noise and label-preserving data augmentation & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=33}{33--35}\\[3pt]
+Capacity, generalization and double descent & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=36}{36--38}\\[3pt]
+Hyperparameter choices and overall training recipe & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=39}{39--42}\\[3pt]
+Matrix derivatives; forward and backward propagation through layers & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=44}{44--48}\\[3pt]
+ReLU derivative & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=49}{49--50}\\[3pt]
+Gradients with respect to weights and biases & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=51}{51--52}\\[3pt]
+Backpropagation: efficiency and limitations & \href{../Lecture\%20Slides/3.4.\%20Deep\%20Learning\%20Fundamentals\%20II.pdf\#page=53}{53}\\[3pt]
+\bottomrule\end{longtable}
+
+\clearpage\renewcommand{\currenttopic}{Topic 4}
+\section{4. CNNs and transfer learning}\label{topic4}
+\deckheading{4.1. CNNs.pdf}
+{\small 111 PDF pages. \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{4.1. CNNs -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Image structure; local connectivity, weight sharing and convolutional features & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=4}{4--11}\\[3pt]
+One-dimensional convolution and filter sliding & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=12}{12--14}\\[3pt]
+Kernel, stride, padding, dilation; output-size formula and questions & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=15}{15--18}\\[3pt]
+Feature maps/channels and receptive fields & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=19}{19--23}\\[3pt]
+2D/RGB convolution; input/output channels and parameter counts & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=24}{24--30}\\[3pt]
+Downsampling, pooling and strided convolution & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=31}{31--32}\\[3pt]
+Upsampling, interpolation, unpooling and transposed convolution & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=33}{33--35}\\[3pt]
+1-by-1 / pointwise convolution; mixing channels & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=36}{36}\\[3pt]
+AlexNet, DeConvNet and feature-map visualization & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=37}{37--43}\\[3pt]
+VGG; small filters, depth and receptive-field comparison & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=44}{44--47}\\[3pt]
+Activation memory, batch size and deeper architectures & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=48}{48--50}\\[3pt]
+Vanishing gradients; ResNet, identity shortcuts and bottleneck blocks & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=51}{51--54}\\[3pt]
+Batch normalization: statistics, gamma/beta and parameter count & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=55}{55--56}\\[3pt]
+BN training versus inference; running statistics, eval mode and folding & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=57}{57}\\[3pt]
+Why normalization helps; batch/layer/instance/group normalization & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=58}{58--59}\\[3pt]
+ResNet family; addition versus concatenation; residual/BN quick questions & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=60}{60--62}\\[3pt]
+Inception/GoogLeNet and DenseNet modules & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=63}{63}\\[3pt]
+MobileNet depthwise-separable convolution; EfficientNet scaling & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=64}{64}\\[3pt]
+Vision Transformer / ConvNeXt comparison and architecture trends & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=65}{65--66}\\[3pt]
+Transfer learning and frozen feature extraction & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=67}{67--70}\\[3pt]
+Fine-tuning; dataset size/domain similarity and adaptation choices & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=71}{71--74}\\[3pt]
+Initial loss, overfitting a tiny set, learning curves, learning-rate decay & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=75}{75--81}\\[3pt]
+Detection, box regression, Faster R-CNN and YOLO & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=82}{82--86}\\[3pt]
+PoseNet; position/orientation regression & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=87}{87--88}\\[3pt]
+Semantic segmentation, FCN, SegNet and instance segmentation/Mask R-CNN & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=90}{90--93}\\[3pt]
+Video feature fusion, multimodal inputs and temporal-order limitations & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=94}{94--101}\\[3pt]
+Task summary; 1D/2D/3D engineering applications and simulation surrogates & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=102}{102--105}\\[3pt]
+Classroom calculation: feature-map sizes and convolution parameters & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=106}{106}\\[3pt]
+Lab 3 connection: toy CNNs and pretrained-model fine-tuning & \href{../Lecture\%20Slides/4.1.\%20CNNs.pdf\#page=108}{108--110}\\[3pt]
+\bottomrule\end{longtable}
+
+\clearpage\renewcommand{\currenttopic}{Topic 5}
+\section{5. Advanced deep learning}\label{topic5}
+\deckheading{5.1. Sequence Models.pdf}
+{\small 34 PDF pages. \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{5.1. Sequence Models -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Sequential order, variable lengths, recurrence and shared weights & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=3}{3--6}\\[3pt]
+Vanilla RNN equations; hidden state and character-level predictions & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=7}{7--9}\\[3pt]
+Generated sequences and interpretable recurrent units & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=10}{10--12}\\[3pt]
+Backpropagation through time (BPTT); vanishing/exploding gradients & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=13}{13--15}\\[3pt]
+Truncated BPTT; memory cost and long-range gradient limitations & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=14}{14, 16}\\[3pt]
+Gradient clipping, initialization and architectural remedies & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=16}{16}\\[3pt]
+LSTM cell/hidden states; forget, input, candidate and output gates & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=17}{17--20}\\[3pt]
+Additive memory path; GRU and its gates & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=21}{21}\\[3pt]
+Stacked and bidirectional recurrent networks & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=22}{22}\\[3pt]
+Video action recognition and dense captioning & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=23}{23--24}\\[3pt]
+Temporal convolutional networks (TCN); causal/dilated filters; WaveNet & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=25}{25--27}\\[3pt]
+Recurrent seq2seq encoder-decoder; fixed context vector & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=28}{28}\\[3pt]
+Teacher forcing, inference feedback, exposure bias and scheduled sampling & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=29}{29}\\[3pt]
+Attention over encoder states; captioning with attention & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=30}{30--31}\\[3pt]
+Summary equations: RNN, BPTT, LSTM, seq2seq and attention & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=32}{32}\\[3pt]
+Character-RNN practical exercise & \href{../Lecture\%20Slides/5.1.\%20Sequence\%20Models.pdf\#page=33}{33}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{5.1. Extra Material.pdf}
+{\small 7 PDF pages. Separate PDF; lookup code 5.1E. \href{../Lecture\%20Slides/5.1.\%20Extra\%20Material.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{5.1. Extra Material -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+LSTM cell diagrams and gates & \href{../Lecture\%20Slides/5.1.\%20Extra\%20Material.pdf\#page=2}{2--4}\\[3pt]
+Tiny LSTM: matrix dimensions, vocabulary, hidden width and parameter counts & \href{../Lecture\%20Slides/5.1.\%20Extra\%20Material.pdf\#page=5}{5}\\[3pt]
+Learned parameters versus computed states; changing vocabulary or hidden width & \href{../Lecture\%20Slides/5.1.\%20Extra\%20Material.pdf\#page=6}{6}\\[3pt]
+Worked LSTM update: gates, cell/hidden state and next-character scores & \href{../Lecture\%20Slides/5.1.\%20Extra\%20Material.pdf\#page=7}{7}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{5.2. Transformers.pdf}
+{\small 43 PDF pages. \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{5.2. Transformers -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+RNN/CNN/attention comparison; weighted context and query/key/value intuition & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=3}{3--8}\\[3pt]
+Self-attention: value projections, query-key scores and softmax weights & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=9}{9--10}\\[3pt]
+Numerical attention example; shared parameters versus input-dependent weights & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=11}{11}\\[3pt]
+Matrix attention, tensor shapes, row softmax and square-root scaling & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=12}{12--14}\\[3pt]
+Permutation equivariance / order blindness; need for positional information & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=15}{15}\\[3pt]
+Sinusoidal, learned, relative, rotary (RoPE) and ALiBi positions & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=16}{16--17}\\[3pt]
+Encoder-only, decoder-only and encoder-decoder overview & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=18}{18}\\[3pt]
+Tokenization: words, characters, subwords and BPE & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=19}{19}\\[3pt]
+Token embeddings, embedding table and contextual representations & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=20}{20--22}\\[3pt]
+Transformer block and multi-head attention; concatenate and project & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=23}{23--24}\\[3pt]
+Residual connections; Add \& Norm and layer normalization & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=25}{25, 27}\\[3pt]
+Positionwise feed-forward MLP & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=26}{26}\\[3pt]
+Encoder stack, masked language modeling and CLS readout & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=28}{28--29}\\[3pt]
+Autoregressive factorization; next-token cross-entropy and training parallelism & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=30}{30}\\[3pt]
+Causal mask; future-token leakage and zero attention to forbidden positions & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=31}{31}\\[3pt]
+Self-attention versus cross-attention; three transformer families & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=32}{32--35}\\[3pt]
+Quadratic attention cost; KV cache, FlashAttention and grouped-query attention & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=36}{36}\\[3pt]
+Vision Transformers: patches, projection, positions, CLS and hybrid designs & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=37}{37--40}\\[3pt]
+A/B classroom attention exercise; simplified divide-by-three normalization & \href{../Lecture\%20Slides/5.2.\%20Transformers.pdf\#page=41}{41--42}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{5.3. Foundation models.pdf}
+{\small 28 PDF pages. \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{5.3. Foundation models -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Transformer-family recap; encoder, decoder and cross-attention & \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=5}{5--8}\\[3pt]
+Foundation-model definition; broad pretraining and downstream transfer & \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=9}{9--11}\\[3pt]
+Scale, data, hardware; total versus active MoE parameters; shared biases & \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=12}{12--13}\\[3pt]
+Training stages: self-supervised pretraining, SFT, preference RL, verifiable RL & \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=14}{14}\\[3pt]
+BERT: masked-token and next-sentence pretraining examples & \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=15}{15}\\[3pt]
+GPT-style generation and multimodal model examples; post-training & \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=16}{16--17}\\[3pt]
+CLIP: image-text embeddings, contrastive alignment and zero-shot classification & \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=19}{19--20}\\[3pt]
+DINOv2: self-distillation, visual features and downstream transfer & \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=21}{21}\\[3pt]
+SAM: promptable segmentation & \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=22}{22}\\[3pt]
+Text-conditioned image generation; text encoder, denoiser and VAE decoder & \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=23}{23--25}\\[3pt]
+Efficiency, explainability and fairness questions & \href{../Lecture\%20Slides/5.3.\%20Foundation\%20models.pdf\#page=26}{26}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{5.4. Unsupervised learning.pdf}
+{\small 38 PDF pages. \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{5.4. Unsupervised learning -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Supervision strategies; unlabeled data and semi-supervised learning & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=2}{2--7}\\[3pt]
+When unlabeled data helps: distribution relevance & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=7}{7}\\[3pt]
+PCA: variance, projection, compression and retained components & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=9}{9--11}\\[3pt]
+t-SNE: local neighborhoods, perplexity and visualization pitfalls & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=12}{12--18}\\[3pt]
+Visualizing high-dimensional CNN features & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=17}{17--18}\\[3pt]
+K-means: initialization, assignments and centroid updates & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=19}{19--20}\\[3pt]
+Hierarchical clustering: agglomerative versus divisive & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=21}{21}\\[3pt]
+Latent Dirichlet Allocation (LDA); topic mixtures, not discriminant analysis & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=22}{22}\\[3pt]
+Self-supervised pretraining and proxy/pretext tasks & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=24}{24--27}\\[3pt]
+Patch position, jigsaws, colorization and inpainting examples & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=26}{26--27}\\[3pt]
+Contrastive learning; positive/negative pairs and triplet ideas & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=28}{28--29}\\[3pt]
+BYOL: online/target networks and learning without negative pairs & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=30}{30--31}\\[3pt]
+SuperPoint: self-supervised keypoint detection and description & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=32}{32}\\[3pt]
+Semi-supervised teacher-student learning, memory banks and pixel-level contrast & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=33}{33}\\[3pt]
+Connection to foundation models; PCA versus t-SNE summary & \href{../Lecture\%20Slides/5.4.\%20Unsupervised\%20learning.pdf\#page=34}{34--36}\\[3pt]
+\bottomrule\end{longtable}
+\deckheading{5.5. Generative Models.pdf}
+{\small 26 PDF pages. \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{5.5. Generative Models -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Discriminative versus generative modeling; learning a data distribution & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=3}{3--6}\\[3pt]
+Autoencoder: encoder, latent code, decoder and reconstruction & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=7}{7}\\[3pt]
+AE versus VAE; latent distributions, reconstruction plus KL regularization & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=8}{8}\\[3pt]
+GANs: generator/discriminator roles and adversarial training & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=9}{9--12}\\[3pt]
+GAN instability, weak gradients and mode collapse & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=13}{13}\\[3pt]
+CycleGAN: unpaired translation and cycle consistency & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=14}{14}\\[3pt]
+Image editing/style-transfer applications & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=15}{15--16}\\[3pt]
+Forward diffusion: progressive Gaussian noising & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=17}{17}\\[3pt]
+Learned reverse diffusion; denoising training versus sampling & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=18}{18--19}\\[3pt]
+Conditional / latent diffusion; text representations and image decoding & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=5}{5, 20--21}\\[3pt]
+AE/VAE/GAN/diffusion comparison: objective, stability, speed, quality, latent space & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=22}{22}\\[3pt]
+Course map: AI, ML, neural networks, deep learning and application areas & \href{../Lecture\%20Slides/5.5.\%20Generative\%20Models.pdf\#page=25}{25--26}\\[3pt]
+\bottomrule\end{longtable}
+
+\clearpage\renewcommand{\currenttopic}{Lab 4 supplement}
+\section{Lab 4 supplement: deployment, explainability and compression}\label{topicL4}
+\deckheading{manolo\_presentation.pdf (Lab Sessions / Lab4)}
+{\small 15 PDF pages. \href{../Lab\%20Sessions/Lab4/manolo\_presentation.pdf}{Open this slide PDF.}}\par
+\begin{longtable}{@{}P{.79\linewidth}P{.17\linewidth}@{}}
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endfirsthead
+\multicolumn{2}{@{}l}{\small\textbf{manolo\_presentation -- continued}}\\
+\toprule\textbf{Concept / method / exercise} & \textbf{PDF pages}\\\midrule\endhead
+Explainable AI (XAI) and model compression: definitions & \href{../Lab\%20Sessions/Lab4/manolo\_presentation.pdf\#page=2}{2}\\[3pt]
+AI governance / regulatory context discussed in the briefing & \href{../Lab\%20Sessions/Lab4/manolo\_presentation.pdf\#page=3}{3--4}\\[3pt]
+Trustworthiness, fairness, transparency and robustness & \href{../Lab\%20Sessions/Lab4/manolo\_presentation.pdf\#page=5}{5}\\[3pt]
+Edge deployment: latency, memory, compute, energy and privacy & \href{../Lab\%20Sessions/Lab4/manolo\_presentation.pdf\#page=6}{6}\\[3pt]
+Grad-CAM: class-specific image evidence and heatmaps & \href{../Lab\%20Sessions/Lab4/manolo\_presentation.pdf\#page=7}{7}\\[3pt]
+Compression families: quantization, pruning, distillation and low-rank methods & \href{../Lab\%20Sessions/Lab4/manolo\_presentation.pdf\#page=8}{8}\\[3pt]
+FP32 versus INT8 quantization; memory reduction and accuracy trade-off & \href{../Lab\%20Sessions/Lab4/manolo\_presentation.pdf\#page=9}{9}\\[3pt]
+Magnitude pruning, sparsity, fine-tuning and hardware-dependent speed & \href{../Lab\%20Sessions/Lab4/manolo\_presentation.pdf\#page=10}{10}\\[3pt]
+Compare accuracy and explanations before/after compression & \href{../Lab\%20Sessions/Lab4/manolo\_presentation.pdf\#page=11}{11}\\[3pt]
+Lab notebook workflow and evaluation tasks & \href{../Lab\%20Sessions/Lab4/manolo\_presentation.pdf\#page=12}{12}\\[3pt]
+\bottomrule\end{longtable}
+
+\end{document}
