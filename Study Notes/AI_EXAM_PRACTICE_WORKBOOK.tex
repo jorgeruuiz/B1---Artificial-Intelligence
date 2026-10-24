@@ -230,7 +230,7 @@ Predicting a house's selling price from examples with known prices is:
 
 \begin{solution}[8mm]{1.1-M01}
 % Write A, B, C, or D here. You may add a brief reason.
-
+C
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -259,7 +259,7 @@ Which task is unsupervised learning?
 
 \begin{solution}[8mm]{1.1-M02}
 % Write A, B, C, or D here. You may add a brief reason.
-
+D
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -290,7 +290,7 @@ learning?
 
 \begin{solution}[8mm]{1.1-M03}
 % Write A, B, C, or D here. You may add a brief reason.
-
+B
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -319,7 +319,7 @@ An inductive bias is:
 
 \begin{solution}[8mm]{1.1-M04}
 % Write A, B, C, or D here. You may add a brief reason.
-
+D
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -349,7 +349,7 @@ independent final evaluation?
 
 \begin{solution}[8mm]{1.1-M05}
 % Write A, B, C, or D here. You may add a brief reason.
-
+A
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -378,7 +378,7 @@ What is the main purpose of a held-out test set?
 
 \begin{solution}[8mm]{1.1-M06}
 % Write A, B, C, or D here. You may add a brief reason.
-
+B
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -407,7 +407,7 @@ Increasing \(k\) in k-NN classification usually makes predictions:
 
 \begin{solution}[8mm]{1.1-M07}
 % Write A, B, C, or D here. You may add a brief reason.
-
+D
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -436,7 +436,7 @@ What does standard k-NN need at prediction time?
 
 \begin{solution}[8mm]{1.1-M08}
 % Write A, B, C, or D here. You may add a brief reason.
-
+C
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -465,7 +465,7 @@ A model finds a strong correlation between two variables. What follows?
 
 \begin{solution}[8mm]{1.1-M09}
 % Write A, B, C, or D here. You may add a brief reason.
-
+A
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -495,7 +495,7 @@ performance?
 
 \begin{solution}[8mm]{1.1-M10}
 % Write A, B, C, or D here. You may add a brief reason.
-
+A
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -515,7 +515,11 @@ Give one example of each.
 
 \begin{solution}[20mm]{1.1-S01}
 % Write your answer here, usually 1--3 sentences.
+Classification's output values are discrete, $y\in\{0,...,n\}$ and Regression's output values come from a continuous function, $y\in\mathbb{R}$.
 
+Regression: predict the price of a house
+
+Classification: check if an image contains a car or not
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -533,7 +537,9 @@ phrase per split.
 
 \begin{solution}[20mm]{1.1-S02}
 % Write your answer here, usually 1--3 sentences.
-
+Training: learn the model's parameters values
+Validation: compare results of the different models
+Test: evaluate which was considered the best model. Only use this set after deciding model using validation, if not, we are introducing bias.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -551,7 +557,7 @@ performance misleading?
 
 \begin{solution}[20mm]{1.1-S03}
 % Write your answer here, usually 1--3 sentences.
-
+Because if you do so, you are deciding the model depending on the test result. The model may not be learning correctly how to predict in our specific problem, and may just adjust the predictions to what he saw in the test split.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -569,7 +575,11 @@ Distinguish a learned parameter from a hyperparameter. In k-NN, which is
 
 \begin{solution}[20mm]{1.1-S04}
 % Write your answer here, usually 1--3 sentences.
+Learned parameter: it is used by the model to make the predictions, its value is updated while training process. For example, weights in a regression.
 
+Hyperparameter: we choose their value depending on the behaviour we want to induct to our models. These are regularization parameters, learning rates, etc.
+
+k in the k-NN algorithm is an hyperparameter, the model does not learn it, we choose it beforehand.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -587,7 +597,7 @@ distance. Why might scaling matter?
 
 \begin{solution}[20mm]{1.1-S05}
 % Write your answer here, usually 1--3 sentences.
-
+We scale the data because we are interested in the "relative distance" between our sample points, not in its absolute value. If we don't scale, in this example, height may have less variability than income so it can affect the result of k-NN algorithm.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -605,7 +615,7 @@ learning algorithm before examining the problem and data?
 
 \begin{solution}[20mm]{1.1-S06}
 % Write your answer here, usually 1--3 sentences.
-
+The lesson is that there is not such thing as best model, their behaviour and results will depend on how they fit to our data and its structure. We should try with different reasonable models making reasonable assumptions about our data, and the final model chosen may depend on the nature of the problem we are studying.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -623,7 +633,7 @@ adding varied examples help more than adding more such duplicates?
 
 \begin{solution}[20mm]{1.1-S07}
 % Write your answer here, usually 1--3 sentences.
-
+Because we want our model to train with different images, and with the more variability the best. If not, our model would overfit to the features that it learnt (the duplicate images ones) and when trying to use other images as input the results may be really bad. If we train with all samples being similar, our model will only be able to make good predictions for those kind of samples.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -643,7 +653,8 @@ unweighted 5-NN predict, and what fraction of neighbours support it?
 
 \begin{solution}[26mm]{1.1-C01}
 % Write your short calculation and final result here. Use $...$ or \[...\] for maths.
-
+prob(A) = 3/5, prob(B) = 2/5
+Our model predicts: A
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -661,7 +672,10 @@ The three nearest targets are 2, 4, and 6. Compute the prediction.
 
 \begin{solution}[26mm]{1.1-C02}
 % Write your short calculation and final result here. Use $...$ or \[...\] for maths.
-
+With \(k=3\):
+\[
+\hat y=\frac{2+4+6}{3}=\boxed{4}
+\]
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -679,7 +693,9 @@ remainder for testing. How many examples are in each split?
 
 \begin{solution}[26mm]{1.1-C03}
 % Write your short calculation and final result here. Use $...$ or \[...\] for maths.
-
+Training: 700 samples
+Validation: 150 samples
+Test: 150 samples
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -720,7 +736,7 @@ features?
 
 \begin{solution}[8mm]{1.2-M01}
 % Write A, B, C, or D here. You may add a brief reason.
-
+D
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -750,7 +766,7 @@ noise assumption?
 
 \begin{solution}[8mm]{1.2-M02}
 % Write A, B, C, or D here. You may add a brief reason.
-
+B
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -779,7 +795,7 @@ Increasing \(\lambda\) in \(L(w)+\lambda\|w\|_2^2\) directly:
 
 \begin{solution}[8mm]{1.2-M03}
 % Write A, B, C, or D here. You may add a brief reason.
-
+A
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -808,7 +824,7 @@ Which penalty is particularly associated with exactly zero coefficients?
 
 \begin{solution}[8mm]{1.2-M04}
 % Write A, B, C, or D here. You may add a brief reason.
-
+C
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -838,7 +854,7 @@ express?
 
 \begin{solution}[8mm]{1.2-M05}
 % Write A, B, C, or D here. You may add a brief reason.
-
+D
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -868,7 +884,7 @@ negative. Which is correct?
 
 \begin{solution}[8mm]{1.2-M06}
 % Write A, B, C, or D here. You may add a brief reason.
-
+A
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -897,7 +913,7 @@ For fixed scores, lowering the positive-class decision threshold:
 
 \begin{solution}[8mm]{1.2-M07}
 % Write A, B, C, or D here. You may add a brief reason.
-
+D
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -926,7 +942,7 @@ The hard-margin SVM chooses a separating hyperplane that:
 
 \begin{solution}[8mm]{1.2-M08}
 % Write A, B, C, or D here. You may add a brief reason.
-
+A
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -956,7 +972,7 @@ The kernel trick allows an SVM to:
 
 \begin{solution}[8mm]{1.2-M09}
 % Write A, B, C, or D here. You may add a brief reason.
-
+D
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -986,7 +1002,7 @@ Which distinction between bagging and boosting is correct?
 
 \begin{solution}[8mm]{1.2-M10}
 % Write A, B, C, or D here. You may add a brief reason.
-
+D
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -1006,7 +1022,7 @@ problem and one appropriate change to try.
 
 \begin{solution}[20mm]{1.2-S01}
 % Write your answer here, usually 1--3 sentences.
-
+Overfitting, the model is "learning by heart" the features of the training dataset and is not generalizing well. One possible attempt to avoid overfitting would be implementing regularization. We could also try to use K fold cross-validation.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -1024,7 +1040,7 @@ alternative from the slides.
 
 \begin{solution}[20mm]{1.2-S02}
 % Write your answer here, usually 1--3 sentences.
-
+Squared residuals give much larger penalties to large errors because the error is squared. Therefore, outliers can disproportionately influence the fitted model. Huber loss is a robust alternative, behaving quadratically for small errors and linearly for large errors.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -1043,6 +1059,11 @@ predictor.
 
 \begin{solution}[20mm]{1.2-S03}
 % Write your answer here, usually 1--3 sentences.
+$R^2 = 1$: Our model predicted correctly all the samples. Prediction = Known Label for all of them.
+
+$R^2 = 0$: Our model is exactly as good as predicting the mean value all time.
+
+$R^2 < 0$: Our model is worse than predicting always the mean value.
 
 \end{solution}
 \end{minipage}\par\medskip
@@ -1061,7 +1082,7 @@ of actual positives detected?
 
 \begin{solution}[20mm]{1.2-S04}
 % Write your answer here, usually 1--3 sentences.
-
+Precision measures how much of the values predicted as positive were real positives. Recall measures how many positives we detected from the total positives that we had in our data.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -1079,7 +1100,7 @@ insufficient for a high F1?
 
 \begin{solution}[20mm]{1.2-S05}
 % Write your answer here, usually 1--3 sentences.
-
+F1 combines precision and recall. $F1 = 2\frac{Precision \cdot Recall}{Precision + Recall}$. Then it is clear that for a high value of $F1$ we need high precision and high recall.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -1097,7 +1118,7 @@ labels for its usual fitting procedure?
 
 \begin{solution}[20mm]{1.2-S06}
 % Write your answer here, usually 1--3 sentences.
-
+PCA is an unsupervised dimensionality-reduction method that projects data onto directions of maximum variance. K-means is an unsupervised clustering algorithm that groups observations into \(k\) clusters based on distance to their centroids. Neither requires class labels.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -1115,7 +1136,7 @@ can averaging randomized trees help?
 
 \begin{solution}[20mm]{1.2-S07}
 % Write your answer here, usually 1--3 sentences.
-
+A decision-tree split divides the data according to a feature and a threshold, aiming to create more homogeneous subsets. Deep trees can overfit because they learn noise and very specific patterns from the training data. Random forests reduce variance by averaging predictions from multiple randomized trees, improving generalization.
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -1130,12 +1151,11 @@ can averaging randomized trees help?
 \href{../Lecture\%20Slides/1.2.\%20Shallow\%20Learning.pdf\#page=60}{PDF
 pp.~60--61}.}
 
-A classifier has \(TP=30\), \(FP=10\), and \(FN=20\). Compute
-positive-class precision and recall.
-
 \begin{solution}[26mm]{1.2-C01}
 % Write your short calculation and final result here. Use $...$ or \[...\] for maths.
+Precision $= TP / (TP + FP) = 30 / (30 + 10) = 0.75$
 
+Recall $= TP / (TP + FN) = 30 / (30 + 20) = 0.6$
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -1153,7 +1173,9 @@ Compute their mean absolute error and mean squared error.
 
 \begin{solution}[26mm]{1.2-C02}
 % Write your short calculation and final result here. Use $...$ or \[...\] for maths.
+MAE $= \frac{1}{2}(|1| + |-3|) = 2$
 
+MSE $= \frac{1}{2}((1)^2 + (-3)^2) = 5$
 \end{solution}
 \end{minipage}\par\medskip
 
@@ -1172,7 +1194,7 @@ stays fixed, does this objective rise or fall?
 
 \begin{solution}[26mm]{1.2-C03}
 % Write your short calculation and final result here. Use $...$ or \[...\] for maths.
-
+$J = 5 + 0.5\cdot 4 = 7$. If $\lambda$ increases, $J$ increases too.
 \end{solution}
 \end{minipage}\par\medskip
 
