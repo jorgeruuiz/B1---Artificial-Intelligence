@@ -1,5 +1,6 @@
 \documentclass[11pt]{article}
 \newcommand{\shorttitle}{Topic 3: Neural-network fundamentals}
+\newcommand{\notesdate}{24 October 2026}
 \input{notes_style.tex}
 \hypersetup{pdftitle={Topic 3 - Shallow Networks and Deep Learning Fundamentals}}
 \begin{document}
@@ -89,7 +90,7 @@ For $4\to5\to3\to2$, this is $5(5)+3(6)+2(4)=51$. State your depth convention: s
 
 Composition allows later units to combine features detected earlier. This can express some functions much more efficiently than a single very wide hidden layer. The slides motivate this with increased numbers of linear regions and hierarchical structure. Efficiency is function-dependent; depth alone does not guarantee useful generalization or easy optimization.
 \newsection{Scores, probabilities and task-specific losses}
-\sources{3.3. Deep Learning Fundamentals, pp. 16--30.}
+\sources{3.3. Deep Learning Fundamentals, pp. 16--28.}
 \subsection{Classification scores}
 A classifier produces a score vector $z=f_\theta(x)$. Raw scores, also called logits, need not sum to one and can be negative. For a single correct class, softmax turns logits into probabilities and cross-entropy assesses the labeled class:
 \[
@@ -117,7 +118,7 @@ J(\theta)=\frac1n\sum_i\ell(f_\theta(x_i),y_i)+\lambda\mathcal R(\theta).
 \]
 The data term measures fit; the regularizer expresses preferences for parameters or functions. Parameters, model capacity, optimizer settings and preprocessing must all be tuned against validation behavior rather than only training loss.
 \newsection{Gradient descent, momentum and adaptive optimizers}
-\sources{3.3. Deep Learning Fundamentals, pp. 31--46.}
+\sources{3.3. Deep Learning Fundamentals, pp. 29--42.}
 \subsection{Loss gradients drive learning}
 Gradient descent uses $\theta\leftarrow\theta-\eta\nabla J$. Mini-batch SGD replaces the full average gradient by a sampled average. The gradient is an instantaneous direction of steepest increase; the minus sign makes a minimizing step.
 
@@ -243,7 +244,7 @@ Augmentation creates variations that preserve the target semantics. Flipping a n
 
 The slides also name transfer learning, multi-task learning and self-supervised approaches. Their shared purpose is to obtain useful structure beyond a small labeled dataset. Transfer learning is developed in the CNN notes; the others are introductory mentions rather than complete algorithms in the supplied decks.
 \newsection{Training behavior, generalization and double descent}
-\sources{3.4. Deep Learning Fundamentals II, pp. 36--42; 3.3. Deep Learning Fundamentals, pp. 47--48.}
+\sources{3.4. Deep Learning Fundamentals II, pp. 36--42; 3.3. Deep Learning Fundamentals, pp. 43--44.}
 \subsection{Read training and validation together}
 If both losses remain poor, suspect underfitting, an unsuitable learning rate, insufficient optimization or an implementation problem. If training improves but validation worsens, examine overfitting, split mismatch and regularization. A noisy training curve can reflect small batches; persistent spikes can also indicate unstable steps or data problems. A gap alone does not identify its cause.
 

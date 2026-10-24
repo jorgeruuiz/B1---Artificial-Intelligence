@@ -1,0 +1,525 @@
+=== PDF PAGE 1 ===
+Master in Artificial Intelligence & Computational engineering
+Ana C. Murillo
+Artificial Intelligence
+Deep learning 5.4 - Unsupervised learning
+
+=== PDF PAGE 2 ===
+Deep Learning:
+Supervision strategies other than “supervised” learning?
+VLM inputs
+Images
+Text
+Pretraining
+Self-supervised
+Supervision from
+The data itself
+Vision encoder +
+LLM trained on
+image–text
+(multimodal) pairs
+Fine-tuning
+(SFT)Supervised
+Supervision from
+Human demos
+Captioning, VQA,
+OCR …
+Preference RL
+RL
+Supervision from
+Human
+preferences
+Reward model ranks
+answers;
+
+cuts hallucination
+Verifiable RL
+RL
+Supervision from
+Automatic
+checkers
+Answer match
+(visual math), box
+IoU (grounding), unit
+tests (chart to code)
+Learns from a fixed dataset
+Predicts or imitates given targets
+Learns from its own samples
+Sample
+ Reward
+ Update
+Others
+
+…
+VLMs use every form of supervision
+
+=== PDF PAGE 3 ===
+Next
+●Other supervision strategies:
+○Unsupervised
+○(Deep) Reinforcement Learning
+Optional courses
+Deep RL vs RL?
+
+=== PDF PAGE 4 ===
+Supervised vs Unsupervised
+Supervised learning: I know the “target” output (human labeled)
+Model
+Data Prediction
+Supervised
+Machine Learning
+Target label:
+robot
+Error
+
+=== PDF PAGE 5 ===
+Supervised vs Unsupervised
+Unsupervised: no labeled data
+Model
+Data Prediction
+UN-supervised
+Machine Learning
+Target label:
+?
+Error?
+
+=== PDF PAGE 6 ===
+○Labeled data is hard to get
+■experts, money, time, …
+○weakly or un-labeled data is very easy/cheap to get
+■Internet, Big-Data, …
+○Un-labeled data can boost supervised methods …
+■semi-supervised learning
+○… or be used on its own
+■unsupervised learning
+Why Unsupervised?
+
+=== PDF PAGE 7 ===
+Why Semi-supervised?
+●We can mix labeled and un-labeled data … How?
+
+
+
+
+●When? Does it always work?
+○Pre-requisite: that the distribution of examples is relevant for our
+problem.
+○Then, un-labeled data can help identify boundary more accurately
+●It’s getting a lot of attention in deep learning communities
+image from slides from Jerry Zhu. CMU.
+a toy-example
+
+=== PDF PAGE 8 ===
+Unsupervised learning
+Classical methods
+●Dimensionality reduction
+●Clustering
+And deep learning essential strategies
+
+=== PDF PAGE 9 ===
+Decompose signals into components
+—> reduce dimensionality
+Unsupervised: dims reduction
+Why? When?
+
+=== PDF PAGE 10 ===
+Unsupervised: dims reduction
+●Principal Components Analysis (PCA)
+○project to different sub-space
+○find how much variation of the data is represented in
+each axis —> we can keep only the top ones
+
+
+=== PDF PAGE 11 ===
+●PCA
+reduces the input dimensionality
+minimizing the information that
+is “lost” with the compression
+PCA example: very large inputs
+
+
+=== PDF PAGE 12 ===
+Another strategy, very interesting for deep nets …
+Unsupervised: dims reduction
+
+=== PDF PAGE 13 ===
+Unsupervised: dims reduction
+●t-SNE (t-distributed stochastic neighbor embedding)
+○represent each point by 2|3 dim. point
+○similar objects are modeled by nearby points (modelling as good as possible
+local structure)
+○dissimilar objects are modeled by distant points (often “too” far, but that’s ok)
+L.J.P . van der Maaten and G.E. Hinton.
+Visualizing High-Dimensional Data Using t-SNE. Journal of Machine Learning Research. 2008
+  http://lvdmaaten.github.io/tsne/
+
+=== PDF PAGE 14 ===
+Unsupervised: dims reduction
+●t-SNE
+L.J.P . van der Maaten and G.E. Hinton.
+Visualizing High-Dimensional Data Using t-SNE. Journal of Machine Learning Research. 2008
+ http://lvdmaaten.github.io/tsne/
+
+=== PDF PAGE 15 ===
+Unsupervised: dims reduction
+●t-SNE, not so easy to tune and interpret
+○hyperparameters influence a lot
+○perplexity recommended between 5-50 ()
+https://distill.pub/2016/misread-tsne/
+Wattenberg, et al., "How to Use t-SNE Eﬀectively", Distill, 2016. http://doi.org/10.23915/distill.00002
+
+
+=== PDF PAGE 16 ===
+Unsupervised: dims reduction
+●Interactive visualisation
+○http://projector.tensorflow.org
+●Plenty of implementations
+○https://scikit-learn.org/stable/modules/generated/
+sklearn.manifold.TSNE.html
+○http://lvdmaaten.github.io/tsne/
+
+=== PDF PAGE 17 ===
+●Features from last layer: 4096 dims. vector
+AlexNet: a layered model composed of convolution,
+subsampling, and further operations followed by a holistic
+representation and all-in-all a landmark classifier on
+ILSVRC12. [ AlexNet ]
+ImageNet Classification with Deep Convolutional Neural Networks
+Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton. NIPS 2012
+How to visualize or analyze this
+feature space? —> reduce the
+4096 to 2 dimensions to “plot”
+Unsupervised: dims reduction. Example
+
+=== PDF PAGE 18 ===
+●Features from last layer: 4096 dims. vector
+AlexNet: a layered model composed of convolution,
+subsampling, and further operations followed by a holistic
+representation and all-in-all a landmark classifier on
+ILSVRC12. [ AlexNet ]
+ImageNet Classification with Deep Convolutional Neural Networks
+Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton. NIPS 2012
+How to visualize or analyze this
+feature space? —> reduce the
+4096 to 2 dimensions to “plot”
+http://cs.stanford.edu/people/karpathy/cnnembed/
+Unsupervised: dims reduction. Example
+
+=== PDF PAGE 19 ===
+Unsupervised: clustering
+Find groups with certain similarity across its members
+Why? When?
+
+=== PDF PAGE 20 ===
+Unsupervised: clustering
+●Objective based: K-Means
+○initialization of K and centers
+○iteratively assign points to clusters
+■minimize different distances
+○and re-compute centers
+slides from M-F Balcan, CMU.
+soccer
+sports fashion
+Gucci tennis  Lacoste
+All topics
+[sports]
+[fashion]
+How does
+
+k-means work?
+
+=== PDF PAGE 21 ===
+Unsupervised: clustering
+●Hierarchical:
+○top-down:
+■start all together
+■Iteratively split into two.
+○bottom-up (agglomerative):
+■start each point is a cluster
+■Iteratively merge closest clusters.
+soccer
+sports fashion
+Gucci tennis  Lacoste
+All topics
+[sports]
+[fashion]
+
+=== PDF PAGE 22 ===
+Unsupervised: clustering
+●Latent Dirichlet allocation (LDA*)
+○NLP , topic discovery (not exactly “clustering”)
+○Document: mix of various topics.    Topic: frequency and co-ocurence of words
+* NOT = Linear Discriminant Analysis
+http://scikit-learn.org
+DEMO
+Image from http://wiki.ubc.ca/Course:CPSC522
+
+=== PDF PAGE 23 ===
+Unsupervised learning
+Classical methods
+●Dimensionality reduction
+●Clustering
+And deep learning essential strategies
+
+=== PDF PAGE 24 ===
+Unsupervised (self-supervised) & Deep Learning
+VLM inputs
+Images
+Text
+Pretraining
+Self-supervised
+Supervision from
+The data itself
+Vision encoder +
+LLM trained on
+image–text
+(multimodal) pairs
+Fine-tuning
+(SFT)Supervised
+Supervision from
+Human demos
+Captioning, VQA,
+OCR …
+Preference RL
+RL
+Supervision from
+Human
+preferences
+Reward model ranks
+answers; cuts
+hallucination
+Verifiable RL
+RL
+Supervision from
+Automatic
+checkers
+Answer match
+(visual math), box
+IoU (grounding), unit
+tests (chart to code)
+Learns from a fixed dataset
+Predicts or imitates given targets
+Learns from its own samples
+Sample
+ Reward
+ Update
+Others
+
+…
+VLMs use every form of supervision
+
+=== PDF PAGE 25 ===
+Reduce human-supervision?
+It’s common to fine-tune/adapt pre-trained models
+(e.g. in ImageNet)
+Can we use large amounts of un-labeled data to
+pretrain base models?
+Unsupervised (self-supervised) & Deep Learning
+
+=== PDF PAGE 26 ===
+Self-supervised Deep Learning: proxy tasks
+Several strategies, most well known:
+●Using a pretext / proxy task for which we can
+automatically obtain the labels: recover relative position of
+patches, colorization, rotations, inpainting missing patches,
+…
+
+
+
+
+
+
+
+
+=== PDF PAGE 27 ===
+Self-supervised Deep Learning: proxy tasks
+Examples of self-supervised learning tasks: (a) guessing the relative positions of image patches—can you guess the answers to Q1 and Q2? (Doersch, Gupta, and
+Efros 2015) © 2015 IEEE; (b) solving a nine-tile jigsaw puzzle (Noroozi and Favaro 2016) © 2016 Springer; (c) image colorization (Zhang, Isola, and Efros 2016) ©
+2016 Springer; (d) video color transfer for tracking (Vondrick, Shrivastava et al. 2018) © 2016 Springer.
+Figure from
+Szelisky-book.
+relative position? jigsaw puzzle
+colorization
+colorization
+and tracking
+in videos
+
+=== PDF PAGE 28 ===
+Self-supervised Deep Learning: contrastive
+Several strategies, most well known:
+●Using a pretext / proxy task
+●we can automatically obtain the labels for the proxy: recover
+relative position of patches, colorization, rotations, inpainting
+missing patches, …
+●then trained “supervised”
+●Using contrastive learning
+●Semantically similar inputs to produce similar
+representations …
+●… and keep distant from negative samples
+
+=== PDF PAGE 29 ===
+Many variations:
+●positives from same and/or different samples
+●many negatives (triplet loss, just 1 positive, 1 negative) - or no negatives!
+Self-supervised Deep Learning: contrastive
+Figure from https://ai.googleblog.com/2021/06/extending-contrastive-learning-to.html
+
+=== PDF PAGE 30 ===
+Self-supervised Deep Learning: examples
+●BYOL (Boostrap your own latent: A New Approach to Self-Supervised Learning)
+●only positive pairs “contrast”. Self-supervised learning.
+●online and target networks: interact and learn from each other.
+Augmented view of an image —> train online network to predict the target
+network representation of the same image under a different augmented view
+●
+Grill, Jean-Bastien, et al. "Bootstrap your own latent: A new approach to self-supervised learning." NeurIPS 2020.
+only stored “result”the only thing stored “after training”
+
+=== PDF PAGE 31 ===
+Self-supervised Deep Learning: examples
+●BYOL. Boostrap your own latent: A New Approach to Self-Supervised Learning
+●only positive pairs “contrast”. Self-supervised learning.
+●online and target networks: interact and learn from each other.
+Augmented view of an image —> train online network to predict the target
+network representation of the same image under a different augmented view
+●representation learned is useful to improve many downstream tasks
+Grill, Jean-Bastien, et al. "Bootstrap your own latent: A new approach to self-supervised learning." NeurIPS 2020.
+
+=== PDF PAGE 32 ===
+Self-supervised Deep Learning: examples
+●Superpoint: Self-Supervised Interest Point Detection and Description
+●opportunities for “adapted” features to specific domains, e.g. medical
+DeTone, Daniel, Tomasz Malisiewicz, and Andrew Rabinovich. "Superpoint: Self-supervised interest point detection and description." Proceedings of the
+IEEE conference on computer vision and pattern recognition workshops. 2018.
+… combined with super-glue
+or light-glue (supervised)
+for matching
+https://psarlin.com/superglue/
+
+https://github.com/cvg/LightGlue
+train on synthetic
+(using homographies)
+to get initial model
+generate pseudo-labels
+and keep training
+
+=== PDF PAGE 33 ===
+Self-supervised Deep Learning: examples
+Additional related “ideas” with interesting results:
+●Semi-supervised: use a few labeled samples and lots of unlabeled data
+●student-teacher: teacher gives
+training examples to the student
+●memory-bank: representative or
+reliable samples
+●contrastive per pixel
+Semi-Supervised Semantic Segmentation with
+Pixel-Level Contrastive Learning from a Class-wise Memory Bank
+Inigo Alonso1 Alberto Sabater1 David Ferstl2 Luis Montesano1,3 Ana C. Murillo1
+1RoPeRT group, at DIIS - I3A, Universidad de Zaragoza, Spain
+2Magic Leap, Z¨urich, Switzerland
+3Bitbrain, Zaragoza, Spain
+{inigo, asabater, montesano, acm}@unizar.es, dferstl@magicleap.com
+Abstract
+This work presents a novel approach for semi-supervised
+semantic segmentation. The key element of this approach
+is our contrastive learning module that enforces the seg-
+mentation network to yield similar pixel-level feature repre-
+sentations for same-class samples across the whole dataset.
+To achieve this, we maintain a memory bank which is con-
+tinuously updated with relevant and high-quality feature
+vectors from labeled data. In an end-to-end training, the
+features from both labeled and unlabeled data are opti-
+mized to be similar to same-class samples from the mem-
+ory bank. Our approach not only outperforms the cur-
+rent state-of-the-art for semi-supervised semantic segmen-
+tation but also for semi-supervised domain adaptation on
+well-known public benchmarks, with larger improvements
+on the most challenging scenarios, i.e., less available la-
+beled data. Code is available athttps://github.com/
+Shathe/SemiSeg-Contrastive
+1. Introduction
+The goal of semantic segmentation consists in assign-
+ing a semantic class label to each pixel in an image. It is
+an essential computer vision task for semantic scene under-
+standing that plays a relevant role in many applications such
+as medical imaging [30] or autonomous driving [2]. As for
+many other computer vision tasks, deep convolutional neu-
+ral networks have shown signiﬁcant improvements in se-
+mantic segmentation [2,19,1]. All these examples follow
+supervised learning approaches requiring a large set of an-
+notated data to generalize well. However, the availability of
+labeled data is a common bottleneck in supervised learning,
+especially for tasks such as semantic segmentation, which
+require tedious and expensive per-pixel annotations.
+Semi-supervised learning assumes that only a small sub-
+set of the available data is labeled. It tackles the issue of
+Figure 1.Proposed contrastive learning module overview.At
+each training iteration, the teacher networkf⇠updates the feature
+memory bank with a subset of selected features from labeled sam-
+ples. Then, the student networkf✓extracts features4from both
+labeled and unlabeled samples, which are optimized to be similar
+to same-class features from the memory bank○.
+limited labeled data by extracting knowledge from unla-
+beled samples. Semi-supervised learning has been applied
+to a wide range of applications [ 37], including semantic
+segmentation [11,17,26]. Previous semi-supervised seg-
+mentation works are mostly based on per-sample entropy
+minimization [17,21,28] and per-sample consistency regu-
+larization [11,36,28]. These segmentation methods do not
+enforce any type of structure on the learned features to in-
+crease inter-class separability across the whole dataset. Our
+hypothesis is that overcoming this limitation can lead to bet-
+ter feature learning and performance, especially when the
+amount of available labeled data is low.
+This work presents a novel approach for semi-supervised
+semantic segmentation, following a teacher-student scheme
+I. Alonso et al. Semi-Supervised Semantic Segmentation with Pixel-Level Contrastive Learning from a Class-wise Memory Bank. ICCV 2021.
+
+=== PDF PAGE 34 ===
+Self-supervised Deep Learning: examples
+R. Bommasani et al. “On the Opportunities and Risks of Foundation Models ”.
+arXiv. 2022. Center for Research on Foundation Models
+Most Foundation Models
+
+use some kind of self-supervision
+
+=== PDF PAGE 35 ===
+Summary: self-supervised DL
+Several strategies, most well known:
+●Using a pretext / proxy task
+●we can automatically obtain the labels for
+the proxy: recover relative position of patches, colorization,
+rotations, inpainting missing patches, …
+●then trained “supervised”
+●Using contrastive learning
+●Semantically similar inputs to
+produce similar representations …
+●… and keep distant from negative samples
+relative position?
+
+
+=== PDF PAGE 36 ===
+… but also other unsupervised ML tools for DL
+Several unsupervised algorithms - very useful to analyze datasets
+●Clustering
+●K-means
+●LDA
+●Dim. Reduction
+●PCA - find mapping function
+●focused on “large” distances
+●t-SNE - visualize given dataset
+●represents input (no mapping function) in 2D or 3D
+●keep similar close (small distances) —> better for visualization
+
+=== PDF PAGE 37 ===
+Next …
+●Generative models (Auto-encoder, GAN, Diffusion)
+
+=== PDF PAGE 38 ===
+Bibliography - Resources for some of the materials today
+●Stanford classes on deep learning for Computer Vision (http://
+cs231n.stanford.edu) and Deep Learning (https://cs230.stanford.edu/)
+●Ian Goodfellow, Yoshua Bengio, Aaron Courville, Deep Learning,
+MIT Press, 2016. http://www.deeplearningbook.org
+●Computer Vision: Algorithms and Applications. 2nd Edition.
+Richard Szeliski. https://szeliski.org/Book/

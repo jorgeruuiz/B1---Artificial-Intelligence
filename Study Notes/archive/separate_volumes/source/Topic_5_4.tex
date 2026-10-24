@@ -1,0 +1,219 @@
+\documentclass[11pt]{article}
+\newcommand{\shorttitle}{5.4: Unsupervised learning}
+\newcommand{\notesdate}{24 October 2026}
+\input{notes_style.tex}
+\hypersetup{pdftitle={5.4 - Unsupervised and Self-Supervised Learning}}
+\begin{document}
+\cover{5.4}{Unsupervised and self-supervised learning}{Distinguish supervision strategies; interpret PCA and t-SNE; perform a small clustering update; recognize topic mixtures; explain proxy tasks, contrastive learning, BYOL and pseudo-labels; identify why unlabeled data is not automatically useful.}
+\tableofcontents\clearpage
+
+\newsection{Learning without task labels}
+\sources{5.4. Unsupervised learning, pp. 2--8, 23--25.}
+In supervised learning, training examples include a target for the task, such as a class, a numerical value or a segmentation map. Unsupervised learning seeks structure without those task labels: groups, low-dimensional representations, distributions or other patterns.
+
+The absence of human class labels does not mean the absence of an objective. A clustering objective can reward compact groups; a reconstruction objective can compare an output with its input; a self-supervised prediction task can derive targets from the data itself.
+
+\begin{longtable}{@{}P{.23\textwidth}P{.35\textwidth}P{.32\textwidth}@{}}
+\toprule Setting & Training signal & Example\\\midrule\endhead
+Supervised & Provided task targets. & Image with a known object class.\\
+Unsupervised & Structure/objective without task labels. & Cluster feature vectors.\\
+Self-supervised & Targets constructed from the data or transformations. & Predict hidden tokens or a rotation applied to an image.\\
+Semi-supervised & A mixture of labeled and unlabeled examples. & Learn from a small labeled set plus consistency or pseudo-labels on more images.\\
+Reinforcement learning & Rewards from actions and outcomes. & Improve a policy using interaction feedback.\\\bottomrule
+\end{longtable}
+Self-supervised learning is often grouped under unsupervised representation learning, but its optimization can look like supervised prediction once its targets have been constructed. Deep RL uses neural networks to represent policies, values or models; it remains reward-based learning, rather than becoming unsupervised merely because it uses a deep network.
+
+\subsection{Why unlabeled examples can help}
+Labels may require expertise, time or dense annotation. Additional unlabeled examples can reveal which inputs occur frequently and where the data has structure. However, those examples should be relevant to the target task and distribution.
+
+If unlabeled data comes from an unrelated domain or reinforces incorrect pseudo-labels, it can harm performance. A cluster boundary is not automatically the correct class boundary. Validate the chosen objective and assumptions rather than assuming that more unlabeled data must improve the result.
+
+\newsection{PCA: compress along directions of variation}
+\sources{5.4. Unsupervised learning, pp. 9--11, 36.}
+Principal component analysis finds orthogonal directions of variation. After centering samples by their mean $\mu$, the leading eigenvectors of the covariance matrix define the directions with largest variance.
+
+For a column-vector sample $x\in\R^D$, collect the first $k$ orthonormal directions in $U_k\in\R^{D\times k}$:
+\[
+z=U_k^\top(x-\mu),\qquad
+\widehat{x}=\mu+U_kz.
+\]
+The first equation is a reusable mapping to $k$ dimensions. The second reconstructs the part retained in that subspace.
+
+\begin{keyidea}{What PCA optimizes}
+Among centered orthogonal linear projections of the same rank, PCA maximizes retained variance and minimizes total squared reconstruction error on the fitted data. This does not mean it preserves every kind of information, the most useful class signal, or nonlinear structure.
+\end{keyidea}
+
+\subsection{Explained variance}
+Let covariance eigenvalues be $\lambda_1\geq\cdots\geq\lambda_D\geq0$. Retaining $k$ components preserves the variance fraction
+\[
+\frac{\sum_{j=1}^{k}\lambda_j}{\sum_{j=1}^{D}\lambda_j}.
+\]
+If the eigenvalues are $(6,3,1)$, the first component preserves $60\%$ and the first two preserve $90\%$. Discarding the third loses $10\%$ of total variance. These are not percentages of classification accuracy.
+
+For a simple projection, let $\mu=(1,1)$, first component $u=(1,0)$ and sample $x=(4,3)$. Then $z=u^\top(x-\mu)=3$, reconstruction is $(4,1)$, and squared reconstruction error is $0^2+2^2=4$.
+
+\subsection{Practical interpretation}
+Features with large numerical scale can dominate variance. Centering and, when appropriate, standardization therefore affect PCA. Fit such preprocessing and the PCA directions on the training split; fitting them on held-out test data leaks information about that set into the representation.
+
+PCA can compress neural-network features or remove some low-variance variation. A low-variance direction can still be essential for a target task, so the downstream validation result matters. The slide's phrase about minimizing lost information is specifically justified by the squared-error/variance criterion, not a universal semantic notion of information.
+
+\newsection{t-SNE: visualize local neighborhoods}
+\sources{5.4. Unsupervised learning, pp. 12--18, 36.}
+t-SNE places the supplied high-dimensional samples in two or three dimensions while trying to preserve local similarities. Nearby points in the original representation are encouraged to remain neighbors in the visualization.
+
+The output axes are coordinates of the visualization; they are not ordered principal components with explained-variance percentages. Widely separated groups, apparent cluster sizes and empty gaps should not be interpreted directly as faithful global distances or densities in the original space.
+
+\subsection{Perplexity and interpretation}
+Perplexity controls the effective neighborhood scale used when converting distances into similarities. A small value emphasizes more local structure; larger values consider broader neighborhoods. It is not a requested number of clusters. Initialization, optimization and other settings can also change the picture.
+
+The slides show a commonly explored range of 5--50, but it is a practical example range rather than a guarantee for every dataset size. A convincing-looking plot should be checked across reasonable settings and against the original representation/task.
+
+\subsection{PCA versus t-SNE}
+\begin{longtable}{@{}P{.25\textwidth}P{.32\textwidth}P{.33\textwidth}@{}}
+\toprule Property & PCA & Standard t-SNE\\\midrule\endhead
+Mapping & Learned linear projection. & Coordinates optimized for the supplied dataset.\\
+Main focus & Variance and squared reconstruction error. & Local neighborhood similarities.\\
+New points & Apply the fitted projection. & No simple fitted linear map in the standard formulation; extensions exist.\\
+Typical use here & Compression/preprocessing and visualization. & Exploratory 2D/3D visualization.\\
+Interpretation & Components ordered by variance. & Plot axes and global gaps lack PCA-style interpretation.\\\bottomrule
+\end{longtable}
+The AlexNet example uses 4096-dimensional feature vectors. Plotting them after t-SNE can reveal possible organization, but a separated plot alone does not prove that a classifier generalizes or that the discovered groups equal semantic classes.
+
+\newsection{K-means: assignments and means}
+\sources{5.4. Unsupervised learning, pp. 19--20, 36.}
+Given $K$ clusters, standard k-means minimizes within-cluster squared Euclidean distance:
+\[
+J=\sum_{i=1}^{n}\|x_i-\mu_{c_i}\|^2.
+\]
+Its alternating steps are:
+\begin{enumerate}
+\item Assign each sample to the nearest current centroid.
+\item Replace each centroid with the mean of its assigned samples.
+\item Repeat until a stopping criterion is met.
+\end{enumerate}
+The mean is the appropriate update for this squared-distance objective. Substituting an arbitrary distance does not automatically preserve the same update rule or algorithm.
+
+\subsection{One small iteration}
+Take scalar samples $\{1,2,8,9\}$, $K=2$, and initial centers 1 and 8. Nearest-center assignment produces groups $\{1,2\}$ and $\{8,9\}$. New centers are
+\[
+\mu_1=(1+2)/2=1.5,\qquad \mu_2=(8+9)/2=8.5.
+\]
+Their squared-distance objective is $4(0.5^2)=1$. Cluster indices 1 and 2 have no intrinsic class meaning; swapping their names leaves the grouping unchanged.
+
+\subsection{What a result does and does not mean}
+Initialization can lead to different local optima. $K$ is chosen externally, not automatically discovered by the standard algorithm. Feature scaling changes distances. Standard k-means is most naturally suited to compact groups in its chosen geometry and can struggle with elongated, irregular or very unequal-density groups.
+
+Increasing $K$ can reduce the optimal training distortion simply by allowing more centers. That does not establish that the resulting clustering is more meaningful. Evaluate stability, interpretability and downstream usefulness as appropriate.
+
+\newsection{Hierarchical clustering and topic mixtures}
+\sources{5.4. Unsupervised learning, pp. 21--22.}
+\subsection{Hierarchical structure}
+Agglomerative clustering begins with each point as its own cluster and repeatedly merges clusters. Divisive clustering begins with all points together and repeatedly splits groups. A dendrogram records this hierarchy.
+
+The result depends on how distances between clusters are defined. For example, single linkage uses the closest cross-cluster pair; complete linkage uses the farthest; average linkage averages distances. Choosing a cut level in the hierarchy determines the final number of groups. A hierarchy supplies structure across resolutions rather than automatically identifying one uniquely correct partition.
+
+\subsection{LDA here means Latent Dirichlet Allocation}
+The slide explicitly uses LDA for \textbf{Latent Dirichlet Allocation}, a probabilistic topic model, not Linear Discriminant Analysis.
+
+Each document has a mixture of topics, and each topic has a distribution over words. A document about sports clothing might combine sports and fashion topics. This differs from a hard clustering model that assigns the entire document to exactly one group.
+
+If a document's topic mixture is $(0.6,0.4)$ and a particular word has probabilities $(0.2,0.05)$ in those topics, its mixture probability is
+\[
+p(w\mid d)=0.6(0.2)+0.4(0.05)=0.14.
+\]
+Topic proportions are probabilities over topics, not a list of words with binary membership. Topic names are interpretations assigned to learned word patterns rather than labels required during fitting.
+
+\newsection{Self-supervision through proxy tasks}
+\sources{5.4. Unsupervised learning, pp. 24--27, 35.}
+A proxy or pretext task constructs a prediction target that can be obtained automatically. The aim is often to learn a representation useful for a later task.
+\begin{longtable}{@{}P{.28\textwidth}P{.32\textwidth}P{.30\textwidth}@{}}
+\toprule Proxy task & Automatically available target & Useful structure encouraged\\\midrule\endhead
+Rotation prediction & The rotation applied to the image. & Orientation and object appearance.\\
+Relative patch position & Where sampled patches came from. & Spatial relationships and scene layout.\\
+Jigsaw reconstruction & The original patch arrangement. & Parts and their configuration.\\
+Colorization & Removed color information. & Context and plausible object appearance.\\
+Inpainting/masked prediction & The hidden original content. & Dependencies between visible and missing regions.\\\bottomrule
+\end{longtable}
+Targets exist even though a human did not annotate a class for every training item. After pretraining, a proxy-specific head may be discarded while retaining the encoder.
+
+Success on the proxy objective is not identical to success on a downstream task. Shortcuts can solve a proxy without learning the intended semantic structure. For example, visible image-processing artifacts might reveal a transformation. Evaluation on the intended downstream task is therefore necessary.
+
+\newsection{Contrastive representations}
+\sources{5.4. Unsupervised learning, pp. 28--29, 35.}
+Contrastive learning encourages related inputs to have similar representations and contrasts them with other inputs. Positive pairs can be two augmented views of the same image or naturally paired modalities. Negative pairs supply examples that should be distinguished under the chosen objective.
+
+The choice of augmentation expresses an invariance assumption. Two crops may preserve object identity; an aggressive crop may remove the object. A color change may be harmless for some tasks and destroy label-relevant information for others.
+
+\subsection{A simple triplet illustration}
+For anchor $a$, positive $p$, negative $n$ and margin $m$, an illustrative distance-based triplet loss is
+\[
+L=\max\bigl(0,d(a,p)-d(a,n)+m\bigr).
+\]
+If $d(a,p)=0.4$, $d(a,n)=0.7$ and $m=0.5$, then $L=0.2$. Zero loss requires the negative to be at least $m$ farther from the anchor than the positive, under this convention.
+
+This illustrates the slide's triplet idea; other contrastive losses use normalized similarities and many negatives. A negative may be a different image of the same semantic class, so pair construction is not automatically identical to true class supervision.
+
+\subsection{Representation collapse}
+If every input is mapped to one constant vector, positive pairs match perfectly but the representation conveys no distinctions. This is collapse. Negatives can discourage it, but there are also successful methods without explicit negatives that use other asymmetries and learning mechanisms.
+
+\newsection{BYOL, SuperPoint and semi-supervised extensions}
+\sources{5.4. Unsupervised learning, pp. 30--34.}
+\subsection{BYOL}
+Bootstrap Your Own Latent (BYOL) uses two augmented views and an online/target network pair. The online branch, including a predictor, is trained to match the target representation of the other view. Gradients do not backpropagate through the target branch; target parameters track the online parameters through a moving average.
+
+A simplified teacher update is
+\[
+\theta_{\mathrm{target}}\leftarrow
+\tau\theta_{\mathrm{target}}+(1-\tau)\theta_{\mathrm{online}}.
+\]
+For scalar values 2 and 4 and $\tau=0.9$, the new target value is $2.2$. This is an explanatory calculation of the averaging mechanism.
+
+BYOL has no explicit negative pairs in its basic objective. It is more precise to call it self-distillation or non-contrastive representation learning than to assume every such method separates negatives. Its predictor, stop-gradient target and update design matter; simply minimizing distance between arbitrary identical networks is not the same training procedure.
+
+After representation learning, use the encoder's learned features for a downstream task; the whole two-branch training construction need not remain in the deployed model.
+
+\subsection{SuperPoint}
+The slides show interest-point detection and description learned using synthetic supervision and transformed images, then improved through generated labels. Known geometric transformations, such as homographies, help construct consistency relationships without manually labeling every real-image correspondence.
+
+A detector predicts useful image locations; a descriptor provides a feature vector for matching those locations. Matching with a separate method is a further component, not the same task as learning the point detector.
+
+\subsection{Pseudo-labels, teachers and memory banks}
+Semi-supervised systems can use a model's predictions as training targets on unlabeled examples, often with confidence or consistency criteria. These pseudo-labels are estimates, not guaranteed truth. A teacher can produce more stable targets; a memory bank can retain representative features used in comparisons.
+
+The slide's pixel-level example encourages same-class pixel representations to be similar across images while using both labeled and unlabeled data. A memory bank stores selected feature information, not necessarily all raw training images. Such mechanisms can propagate useful structure, but incorrect pseudo-labels can reinforce mistakes.
+
+\newsection{Revision questions and answers}
+\subsection{Questions}
+\begin{enumerate}
+\item Can self-supervised training have explicit targets and a loss?
+\item Does unlabeled data from any distribution necessarily help a supervised task?
+\item With PCA eigenvalues $(6,3,1)$, what fraction of variance do the top two retain?
+\item Does retaining 90\% of variance guarantee 90\% classification accuracy?
+\item Is t-SNE perplexity a requested cluster count?
+\item Can a large gap in a t-SNE plot be read as a reliable global distance?
+\item One k-means cluster contains scalar points 2, 4 and 9. What is its updated center?
+\item What distinguishes agglomerative from divisive clustering?
+\item What does LDA stand for in these slides, and may a document have several topics?
+\item What are positive pairs and what does representation collapse mean?
+\item Does basic BYOL require explicit negatives?
+\item Why can pseudo-labeling amplify an error?
+\end{enumerate}
+\subsection{Answers}
+\begin{enumerate}
+\item Yes; targets can be derived automatically from inputs or transformations.
+\item No. Distribution relevance and method assumptions matter.
+\item $(6+3)/10=0.9$.
+\item No; variance and predictive label information are different quantities.
+\item No; it controls an effective neighborhood scale.
+\item No; t-SNE primarily aims to preserve local relationships.
+\item $(2+4+9)/3=5$.
+\item Agglomerative merges initially separate groups; divisive splits an initial whole.
+\item Latent Dirichlet Allocation; each document can be a mixture of topics.
+\item Positives are paired inputs to align; collapse maps different inputs to indistinguishable representations.
+\item No. It uses an online predictor and a target network with stop-gradient and moving-average updates.
+\item An incorrect prediction becomes a training target and can be reinforced.
+\end{enumerate}
+
+\newsection{Source guide}
+\texttt{5.4. Unsupervised learning.pdf}: supervision strategies and motivation (pp. 2--8), PCA (pp. 9--11), t-SNE and feature visualization (pp. 12--18), k-means/hierarchy/LDA (pp. 19--22), proxy tasks (pp. 24--27), contrastive representations (pp. 28--29), BYOL (pp. 30--31), SuperPoint and semi-supervised examples (pp. 32--34), and summaries (pp. 35--36). The numerical projection, clustering, mixture, triplet and teacher-update examples are study calculations derived from these concepts.
+\end{document}

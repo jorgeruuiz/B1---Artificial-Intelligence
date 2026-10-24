@@ -1,0 +1,415 @@
+=== PDF PAGE 1 ===
+Master in Artificial Intelligence & Computational engineering
+Ana C. Murillo
+Artificial Intelligence
+Deep learning 5.3 - Foundation models
+
+=== PDF PAGE 2 ===
+●Ana C. Murillo
+●acm@unizar.es
+●D1.08 Ada Byron - Tu. 12:00-14:00,  Th. 10:00-14:00
+Please, recommended to email to book/confirm office
+hour slots (office hours may be in person or online).
+
+=== PDF PAGE 3 ===
+Some reminders
+●LAB 4 submission: this Wednesday
+●LAB 5: tomorrow
+●If possible review the prior work to be prepared
+●It’s short, to submit right after the session or next day.
+We’ll evaluate it on Thursday with an interview.
+●Final Exam: short questions (everyone, around 1h) +
+Global exam about labs (if not submitted in the
+continuous evaluation)
+
+=== PDF PAGE 4 ===
+Today
+●So far:  Supervised Deep learning - CNN & Transformers
+●Next: Foundation models & …
+●Other supervision strategies
+●Unsupervised
+●RL
+●Generative models
+
+=== PDF PAGE 5 ===
+526 Chapter 15. Neural Networks for Sequences
+Figure 15.26: The transformer. From [Wen18]. Used with kind permission of Lilian Weng. Adapted from
+Figures 1–2 of [Vas+17].
+def Encoder(X, N):
+E=P O S ( E m b e d ( X ) )
+for n in range(N):
+E=E n c o d e r B l o c k ( E )
+return E
+See the LHS of Figure15.26for an illustration.
+The decoder has a somewhat more complex structure. It is given access to the encoder via
+another multi-head attention block. But it is also given access to previously generated outputs: these
+are shifted, and then combined with a positional embedding, and then fed into a masked (causal)
+multi-head attention model. Finally the output distribution over tokens at each location is computed
+in parallel.
+In more detail, the decoder block is deﬁned as follows:
+def DecoderBlock(Y, E):
+Z=L a y e r N o r m ( M u l t i H e a d A t t n ( Q = Y ,K = Y ,V = Y )+Y )
+Z’ = LayerNorm(MultiHeadAttn(Q=Z, K=E, V=E) + Z)
+D=L a y e r N o r m ( F e e d F o r w a r d ( Z ’ )+Z ’ )
+return D
+The overall decoder is deﬁned byNcopies of the decoder block:
+Draft of “Probabilistic Machine Learning: An Introduction”. November 8, 2021
+Transformers
+Transformers: Attention is all you need
+●Based on self-attention:
+similar to FC layer,
+but instead of fixed weights,
+they are adapted
+depending on the input
+●Usually multi-head: multiple
+sets of learned weights
+●Dominant paradigm in many fields:
+NLP , Computer Vision, …
+A. Vaswani et al. “Attention Is All You Need”. In: NIPS. 2017.
+
+=== PDF PAGE 6 ===
+526 Chapter 15. Neural Networks for Sequences
+Figure 15.26: The transformer. From [Wen18]. Used with kind permission of Lilian Weng. Adapted from
+Figures 1–2 of [Vas+17].
+def Encoder(X, N):
+E=P O S ( E m b e d ( X ) )
+for n in range(N):
+E=E n c o d e r B l o c k ( E )
+return E
+See the LHS of Figure15.26for an illustration.
+The decoder has a somewhat more complex structure. It is given access to the encoder via
+another multi-head attention block. But it is also given access to previously generated outputs: these
+are shifted, and then combined with a positional embedding, and then fed into a masked (causal)
+multi-head attention model. Finally the output distribution over tokens at each location is computed
+in parallel.
+In more detail, the decoder block is deﬁned as follows:
+def DecoderBlock(Y, E):
+Z=L a y e r N o r m ( M u l t i H e a d A t t n ( Q = Y ,K = Y ,V = Y )+Y )
+Z’ = LayerNorm(MultiHeadAttn(Q=Z, K=E, V=E) + Z)
+D=L a y e r N o r m ( F e e d F o r w a r d ( Z ’ )+Z ’ )
+return D
+The overall decoder is deﬁned byNcopies of the decoder block:
+Draft of “Probabilistic Machine Learning: An Introduction”. November 8, 2021
+ENCODER
+DECODER
+Transformers
+Transformers: Attention is all you need
+●Based on self-attention:
+similar to FC layer,
+but instead of fixed weights,
+they are adapted
+depending on the input
+●Usually multi-head: multiple
+sets of learned weights
+●Dominant paradigm in many fields:
+NLP , Computer Vision, …
+A. Vaswani et al. “Attention Is All You Need”. In: NIPS. 2017.
+
+=== PDF PAGE 7 ===
+526 Chapter 15. Neural Networks for Sequences
+Figure 15.26: The transformer. From [Wen18]. Used with kind permission of Lilian Weng. Adapted from
+Figures 1–2 of [Vas+17].
+def Encoder(X, N):
+E=P O S ( E m b e d ( X ) )
+for n in range(N):
+E=E n c o d e r B l o c k ( E )
+return E
+See the LHS of Figure15.26for an illustration.
+The decoder has a somewhat more complex structure. It is given access to the encoder via
+another multi-head attention block. But it is also given access to previously generated outputs: these
+are shifted, and then combined with a positional embedding, and then fed into a masked (causal)
+multi-head attention model. Finally the output distribution over tokens at each location is computed
+in parallel.
+In more detail, the decoder block is deﬁned as follows:
+def DecoderBlock(Y, E):
+Z=L a y e r N o r m ( M u l t i H e a d A t t n ( Q = Y ,K = Y ,V = Y )+Y )
+Z’ = LayerNorm(MultiHeadAttn(Q=Z, K=E, V=E) + Z)
+D=L a y e r N o r m ( F e e d F o r w a r d ( Z ’ )+Z ’ )
+return D
+The overall decoder is deﬁned byNcopies of the decoder block:
+Draft of “Probabilistic Machine Learning: An Introduction”. November 8, 2021
+Transformers
+Encoder models (e.g. BERT)
+●Embeddings from input tokens
+Decoder models (e.g. GPT, Gemini, …)
+●Left to right autoregressive
+generation
+●Decoder won’t know the future
+during inference —>
+attention can’t use future tokens
+during training (use mask attention
+to ignore them)
+A. Vaswani et al. “Attention Is All You Need”. In: NIPS. 2017.
+ENCODER
+DECODER
+LAB 5!
+
+=== PDF PAGE 8 ===
+526 Chapter 15. Neural Networks for Sequences
+Figure 15.26: The transformer. From [Wen18]. Used with kind permission of Lilian Weng. Adapted from
+Figures 1–2 of [Vas+17].
+def Encoder(X, N):
+E=P O S ( E m b e d ( X ) )
+for n in range(N):
+E=E n c o d e r B l o c k ( E )
+return E
+See the LHS of Figure15.26for an illustration.
+The decoder has a somewhat more complex structure. It is given access to the encoder via
+another multi-head attention block. But it is also given access to previously generated outputs: these
+are shifted, and then combined with a positional embedding, and then fed into a masked (causal)
+multi-head attention model. Finally the output distribution over tokens at each location is computed
+in parallel.
+In more detail, the decoder block is deﬁned as follows:
+def DecoderBlock(Y, E):
+Z=L a y e r N o r m ( M u l t i H e a d A t t n ( Q = Y ,K = Y ,V = Y )+Y )
+Z’ = LayerNorm(MultiHeadAttn(Q=Z, K=E, V=E) + Z)
+D=L a y e r N o r m ( F e e d F o r w a r d ( Z ’ )+Z ’ )
+return D
+The overall decoder is deﬁned byNcopies of the decoder block:
+Draft of “Probabilistic Machine Learning: An Introduction”. November 8, 2021
+Transformers
+Encoder-Decoder models
+(e.g. T5, Whisper)
+●Seq2seq models (translation,
+transcription, …)
+●Cross attention:
+Queries come from the previous
+decoder layer,
+but Keys and Values
+come from encoder output
+A. Vaswani et al. “Attention Is All You Need”. In: NIPS. 2017.
+ENCODER
+DECODER
+
+=== PDF PAGE 9 ===
+Foundation models
+Transformers &
+Foundation models?
+
+=== PDF PAGE 10 ===
+Foundation models
+●Trained on broad very (very) large scale datasets and
+adaptable to a wide range of downstream tasks
+Transfer learning at scale
+R. Bommasani et al. “On the Opportunities and Risks of Foundation Models ”.
+arXiv. 2022. Center for Research on Foundation Models
+
+=== PDF PAGE 11 ===
+Foundation models
+●Trained on broad very (very) large scale datasets and
+adaptable to a wide range of downstream tasks
+Transfer learning at scale
+https://www.comet.com/site/blog/explainable-ai-for-transformers/
+
+
+=== PDF PAGE 12 ===
+Foundation models
+Pros: plenty application domains & Impressive results
+Cons: Very (VERY) resource demanding
+●GPT-3 has 175B params. Frontier models unknown -
+believed to be Mixture-of-Experts
+●DeepSeek-V3: 671B params. About 37B active per token
+Kimi K2 about 1T total, about 32B active per token)
+New legal, ethic challenges (e.g., all AI apps inherit bias
+from a few generic models)
+
+=== PDF PAGE 13 ===
+Foundation models
+●Key ingredients of Frontier models (which are not “new”):
+●Self-supervised learning
+●Reinforcement Learning
+●and new ingredients that were not available a few years ago:
+●Improved hardware
+●Transformer-based architectures
+●Availability of data
+
+=== PDF PAGE 14 ===
+Foundation models
+Pretraining
+Self-supervised
+Supervision from
+The data itself
+Vision encoder +
+LLM trained on
+image–text
+(multimodal) pairs
+Fine-tuning
+(SFT)Supervised
+Supervision from
+Human demos
+Captioning, VQA,
+OCR …
+Preference RL
+RL
+Supervision from
+Human
+preferences
+Reward model ranks
+answers; cuts
+hallucination
+Verifiable RL
+RL
+Supervision from
+Automatic
+checkers
+Answer match
+(visual math), box
+IoU (grounding), unit
+tests (chart to code)
+Learns from a fixed dataset
+Predicts or imitates given targets
+Learns from its own samples
+Sample
+ Reward
+ Update
+Frontier models (VLMs) use every form of supervision
+VLM inputs
+Images
+Text
+Others
+
+…
+
+=== PDF PAGE 15 ===
+Foundation models
+●BERT (Bidirectional Encoder Representations from Transformers)
+●NLP , Google 2018 (currently applied in English-language queries at
+Google)
+●transformer language model with a variable number of encoder
+layers and self-attention heads
+●trained from unlabeled data from the BooksCorpus[4] - 800M words
+and English Wikipedia - 2,500M words.
+●pretrained on two tasks: language modeling (some tokens masked;
+trained to predict them from context) and next sentence prediction
+(predict if certain sentence was probable or not given the first).
+
+=== PDF PAGE 16 ===
+Foundation models
+●GPT family: Generative Pre-trained Transformer
+●NLP , openAI. GPT3 2020; GPT4 March 2023. Generate human-like text
+●GPT3: transformer decoder network with 2048 token long context
+and 175 billion params (800 Gb of storage). Largest at the time.
+-trained on common crawl (60%), webtext, books, wikipedia (3%) to
+predict what the next token is
+●>=GPT4: pre-training using both public data and "data licensed” from
+other parties. Then, fine-tuned with reinforcement learning feedback
+from humans and AI for human alignment and policy compliance. (tech
+details not public
+-Also takes image inputs
+EVEN MORE!
+
+=== PDF PAGE 17 ===
+Foundation models
+●GEMINI family - Google DeepMind - Native multi-modal training
+●Transformer decoder based models. Mixture-of-Experts (MoE) architecture.
+●Main source of multimodal training: Web docs, code, books, images,
+video, audio (filtered for quality/safety)
+●Post-training:
+●“supervised fine-tuning” with Human-generated prompts & responses
+●Final alignment with human preference rankings (with RL)
+●Frontier models (also GPT, Claude, DeepSeek… ) are focusing on advanced
+reasoning ("thinking" models), "vibe coding," and generative interfaces.
+
+=== PDF PAGE 18 ===
+Foundation models
+●Other more specific foundation models
+
+
+=== PDF PAGE 19 ===
+Foundation models: Large Vision Models
+DEMO
+https://openai.com/index/clip/
+Radford, Alec, et al. "Learning transferable visual models from natural language supervision." International conference on machine learning. PMLR, 2021.
+CLIP: Contrastive Language-Image Pre-training
+●(Encoder network) Trained on image-text pairs to learn a shared embedding for
+images and text
+
+=== PDF PAGE 20 ===
+Foundation models: Large Vision Models
+CLIP: Contrastive Language-Image Pre-training
+●Trained on image-text pairs to learn a shared embedding for images and text
+●Tasks like zero-shot image classification & image generation from text
+Radford, Alec, et al. "Learning transferable visual models from natural language supervision." International conference on machine learning. PMLR, 2021.
+https://openai.com/index/clip/
+
+=== PDF PAGE 21 ===
+Foundation models: Large Vision Models
+●DINOv2: self-distillation with NO labels v2
+●Self-supervised learning to obtain visual representations
+●Used to train an encoder: teacher-student framework trained on different
+views of the same image (no labels, no text description used)
+●Universal for all kinds of tasks, both image-level & pixel-level, no fine-tunning
+Oquab, Maxime, et al. "DINOv2: Learning Robust Visual Features without Supervision." Transactions on Machine Learning Research Journal (2024)
+DEMO
+
+
+=== PDF PAGE 22 ===
+Foundation models: Large Vision Models
+●SAM:  Segment Anything
+Model
+●Multiple versions
+●SAM3 includes LLMs and 3D
+models
+DEMO
+
+
+=== PDF PAGE 23 ===
+DL & Foundation models
+Image generation?
+
+=== PDF PAGE 24 ===
+Foundation models & image generation
+NLP + generative image model. Images from “prompts”
+Some of the earliest alternatives:
+●DALL-E (openAI 2021/22. Based on GPT-3)
+●Stable diffusion (Stability AI & CompVis LMU 2022. Public
+code and model. Diffusion model: VAE + U-Net + text
+encoder.)
+●Midjourney (Midjourney team, 2022)
+Generative models: diffusion
+NEXT and optional courses
+
+=== PDF PAGE 25 ===
+Foundation models & image generation
+Two self-supervised generative objectives
+Language model
+Predicts the next token (discrete)
+Diffusion model
+Denoises a latent step by step (continuous)
+LLM conditions diffusion
+Separate models
+e.g. Stable Diffusion 3, Imagen, Qwen-Image
+Text prompt
+LLM / text encoder → embeddings
+Diffusion transformer (denoiser)
+VAE decoder → image
+Post-training. Preference optimization and RL
+now also tune image generators, like for text.
+LLM + diffusion model. Images from “prompts”
+
+=== PDF PAGE 26 ===
+DL & Foundation models
+Efficiency? Explainability?
+Fairness?
+Optional courses
+
+=== PDF PAGE 27 ===
+Next
+●Other supervision strategies:
+○Unsupervised
+○(Deep) Reinforcement Learning
+●Generative models
+
+=== PDF PAGE 28 ===
+Bibliography - Resources related to this block
+●Stanford classes on deep learning for Computer Vision (http://
+cs231n.stanford.edu) and Deep Learning (https://cs230.stanford.edu/)
+●Berkeley course - CS 198-126: Deep Learning for Visual Data
+(https://ml-berkeley.notion.site/CS-198-126-Deep-Learning-for-
+Visual-Data-c77ce2526cb4460b8b02dc56a86bc426)
+●Ian Goodfellow, Yoshua Bengio, Aaron Courville, Deep Learning, MIT
+Press, 2016. http://www.deeplearningbook.org
+●Computer Vision: Algorithms and Applications. 2nd Edition. Richard
+Szeliski. https://szeliski.org/Book/
+●Probabilistic Machine Learning: An introduction. K. Murphy. MIT
+Press, 2022, probml.ai

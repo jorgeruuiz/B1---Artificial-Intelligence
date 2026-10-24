@@ -1,516 +1,625 @@
 ---
 title: "Artificial Intelligence: Two One-Hour Mock Papers"
-subtitle: "Questions only · 23 October 2026"
-author: "MAICE · Artificial Intelligence"
-lang: en-GB
+subtitle: "From the expanded slide-by-slide bank · Questions only"
+author: "24 October 2026"
 ---
 
 # Instructions
 
-Each paper contains **20 multiple-choice questions and 8 short questions**, including **2 small calculations**. The papers contain different questions drawn from `AI_EXAM_PRACTICE_QUESTIONS.md`. They are suggested practice formats, not the teachers' announced question count or marking scheme.
+Each paper contains **20 multiple-choice questions and 8 short questions**, including **2 easy calculations**. Allow **60 minutes per paper**: 20 minutes for MC, 32 minutes for short questions, and 8 minutes to review. Choose one best option for each MC question. Keep written answers to 1–3 sentences unless a brief list is requested.
 
-Allow **60 minutes per paper**: 20 minutes for multiple choice, 32 minutes for short questions, and 8 minutes to review. Choose exactly one option for each MC question. Keep written responses to 1–3 sentences unless a short list is requested. For calculations, show a formula and substitution.
+The papers use different questions from the expanded bank. Source titles, PDF page references, and stable question IDs are retained for review after your attempt. No answers, marked options, or worked solutions are included. The PDFs provide writing space for short answers.
 
-No answer key, marked options, or worked solutions are included. The bank identifiers are retained so you can locate each question and its source topic after finishing. The PDFs include writing space after short questions.
-
-Use the source map in the full question bank to review the relevant slides after attempting a paper. The Lab 4 supplement is available in the bank but is not included in these two lecture-based mock papers.
+**0. Presentation and 0.1. Math background are excluded.** The Lab 4 supplement is available separately in the bank. The question count and timing are suggested practice formats, not the teachers' confirmed marking scheme.
 
 
 # Paper A · Multiple choice
 
-Suggested time: 20 minutes. Choose one best answer per question.
+Suggested time: 20 minutes.
 
 
-### 1. Q001 · MC
+### 1. 1.1-M05 · MC
 
-Which binary probability distribution has the greatest Shannon entropy?
+*Source: [1.1. Fundamentals.pdf · PDF pp. 31–32, 41](../Lecture%20Slides/1.1.%20Fundamentals.pdf#page=31).*
 
-- A. $(1.00, 0.00)$
-- B. $(0.99, 0.01)$
-- C. $(0.50, 0.50)$
-- D. $(0.80, 0.20)$
+Which split should guide hyperparameter selection while preserving an independent final evaluation?
 
+- A. The validation set.
+- B. All data merged together.
+- C. The training labels alone.
+- D. The test set after every experiment.
 
-### 2. Q008 · MC
 
-You compare several hyperparameter settings. Which dataset should normally guide the choice, while preserving an independent final evaluation?
+### 2. 1.2-M03 · MC
 
-- A. The union of the training and test sets.
-- B. The validation set, or validation folds within the training data.
-- C. The test set, evaluated after every change.
-- D. The training set alone.
+*Source: [1.2. Shallow Learning.pdf · PDF pp. 16–20](../Lecture%20Slides/1.2.%20Shallow%20Learning.pdf#page=16).*
 
+Increasing $\lambda$ in $L(w)+\lambda\|w\|_2^2$ directly:
 
-### 3. Q010 · MC
+- A. Strengthens the penalty on large coefficient magnitudes.
+- B. Removes the data-fit term.
+- C. Increases the learning rate.
+- D. Adds polynomial features.
 
-In k-nearest-neighbour classification, increasing $k$ usually makes the decision boundary:
 
-- A. Identical, because $k$ only affects inference speed.
-- B. More irregular and more sensitive to individual examples.
-- C. Smoother and less sensitive to individual training examples.
-- D. Equivalent to the boundary of a linear SVM.
+### 3. 1.2-M06 · MC
 
+*Source: [1.2. Shallow Learning.pdf · PDF pp. 60–65](../Lecture%20Slides/1.2.%20Shallow%20Learning.pdf#page=60).*
 
-### 4. Q016 · MC
+On data with 95% negatives, a classifier predicts every example as negative. Which is correct?
 
-In ridge regression with objective $L(w)+\lambda\|w\|_2^2$, increasing $\lambda$ means:
+- A. Accuracy is 95%, but positive-class recall is 0%.
+- B. Positive-class recall is 95%.
+- C. Positive-class F1 is 95%.
+- D. It detects most positive examples.
 
-- A. Increasing the number of polynomial features.
-- B. Penalizing large coefficient magnitudes more strongly.
-- C. Taking larger gradient steps.
-- D. Giving less importance to large coefficient magnitudes.
 
+### 4. 1.3-M06 · MC
 
-### 5. Q018 · MC
+*Source: [1.3. Bayesian Learning.pdf · PDF pp. 30–35](../Lecture%20Slides/1.3.%20Bayesian%20Learning.pdf#page=30).*
 
-A binary logistic-regression model outputs $p(y=1\mid x)=0.8$. Using a decision threshold of 0.5, what does this mean?
+A Gaussian process specifies that:
 
-- A. The model has 80% accuracy on the dataset.
-- B. It predicts class 1 and assigns that class probability 0.8 for this input.
-- C. Exactly 80% of the input features indicate class 1.
-- D. The true label is guaranteed to be 1.
+- A. Function values at any finite collection of inputs have a joint Gaussian distribution.
+- B. All function values are independent.
+- C. Input features must be Gaussian.
+- D. Every sampled function is a Gaussian bell curve.
 
 
-### 6. Q028 · MC
+### 5. 2.1-M09 · MC
 
-In linear regression with Gaussian observation noise, a zero-mean isotropic Gaussian prior on the weights leads to which MAP penalty?
+*Source: [2.1. Introduction to Reinforcement Learning.pdf · PDF pp. 14–16](../Lecture%20Slides/2.1.%20Introduction%20to%20Reinforcement%20Learning.pdf#page=14).*
 
-- A. An L2 penalty.
-- B. An L1 penalty.
-- C. A penalty on the validation error alone.
-- D. A penalty on the number of observations.
+What distinguishes planning with a known model from learning by interaction?
 
+- A. Planning has no objective.
+- B. Planning always needs human action labels.
+- C. Learning needs deterministic transitions.
+- D. Planning computes consequences using a model; learning obtains information from experience.
 
-### 7. Q030 · MC
 
-For an RBF Gaussian-process kernel, increasing the length scale while keeping other hyperparameters fixed generally favours functions that:
+### 6. 2.2-M01 · MC
 
-- A. Have a larger observation-noise variance by definition.
-- B. Become periodic.
-- C. Vary more slowly, with correlation extending across larger input distances.
-- D. Vary more rapidly over short input distances.
+*Source: [2.2. Markov decision processes.pdf · PDF pp. 2–3](../Lecture%20Slides/2.2.%20Markov%20decision%20processes.pdf#page=2).*
 
+The Markov property means that, given the current state and action:
 
-### 8. Q035 · MC
+- A. The history adds no information about the next-state distribution.
+- B. The next state must be deterministic.
+- C. All actions have equal value.
+- D. Rewards must be positive.
 
-What does the Markov property require of a state representation?
 
-- A. Given the current state and action, past history provides no additional information about the next-state distribution.
-- B. All actions must have equal probability.
-- C. The reward must depend on the full history.
-- D. The next state must be deterministic.
+### 7. 2.2-M07 · MC
 
+*Source: [2.2. Markov decision processes.pdf · PDF pp. 12–15](../Lecture%20Slides/2.2.%20Markov%20decision%20processes.pdf#page=12).*
 
-### 9. Q037 · MC
+The Bellman expectation equation decomposes value into:
 
-What does setting the discount factor $\gamma=0$ do to the return objective?
+- A. Reward divided by the number of actions.
+- B. Expected immediate reward plus discounted successor value.
+- C. Prior probability and likelihood.
+- D. Training error and validation error.
 
-- A. It prevents the agent from changing its policy.
-- B. It makes all rewards equal to zero.
-- C. It makes only the next immediate reward contribute.
-- D. It makes all future rewards equally important.
 
+### 8. 2.3-M06 · MC
 
-### 10. Q042 · MC
+*Source: [2.3. Q-learning.pdf · PDF pp. 35–38](../Lecture%20Slides/2.3.%20Q-learning.pdf#page=35).*
 
-Which next-action value appears in the standard Q-learning target?
+The standard Q-learning target uses:
 
-- A. The average Q-value over all previous states.
-- B. The value of the actual next action sampled from the behaviour policy.
-- C. The minimum Q-value at the current state.
-- D. The maximum Q-value over available actions at the next state.
+- A. The maximum next-state action value.
+- B. The average value of all states.
+- C. The actual sampled next action's value.
+- D. The minimum current-state action value.
 
 
-### 11. Q053 · MC
+### 9. 2.4-M06 · MC
 
-For a ReLU unit whose input is strictly negative, its output and local derivative with respect to that input are:
+*Source: [2.4. Policy Search.pdf · PDF pp. 9–14](../Lecture%20Slides/2.4.%20Policy%20Search.pdf#page=9).*
 
-- A. Output 0; derivative 0.
-- B. Output negative; derivative 1.
-- C. Output 0; derivative 1.
-- D. Output positive; derivative 0.
+In REINFORCE, sampled returns primarily:
 
+- A. Guarantee the best trajectory is repeated exactly.
+- B. Weight gradients of log action probabilities.
+- C. Replace the environment model with correct labels.
+- D. Remove the need to sample actions.
 
-### 12. Q057 · MC
 
-For one example with a one-hot target, cross-entropy is $-\log p_{\text{true}}$. Which prediction receives the larger loss?
+### 10. 3.1-M04 · MC
 
-- A. It depends only on the number of hidden layers.
-- B. A prediction assigning 0.1 to the true class.
-- C. Both receive the same loss if their predicted class is correct.
-- D. A prediction assigning 0.9 to the true class.
+*Source: [3.1. Introduction to Deep Learning.pdf · PDF pp. 38–39](../Lecture%20Slides/3.1.%20Introduction%20to%20Deep%20Learning.pdf#page=38).*
 
+What changes in an end-to-end deep classifier compared with a fixed handcrafted-feature pipeline?
 
-### 13. Q070 · MC
+- A. Feature extraction can be optimized jointly with the prediction stage.
+- B. It no longer needs a prediction objective.
+- C. Evaluation becomes unnecessary.
+- D. It no longer needs training data.
 
-In a residual block $y=x+F(x)$ with matching shapes, what happens if $F(x)=0$?
 
-- A. The block discards the input.
-- B. The block implements the identity mapping.
-- C. The block output becomes zero.
-- D. The number of output channels doubles.
+### 11. 3.2-M05 · MC
 
+*Source: [3.2. Shallow NN.pdf · PDF pp. 23–24](../Lecture%20Slides/3.2.%20Shallow%20NN.pdf#page=23).*
 
-### 14. Q071 · MC
+The universal approximation theorem establishes, under its usual assumptions:
 
-For standard batch normalization with stored running statistics, which statement is correct?
+- A. SGD always finds the best approximation.
+- B. Perfect generalization from a finite dataset.
+- C. Sufficiently wide shallow networks can approximate continuous functions on compact domains arbitrarily well.
+- D. One hidden unit is enough for every function.
 
-- A. Evaluation updates the convolution weights using test-batch statistics.
-- B. Batch normalization has no learnable scale or shift parameters.
-- C. Training and evaluation both recompute statistics from the test set.
-- D. Training uses current mini-batch statistics; evaluation normally uses stored running statistics.
 
+### 12. 3.3-M06 · MC
 
-### 15. Q081 · MC
+*Source: [3.3. Deep Learning Fundamentals.pdf · PDF pp. 24–26](../Lecture%20Slides/3.3.%20Deep%20Learning%20Fundamentals.pdf#page=24).*
 
-In an LSTM, a forget-gate value close to 1 primarily means:
+For one-hot targets, cross-entropy $-\log p_{true}$ is smaller when:
 
-- A. Completely erase the corresponding previous cell-state component.
-- B. Prevent any output from being computed.
-- C. Set the corresponding hidden-state component to exactly 1.
-- D. Retain most of the corresponding previous cell-state component before adding the new contribution.
+- A. The parameter count is larger, regardless of predictions.
+- B. The true class receives a larger probability.
+- C. The true class probability is ignored.
+- D. The true class receives a smaller probability.
 
 
-### 16. Q089 · MC
+### 13. 3.4-M08 · MC
 
-Why is the dot-product score divided by $\sqrt{d_k}$ in standard scaled attention?
+*Source: [3.4. Deep Learning Fundamentals II.pdf · PDF pp. 32, 34](../Lecture%20Slides/3.4.%20Deep%20Learning%20Fundamentals%20II.pdf#page=32).*
 
-- A. To control score magnitudes and reduce softmax saturation as key/query dimension grows.
-- B. To reduce the number of token positions to $d_k$.
-- C. To replace positional encoding.
-- D. To make attention weights independent of the input.
+Standard dropout during training:
 
+- A. Drops only incorrect training examples.
+- B. Is normally applied unchanged during ordinary inference.
+- C. Randomly suppresses some activations and uses an appropriate scaling convention.
+- D. Permanently deletes a fixed subset of units.
 
-### 17. Q091 · MC
 
-At position $t$ in a decoder trained to predict the next token from tokens $1,\ldots,t$, a causal mask allows attention to:
+### 14. 4.1-M08 · MC
 
-- A. Positions $1,\ldots,t$, including the current input token.
-- B. Future tokens only.
-- C. Only position $t+1$.
+*Source: [4.1. CNNs.pdf · PDF pp. 55–59](../Lecture%20Slides/4.1.%20CNNs.pdf#page=55).*
+
+Standard batch normalization with running statistics normally uses:
+
+- A. The current evaluation batch for every deployment prediction.
+- B. No learned scale or shift.
+- C. Test-set statistics to fit its training parameters.
+- D. Batch statistics during training and stored statistics during evaluation.
+
+
+### 15. 5.1-M09 · MC
+
+*Source: [5.1. Sequence Models.pdf · PDF pp. 28–29](../Lecture%20Slides/5.1.%20Sequence%20Models.pdf#page=28).*
+
+Teacher forcing feeds the decoder:
+
+- A. The final target sentence as a single class label.
+- B. Only its own mistakes during training.
+- C. The ground-truth next token at inference time.
+- D. The ground-truth previous token during training.
+
+
+### 16. 5.1E-M09 · MC
+
+*Source: [5.1. Extra Material.pdf · PDF pp. 6](../Lecture%20Slides/5.1.%20Extra%20Material.pdf#page=6).*
+
+Which quantities normally change while a trained LSTM reads a sequence without training updates?
+
+- A. Vocabulary size at every step.
+- B. All layer dimensions at every step.
+- C. Only the weights.
+- D. $c_t$ and $h_t$, while learned weights stay fixed.
+
+
+### 17. 5.2-M08 · MC
+
+*Source: [5.2. Transformers.pdf · PDF pp. 30–31](../Lecture%20Slides/5.2.%20Transformers.pdf#page=30).*
+
+At input position $t$ predicting token $t+1$, the usual causal mask permits attention to:
+
+- A. Only position $t+1$.
+- B. Only future positions.
+- C. Input positions $1,\ldots,t$.
 - D. Every position except $t$.
 
 
-### 18. Q099 · MC
+### 18. 5.3-M06 · MC
 
-Which property best characterizes a foundation model?
+*Source: [5.3. Foundation models.pdf · PDF pp. 19–20](../Lecture%20Slides/5.3.%20Foundation%20models.pdf#page=19).*
 
-- A. It contains a fixed minimum number of layers.
-- B. It is pretrained on broad data and can be adapted to many downstream tasks.
-- C. It is defined by always using an encoder–decoder architecture.
-- D. It is trained from scratch separately for each individual input.
+CLIP learns:
 
-
-### 19. Q109 · MC
-
-In a standard contrastive objective with positive and negative pairs, training encourages:
-
-- A. Positive-pair representations to become similar and negative-pair representations to remain separated.
-- B. Positive-pair representations to move apart.
-- C. Predictions to reproduce the raw input pixels exactly.
-- D. Identical representations for every input.
+- A. A separate encoder for every future class name.
+- B. A transition model for an RL environment.
+- C. A shared representation space for images and text.
+- D. Only a pixel reconstruction model.
 
 
-### 20. Q116 · MC
+### 19. 5.4-M03 · MC
 
-A GAN generator produces a few realistic-looking outputs repeatedly despite receiving many different noise inputs. What is this failure mode called?
+*Source: [5.4. Unsupervised learning.pdf · PDF pp. 13–18, 36](../Lecture%20Slides/5.4.%20Unsupervised%20learning.pdf#page=13).*
 
-- A. Mode collapse.
-- B. Teacher forcing.
-- C. Gradient clipping.
-- D. Covariate normalization.
+A defensible interpretation of t-SNE is that it mainly aims to preserve:
+
+- A. All pairwise distances exactly.
+- B. Local neighbourhood structure in a low-dimensional visualization.
+- C. Cluster sizes as exact population proportions.
+- D. Only the covariance eigenvalues.
+
+
+### 20. 5.5-M08 · MC
+
+*Source: [5.5. Generative Models.pdf · PDF pp. 13](../Lecture%20Slides/5.5.%20Generative%20Models.pdf#page=13).*
+
+A generator produces only a few similar outputs despite varied noise inputs. This is:
+
+- A. Feature normalization.
+- B. Gradient clipping.
+- C. Teacher forcing.
+- D. Mode collapse.
 
 
 # Paper A · Short questions
 
-Suggested time: 32 minutes. Then use the final 8 minutes to review the whole paper.
+Suggested time: 32 minutes, then 8 minutes to review the paper.
 
 
-### 21. Q022 · Calculation
+### 21. 1.2-C01 · Calculation
 
-For a chosen positive class, a classifier has $TP=30$, $FP=10$, and $FN=20$. Compute its precision and recall. Leave the results as fractions or percentages.
+*Source: [1.2. Shallow Learning.pdf · PDF pp. 60–61](../Lecture%20Slides/1.2.%20Shallow%20Learning.pdf#page=60).*
 
-
-### 22. Q046 · Calculation
-
-Perform one Q-learning update. The current value is $Q(s,a)=2$, the received reward is $r=1$, $\gamma=0.5$, $\alpha=0.5$, and $\max_{a'}Q(s',a')=6$. Compute the target $r+\gamma\max Q(s',a')$ and then the updated value $Q(s,a)+\alpha[\text{target}-Q(s,a)]$.
+A classifier has $TP=30$, $FP=10$, and $FN=20$. Compute positive-class precision and recall.
 
 
-### 23. Q032 · Short
+### 22. 3.2-C01 · Calculation
 
-In $p(w\mid D)\propto p(D\mid w)p(w)$, identify the prior, likelihood, and posterior. Which expresses beliefs before observing this dataset?
+*Source: [3.2. Shallow NN.pdf · PDF pp. 39–42](../Lecture%20Slides/3.2.%20Shallow%20NN.pdf#page=39).*
 
-
-### 24. Q064 · Short
-
-What does mini-batch SGD change relative to full-batch gradient descent? Give one benefit and one consequence for the variability of the updates.
+A fully connected shallow network has 2 inputs, 3 hidden units, and 1 output. Include one bias for every hidden and output unit. Compute the total number of trainable parameters.
 
 
-### 25. Q077 · Short
+### 23. 1.3-S03 · Short
 
-Distinguish feature extraction with a frozen pretrained network from fine-tuning. In each case, which weights are updated?
+*Source: [1.3. Bayesian Learning.pdf · PDF pp. 14](../Lecture%20Slides/1.3.%20Bayesian%20Learning.pdf#page=14).*
 
-
-### 26. Q084 · Short
-
-What is backpropagation through time? Why can repeated multiplication of derivatives make long-range dependencies difficult for a vanilla RNN to learn?
+Distinguish uncertainty about the latent function from observation noise. Which can often be reduced by additional informative data?
 
 
-### 27. Q098 · Short
+### 24. 2.3-S04 · Short
 
-Why can a causal transformer compute next-token losses for all positions in a known training sequence in parallel, while ordinary autoregressive generation still produces new tokens sequentially?
+*Source: [2.3. Q-learning.pdf · PDF pp. 29, 35–38](../Lecture%20Slides/2.3.%20Q-learning.pdf#page=29).*
+
+At the next state, the behaviour policy chooses a low-value exploratory action. How can the SARSA and Q-learning targets differ?
 
 
-### 28. Q119 · Short
+### 25. 2.4-S06 · Short
 
-Why might decoding an arbitrary random latent vector with a basic autoencoder give a poor result? What is the purpose of the KL regularization term in a VAE in this context?
+*Source: [2.4. Policy Search.pdf · PDF pp. 17](../Lecture%20Slides/2.4.%20Policy%20Search.pdf#page=17).*
+
+State the actor's and critic's roles in one sentence each. Which one directly determines action probabilities?
+
+
+### 26. 4.1-S05 · Short
+
+*Source: [4.1. CNNs.pdf · PDF pp. 67–73](../Lecture%20Slides/4.1.%20CNNs.pdf#page=67).*
+
+Distinguish frozen feature extraction from fine-tuning. Which weights change in each case?
+
+
+### 27. 5.2-S04 · Short
+
+*Source: [5.2. Transformers.pdf · PDF pp. 30–31](../Lecture%20Slides/5.2.%20Transformers.pdf#page=30).*
+
+Why can next-token training evaluate all known sequence positions in parallel while ordinary autoregressive generation produces new tokens sequentially?
+
+
+### 28. 5.5-S06 · Short
+
+*Source: [5.5. Generative Models.pdf · PDF pp. 17–18](../Lecture%20Slides/5.5.%20Generative%20Models.pdf#page=17).*
+
+Distinguish the fixed forward noising process from the learned reverse process in diffusion.
 
 
 # Paper B · Multiple choice
 
-Suggested time: 20 minutes. Choose one best answer per question.
+Suggested time: 20 minutes.
 
 
-### 1. Q002 · MC
+### 1. 1.1-M09 · MC
 
-For two discrete probability distributions on the same finite set, what does $D_{KL}(p\|q)=0$ imply?
+*Source: [1.1. Fundamentals.pdf · PDF pp. 26](../Lecture%20Slides/1.1.%20Fundamentals.pdf#page=26).*
 
-- A. They have disjoint supports.
-- B. Both distributions are uniform.
-- C. Their means agree, but their probabilities may differ.
-- D. They assign identical probabilities to every outcome.
+A model finds a strong correlation between two variables. What follows?
 
+- A. The association alone does not establish causation.
+- B. Confounding variables can be ruled out.
+- C. The first variable necessarily causes the second.
+- D. The second variable necessarily causes the first.
 
-### 2. Q007 · MC
 
-Which task is an example of unsupervised learning?
+### 2. 1.2-M08 · MC
 
-- A. Predicting house prices from examples with known prices.
-- B. Classifying emails using examples labelled spam or not spam.
-- C. Learning a robot policy from rewards.
-- D. Grouping customers by similarity without predefined group labels.
+*Source: [1.2. Shallow Learning.pdf · PDF pp. 72–76](../Lecture%20Slides/1.2.%20Shallow%20Learning.pdf#page=72).*
 
+The hard-margin SVM chooses a separating hyperplane that:
 
-### 3. Q011 · MC
+- A. Maximizes the margin to the closest examples.
+- B. Minimizes the margin to the closest examples.
+- C. Maximizes the number of features.
+- D. Passes through the class means.
 
-What is an inductive bias?
 
-- A. The assumptions that favour some patterns or solutions over others.
-- B. The difference between the training and validation set sizes.
-- C. The scalar intercept of every machine-learning model.
-- D. The average prediction error on the training set.
+### 3. 1.2-M10 · MC
 
+*Source: [1.2. Shallow Learning.pdf · PDF pp. 82–84](../Lecture%20Slides/1.2.%20Shallow%20Learning.pdf#page=82).*
 
-### 4. Q017 · MC
+Which distinction between bagging and boosting is correct?
 
-Which regularizer is especially associated with producing exactly zero coefficients and therefore sparse models?
+- A. Bagging uses only one model.
+- B. Random forests are linear regressors.
+- C. Boosting requires independent learners.
+- D. Bagging combines resampled learners; boosting builds learners sequentially to address remaining errors.
 
-- A. A larger validation set.
-- B. An L1 penalty on the coefficients.
-- C. An L2 penalty on the coefficients.
-- D. An increase in the learning rate.
 
+### 4. 1.3-M08 · MC
 
-### 5. Q019 · MC
+*Source: [1.3. Bayesian Learning.pdf · PDF pp. 38, 46–47](../Lecture%20Slides/1.3.%20Bayesian%20Learning.pdf#page=38).*
 
-A dataset contains 95% negative examples. A classifier predicts every example as negative. Which statement is correct?
+A larger RBF length scale generally favours:
 
-- A. Its positive-class recall is 95%.
-- B. Its accuracy is 95%, but its positive-class recall is 0%.
-- C. Its high accuracy establishes that it detects positive examples well.
-- D. Its accuracy and positive-class F1 score are both 95%.
+- A. Higher noise variance by definition.
+- B. More rapid variation across nearby inputs.
+- C. Correlations extending over larger input distances.
+- D. Periodicity with a shorter period.
 
 
-### 6. Q020 · MC
+### 5. 2.1-M04 · MC
 
-For linearly separable data, a hard-margin SVM selects a separating hyperplane by:
+*Source: [2.1. Introduction to Reinforcement Learning.pdf · PDF pp. 8–9](../Lecture%20Slides/2.1.%20Introduction%20to%20Reinforcement%20Learning.pdf#page=8).*
 
-- A. Minimizing the number of input features.
-- B. Maximizing the margin to the closest training examples.
-- C. Maximizing the distance to the average training example.
-- D. Maximizing the number of support vectors.
+In stochastic gridworld, choosing North means:
 
+- A. The state is necessarily unobservable.
+- B. The successor cell must be North.
+- C. The policy is necessarily random.
+- D. Actual movement is sampled from a transition distribution.
 
-### 7. Q027 · MC
 
-Which statement best distinguishes full Bayesian parameter learning from maximum-likelihood or MAP point estimation?
+### 6. 2.2-M10 · MC
 
-- A. MAP keeps a distribution, but Bayesian learning keeps only its maximum.
-- B. Bayesian learning keeps a distribution over plausible parameter values.
-- C. Maximum likelihood requires a prior, but Bayesian learning does not.
-- D. Bayesian learning removes the need for a likelihood.
+*Source: [2.2. Markov decision processes.pdf · PDF pp. 20–24](../Lecture%20Slides/2.2.%20Markov%20decision%20processes.pdf#page=20).*
 
+Policy iteration repeatedly alternates:
 
-### 8. Q031 · MC
+- A. Clustering and dimensionality reduction.
+- B. Policy evaluation and policy improvement.
+- C. Random action selection and restarting all values.
+- D. Reward deletion and state deletion.
 
-What does the kernel $k(x,x')$ specify in a Gaussian process?
 
-- A. The probability that $x$ and $x'$ have the same label.
-- B. The posterior mean at $x$ for every dataset.
-- C. The covariance between function values at $x$ and $x'$.
-- D. The number of basis functions stored for each input.
+### 7. 2.3-M10 · MC
 
+*Source: [2.3. Q-learning.pdf · PDF pp. 47](../Lecture%20Slides/2.3.%20Q-learning.pdf#page=47).*
 
-### 9. Q039 · MC
+Which three ingredients form the deadly triad associated with instability?
 
-What distinguishes a Bellman optimality backup from a Bellman expectation backup for a fixed policy?
+- A. Discounting, rewards, terminal states.
+- B. Function approximation, bootstrapping, off-policy learning.
+- C. Exploration, deterministic policies, finite horizons.
+- D. Labels, minibatches, cross-entropy.
 
-- A. It removes the immediate reward.
-- B. It averages uniformly over all actions.
-- C. It sets the discount factor to 1.
-- D. It chooses the best action instead of averaging actions according to the fixed policy.
 
+### 8. 2.4-M03 · MC
 
-### 10. Q040 · MC
+*Source: [2.4. Policy Search.pdf · PDF pp. 6–7](../Lecture%20Slides/2.4.%20Policy%20Search.pdf#page=6).*
 
-Which statement correctly compares Monte Carlo policy evaluation with one-step TD evaluation?
+The policy objective $J(\theta)$ is typically:
 
-- A. Both require an exact transition model.
-- B. Monte Carlo bootstraps from the next state's value; TD always waits for the full return.
-- C. Monte Carlo uses completed sampled returns; TD can update using a reward and an estimated successor value before an episode ends.
-- D. TD does not use observed rewards.
+- A. The negative transition probability.
+- B. The number of policy parameters.
+- C. Expected return under the parameterized policy.
+- D. A supervised class-accuracy score by definition.
 
 
-### 11. Q044 · MC
+### 9. 3.1-M07 · MC
 
-In REINFORCE, sampled returns are used primarily to:
+*Source: [3.1. Introduction to Deep Learning.pdf · PDF pp. 26–34](../Lecture%20Slides/3.1.%20Introduction%20to%20Deep%20Learning.pdf#page=26).*
 
-- A. Guarantee a global maximum of the policy objective.
-- B. Weight policy-gradient updates so actions associated with better returns are reinforced.
-- C. Supervise an exact transition-probability table.
-- D. Replace the policy with a list of fixed class labels.
+Which is the most useful first check for a large training dataset?
 
+- A. Whether its examples, labels, and variability suit the intended task.
+- B. Whether every image has the same filename length.
+- C. Whether the network can memorize its row order.
+- D. Whether the file is larger than all previous datasets.
 
-### 12. Q055 · MC
 
-Why can depth be useful even when a shallow network has universal approximation capacity?
+### 10. 3.2-M07 · MC
 
-- A. Every extra layer guarantees lower test error.
-- B. Some compositional functions can be represented much more efficiently using multiple layers.
-- C. Deep models need no training examples.
-- D. Depth removes the need for activation functions.
+*Source: [3.2. Shallow NN.pdf · PDF pp. 26–28](../Lecture%20Slides/3.2.%20Shallow%20NN.pdf#page=26).*
 
+In a shallow network with two outputs and one shared hidden layer:
 
-### 13. Q058 · MC
+- A. The hidden units cannot be shared.
+- B. The two outputs require identical output biases.
+- C. Each output must equal the other.
+- D. Each output can use a different weighted combination of the same hidden activations.
 
-What does backpropagation compute?
 
-- A. The generalization error without a validation set.
-- B. The parameter update independently of any optimizer or learning rate.
-- C. The optimal architecture for the dataset.
-- D. Gradients of the loss with respect to parameters by applying the chain rule.
+### 11. 3.3-M10 · MC
 
+*Source: [3.3. Deep Learning Fundamentals.pdf · PDF pp. 40–42](../Lecture%20Slides/3.3.%20Deep%20Learning%20Fundamentals.pdf#page=40).*
 
-### 14. Q060 · MC
+Adam combines momentum-like information with:
 
-Which statement correctly describes standard dropout?
+- A. Exact Hessian inversion at every step.
+- B. A rule that all parameters share identical gradients.
+- C. Per-parameter scaling based on squared-gradient statistics.
+- D. Removal of the learning rate.
 
-- A. It randomly deletes labels from the validation set.
-- B. It randomly suppresses activations during training and is normally disabled during ordinary inference, with the appropriate scaling convention.
-- C. It is an optimizer that accumulates past gradients.
-- D. It deletes a fixed subset of units permanently before training.
 
+### 12. 3.4-M03 · MC
 
-### 15. Q067 · MC
+*Source: [3.4. Deep Learning Fundamentals II.pdf · PDF pp. 10–16](../Lecture%20Slides/3.4.%20Deep%20Learning%20Fundamentals%20II.pdf#page=10).*
 
-Which pair of properties most directly reduces the parameter count of a convolutional layer compared with a fully connected layer on an image?
+If a parameter influences loss through two computational paths, its gradient receives:
 
-- A. Global connectivity and a separate bias for every input pixel.
-- B. Larger input images and more output classes.
-- C. Local connectivity and weight sharing across spatial positions.
-- D. A separate filter for every pixel and no shared weights.
+- A. Only the larger contribution.
+- B. Only the first path's contribution.
+- C. The sum of contributions from both paths.
+- D. Their average regardless of the computation.
 
 
-### 16. Q082 · MC
+### 13. 4.1-M06 · MC
 
-What is teacher forcing in sequence-to-sequence training?
+*Source: [4.1. CNNs.pdf · PDF pp. 36](../Lecture%20Slides/4.1.%20CNNs.pdf#page=36).*
 
-- A. Feeding the correct previous token to the decoder during training.
-- B. Selecting only the highest-probability token during every training step.
-- C. Training the network without target sequences.
-- D. Replacing the decoder with the encoder at inference time.
+A stride-1 $1\times1$ convolution primarily:
 
+- A. Expands the spatial receptive field to $3\times3$.
+- B. Mixes channels at each location and can change channel count.
+- C. Removes all channel information.
+- D. Pools neighbouring pixels.
 
-### 17. Q090 · MC
 
-Why add positional information to an unmasked self-attention model?
+### 14. 4.1-M10 · MC
 
-- A. To ensure all words have different vocabulary indices.
-- B. Self-attention alone is permutation equivariant and does not identify sequence positions.
-- C. To make every attention weight equal.
-- D. To remove the need for learned embeddings.
+*Source: [4.1. CNNs.pdf · PDF pp. 90–93](../Lecture%20Slides/4.1.%20CNNs.pdf#page=90).*
 
+Instance segmentation differs from semantic segmentation by:
 
-### 18. Q094 · MC
+- A. Assigning no class labels to objects.
+- B. Avoiding pixel-level outputs.
+- C. Predicting only one class for the whole image.
+- D. Separating distinct objects even when they have the same class.
 
-What does multi-head attention add to a single attention head?
 
-- A. A new vocabulary for each position.
-- B. A separate loss function that must be supervised for every head.
-- C. An independent training dataset for each head.
-- D. Several learned projection sets that can capture different relationships in parallel.
+### 15. 5.1-M07 · MC
 
+*Source: [5.1. Sequence Models.pdf · PDF pp. 21](../Lecture%20Slides/5.1.%20Sequence%20Models.pdf#page=21).*
 
-### 19. Q101 · MC
+Relative to an LSTM, the usual GRU:
 
-What is the main representation-learning objective of CLIP?
+- A. Has an additional separate cell state.
+- B. Cannot process variable-length sequences.
+- C. Has update/reset gates and no separate LSTM-style cell state.
+- D. Uses no gates.
 
-- A. Generate an image by iteratively removing Gaussian noise.
-- B. Compress every image into a fixed handcrafted descriptor.
-- C. Align corresponding images and text in a shared embedding space.
-- D. Predict a separate semantic class for every image pixel using only masks.
 
+### 16. 5.1E-M08 · MC
 
-### 20. Q117 · MC
+*Source: [5.1. Extra Material.pdf · PDF pp. 2–4, 7](../Lecture%20Slides/5.1.%20Extra%20Material.pdf#page=2).*
 
-Which description matches the basic diffusion-model procedure?
+The output gate primarily controls:
 
-- A. Two classifiers compete to predict the correct semantic label.
-- B. Sampling reconstructs only images already stored in the training set.
-- C. The forward process classifies images and the reverse process sorts the classes.
-- D. A fixed forward process adds noise; a learned reverse process progressively denoises to generate samples.
+- A. The size of the vocabulary.
+- B. The number of stored training sequences.
+- C. How much of the transformed cell state is exposed as hidden output.
+- D. Which input column is selected.
+
+
+### 17. 5.2-M09 · MC
+
+*Source: [5.2. Transformers.pdf · PDF pp. 32–35](../Lecture%20Slides/5.2.%20Transformers.pdf#page=32).*
+
+In encoder–decoder cross-attention:
+
+- A. Queries come from decoder representations; keys and values come from encoder output.
+- B. Queries, keys, and values must all come from the same sequence.
+- C. The encoder queries future decoder outputs.
+- D. Keys are the future target labels.
+
+
+### 18. 5.3-M05 · MC
+
+*Source: [5.3. Foundation models.pdf · PDF pp. 14](../Lecture%20Slides/5.3.%20Foundation%20models.pdf#page=14).*
+
+Which is an example of a verifiable reward?
+
+- A. A random score independent of the output.
+- B. The number of training parameters alone.
+- C. Whether generated code passes specified unit tests.
+- D. A manually supplied next-token label by definition.
+
+
+### 19. 5.4-M10 · MC
+
+*Source: [5.4. Unsupervised learning.pdf · PDF pp. 30–31](../Lecture%20Slides/5.4.%20Unsupervised%20learning.pdf#page=30).*
+
+The basic BYOL approach is notable for:
+
+- A. Needing a separate classifier for every image.
+- B. Learning from two views using online/target networks without explicit negatives.
+- C. Requiring manually labelled negative examples.
+- D. Replacing the encoder with k-means.
+
+
+### 20. 5.5-M05 · MC
+
+*Source: [5.5. Generative Models.pdf · PDF pp. 8](../Lecture%20Slides/5.5.%20Generative%20Models.pdf#page=8).*
+
+The KL regularization term in a VAE encourages:
+
+- A. Removal of the reconstruction objective.
+- B. Every reconstruction to be identical.
+- C. Infinite latent variance for every input.
+- D. The latent distribution to agree with a chosen prior.
 
 
 # Paper B · Short questions
 
-Suggested time: 32 minutes. Then use the final 8 minutes to review the whole paper.
+Suggested time: 32 minutes, then 8 minutes to review the paper.
 
 
-### 21. Q023 · Short
+### 21. 2.3-C01 · Calculation
 
-Using the standard definition $R^2=1-\mathrm{SSE}/\mathrm{SST}$ on a test set with nonconstant targets, interpret $R^2=1$, $R^2=0$, and $R^2<0$ relative to predicting the test-set mean.
+*Source: [2.3. Q-learning.pdf · PDF pp. 35–36](../Lecture%20Slides/2.3.%20Q-learning.pdf#page=35).*
 
-
-### 22. Q050 · Short
-
-In actor–critic learning, what is the actor's role and what is the critic's role? Compared with plain Monte Carlo policy gradients, what variance–bias trade-off can a learned critic introduce?
+Perform one Q-learning update with $Q(s,a)=2$, $r=1$, $\gamma=0.5$, $\alpha=0.5$, and $\max_{a'}Q(s',a')=6$. First compute the target, then $Q_{new}=Q+\alpha(\text{target}-Q)$.
 
 
-### 23. Q061 · Calculation
+### 22. 4.1-C01 · Calculation
 
-A fully connected layer has 3 inputs and 2 output units, with one bias per output unit. How many trainable scalar parameters does it have?
+*Source: [4.1. CNNs.pdf · PDF pp. 15–17](../Lecture%20Slides/4.1.%20CNNs.pdf#page=15).*
 
-
-### 24. Q076 · Short
-
-What is a unit's receptive field? How does dilation increase the spatial reach of a convolution without increasing the number of kernel weights?
+A $7\times7$ input is convolved with a $3\times3$ kernel, stride 2, padding 1 per side, and dilation 1. Use $W_{out}=\lfloor(W-K+2P)/S\rfloor+1$ to compute output height and width.
 
 
-### 25. Q086 · Short
+### 23. 1.1-S04 · Short
 
-What makes a temporal convolution causal? What must change if a temporal convolutional network needs to use information from much farther back in the sequence?
+*Source: [1.1. Fundamentals.pdf · PDF pp. 6, 30, 33–36](../Lecture%20Slides/1.1.%20Fundamentals.pdf#page=6).*
 
-
-### 26. Q095 · Calculation
-
-One attention query has normalized weights $(0.25,0.75)$ over two scalar values $v_1=2$ and $v_2=6$. Compute its attention output.
+Distinguish a learned parameter from a hyperparameter. In k-NN, which is $k$?
 
 
-### 27. Q103 · Short
+### 24. 3.3-S05 · Short
 
-Distinguish supervised fine-tuning from preference-based reinforcement learning by stating the training signal used in each. What changes when rewards instead come from an automatic verifier, such as a unit test?
+*Source: [3.3. Deep Learning Fundamentals.pdf · PDF pp. 32–37](../Lecture%20Slides/3.3.%20Deep%20Learning%20Fundamentals.pdf#page=32).*
+
+What can happen if the learning rate is too high? What if it is extremely low?
 
 
-### 28. Q111 · Short
+### 25. 3.4-S01 · Short
 
-Give one self-supervised image pretext task from the slides. State what its target is and how that target is obtained without manually annotating semantic classes.
+*Source: [3.4. Deep Learning Fundamentals II.pdf · PDF pp. 7–22](../Lecture%20Slides/3.4.%20Deep%20Learning%20Fundamentals%20II.pdf#page=7).*
+
+Distinguish the forward pass, backward pass, and optimizer step. Which computes predictions and which changes weights?
+
+
+### 26. 5.1-S06 · Short
+
+*Source: [5.1. Sequence Models.pdf · PDF pp. 29](../Lecture%20Slides/5.1.%20Sequence%20Models.pdf#page=29).*
+
+What is exposure bias in a teacher-forced decoder? Why can an early inference-time mistake affect later outputs?
+
+
+### 27. 5.3-S04 · Short
+
+*Source: [5.3. Foundation models.pdf · PDF pp. 14](../Lecture%20Slides/5.3.%20Foundation%20models.pdf#page=14).*
+
+Distinguish human demonstrations, preference rankings, and automatically verifiable rewards as training signals.
+
+
+### 28. 5.4-S06 · Short
+
+*Source: [5.4. Unsupervised learning.pdf · PDF pp. 28–31](../Lecture%20Slides/5.4.%20Unsupervised%20learning.pdf#page=28).*
+
+What is representation collapse? Why would mapping every input to the same vector be unhelpful for downstream tasks?

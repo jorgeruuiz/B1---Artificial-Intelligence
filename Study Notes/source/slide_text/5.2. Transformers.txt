@@ -1,0 +1,581 @@
+=== PDF PAGE 1 ===
+Master in Artificial Intelligence & Computational Engineering
+Luis Montesano
+Artificial Intelligence –
+Deep learning 5.2: Attention & Transformers
+
+=== PDF PAGE 2 ===
+Today
+● Why attention: from RNNs to attention
+● Self-attention: values, queries, keys; matrix form
+● Positional encoding: sinusoidal, learned, relative
+● Text: tokens, embeddings, contextual embeddings
+● The transformer block and the encoder stack (BERT)
+● Decoders: next-token prediction, causal mask (GPT)
+● Encoder–decoder: cross-attention, the original Transformer
+● The cost of attention, state-space models; Vision Transformer
+● In-class exercise → Lab 5
+
+=== PDF PAGE 3 ===
+Attention
+Transformers - Attention
+● Attention is all you need
+Spring 2021
+Bill Freeman, Phillip Isola
+A. Vaswani et al. “Attention Is All You Need”. In: NIPS. 2017.
+
+
+=== PDF PAGE 4 ===
+Transformers vs CNN vs RNN
+● 1D CNN - RNN - Self-attention
+● different tradeoffs speed - expressive power (maximum path length between any
+two inputs)
+● self-attention: every output is connected to every input
+● Differently from RNN, Transformers can process all input at once (instead of seq.)
+● Differently from CNN, Transformers do not have certain “bias” (as the assumptions
+encoded in CNNs about nearby more important than further away)
+Spring 2021
+Bill Freeman, Phillip Isola
+A. Zhang, Z. Lipton, M. Li, and A. Smola. Dive into deep learning. 2020.
+
+
+=== PDF PAGE 5 ===
+Spring 2021
+Bill Freeman, Phillip Isola
+slides from: B. Freeman. P. Isola. Advances in Computer Vision. MIT. 2021
+● RNN decoder:
+Hidden
+Outputs
+Input
+LSTM LSTM LSTM LSTM LSTM LSTM
+… … …
+RNN vs Attention
+Average (equal weights), computed once → only step 1 sees the
+frames
+
+=== PDF PAGE 6 ===
+Spring 2021
+Bill Freeman, Phillip Isola
+slides from: B. Freeman. P. Isola. Advances in Computer Vision. MIT. 2021
+● Attention:
+Outputs
+LSTM LSTM LSTM LSTM LSTM LSTM
+Hidden
+Input
+ … … …
+RNN vs Attention
+New weights for every word (here:
+“swimming”)
+
+=== PDF PAGE 7 ===
+Spring 2021
+Bill Freeman, Phillip Isola
+slides from: B. Freeman. P. Isola. Advances in Computer Vision. MIT. 2021
+● Attention:
+Outputs
+LSTM LSTM LSTM LSTM LSTM LSTM
+Hidden
+Input
+ … … …
+RNN vs Attention
+For “anemone”: weights shift to later frames
+
+=== PDF PAGE 8 ===
+Spring 2021
+Bill Freeman, Phillip Isola
+slides from: B. Freeman. P. Isola. Advances in Computer Vision. MIT. 2021
+LSTM LSTM LSTM LSTM LSTM LSTM
+weights are determined
+by similarity between
+query and key
+=
+Input
+ … … …
+query
+key
+value
+summation is over
+weights * value
+Transformers vs RNN
+
+=== PDF PAGE 9 ===
+Self-attention (1): weighted sums
+•  N inputs x1 … xN, each a D-dim vector (a frame feature, a word embedding, …)
+•  Each input is mapped to a value: the same linear map for every input, no ReLU
+•  Each output is a weighted sum of all the values:
+•  anm: share of input m in output n, computed from the inputs (next slide)
+Figures and notation adapted from S. J. D. Prince. Understanding Deep Learning. MIT Press, 2023, ch. 12 (udlbook.github.io)
+
+=== PDF PAGE 10 ===
+Self-attention (2): the weights
+•  Each input also produces a query and a key (two more learned linear maps):
+•  Score = key · query (similarity); softmax over m → weights of output n:
+Same roles as slide 8 — query: what output n needs · key: what input m offers. New: every input is also a
+query → self-attention.
+Figures and notation adapted from S. J. D. Prince. Understanding Deep Learning. MIT Press, 2023, ch. 12 (udlbook.github.io )
+
+=== PDF PAGE 11 ===
+Self-attention (3): a worked example
+•  N = 3 inputs, D = 2, already projected. Compute output 1,
+whose query is q₁ = (1, 0)
+m key kₘ score kₘᵀq₁ weight a₁ₘ value vₘ
+1 (1, 0) 1 0.245 (1, 0)
+2 (0, 1) 0 0.090 (0, 2)
+3 (2, 1) 2 0.665 (3, 1)
+softmax(1, 0, 2) = (0.245, 0.090, 0.665)
+•  Key 3 matches q ₁ best → input 3 dominates output 1
+•  Outputs 2 and 3: same computation with q ₂, q₃ → independent →
+all in parallel (matrix form, later)
+Key properties
+•  Parameters: only the three
+projections (values, queries, keys).
+They do not grow with N → any
+sequence length
+•  Weights are computed from the
+input, not stored: a data-dependent
+layer
+•  Every output reaches every input
+in one step
+•  Order-blind: shuffle the inputs →
+outputs shuffled the same way (→
+positional encodings)
+•  Cost: N × N scores
+Toy numbers for illustration. Notation: S. J. D. Prince. Understanding Deep Learning. MIT Press, 2023, ch. 12
+
+=== PDF PAGE 12 ===
+Self-attention in matrix form
+Figures and notation adapted from S. J. D. Prince. Understanding Deep Learning. MIT Press, 2023, ch. 12 (udlbook.github.io )
+
+=== PDF PAGE 13 ===
+Self-attention in matrix form
+● Inputs: the N token embeddings as rows of X ∈ ℝN×D. Three learned
+projections:
+● QK⊤: N × N scores, every query against every key; softmax row by row → weights
+that sum to 1
+● Output: N × dv, each row a weighted average of the values
+● Why √dk? If the components of q and k are independent with zero mean and unit
+variance, q·k has variance d k. Dividing keeps the scores O(1), so the softmax does
+not saturate (tiny gradients)
+A. Vaswani et al. Attention is all you need. NeurIPS 2017
+
+=== PDF PAGE 14 ===
+Self-attention: just matrix multiplications
+● Attention is just really large matrix multiplications!
+● Many operations …
+● … but super parallelizable on GPUs/TPUs
+
+
+=== PDF PAGE 15 ===
+Positional encoding (1): why we need it
+•  Self-attention is order-blind: permute the inputs → outputs permuted the same way
+•  “The man ate the fish” vs “The fish ate the man”: same tokens → same outputs
+•  Idea: give each position n a vector pn and add it to the token embedding:
+token
+token embedding
+position encoding
+input to attention
+“The”
+x(the)
++
+p₁
+=
+x̃₁
+“fish”
+x(fish)
++
+p₂
+=
+x̃₂
+“ate”
+x(ate)
++
+p₃
+=
+x̃₃
+“the”
+x(the)
++
+p₄
+=
+x̃₄
+“man”
+x(man)
++
+p₅
+=
+x̃₅
+In “The man ate the fish”, ‘man’ gets p₂ instead of p₅ → a different input, different queries, keys and values.
+Attention now sees what a token is and where it is.
+Example after S. J. D. Prince. Understanding Deep Learning. MIT Press, 2023, ch. 12
+
+=== PDF PAGE 16 ===
+Positional encoding (2): fixed sinusoids
+•  Why not pn = n? Unbounded. Or n / N? Depends on the length.
+•  Vaswani et al.: sines and cosines at different frequencies (no parameters):
+•  Each (sin, cos) pair is a clock: fast in the first dims, slow in the last
+•  Works for any length; p n+k is a rotation of p n → offsets are easy to read with dot products (c)
+A. Vaswani et al. Attention is all you need. NeurIPS 2017 · S. J. D. Prince. Understanding Deep Learning, ch. 12
+
+=== PDF PAGE 17 ===
+Positional encoding (3): learned, relative
+•  Learned absolute: a trainable table P (Nmax × D), like the token embeddings
+–  simple, but undefined beyond Nmax. BERT, GPT-2, ViT
+•  Relative: what matters is the offset n − m → put it in the score
+–  RoPE (rotary): rotate qn by angle ∝ n, km by angle ∝ m → qn·km depends on content and n − m. Every layer.
+Llama, Mistral, Qwen
+–  ALiBi: subtract a penalty ∝ |n − m| from the score (BLOOM)
+Parameters Where Beyond training length Used in
+Sinusoidal (fixed) none added to the input defined, limited in practice original Transformer
+Learned absolute Nₘₐₓ × D added to the input no BERT, GPT-2, ViT
+Rotary (RoPE) none rotates q, k in every layer better (with scaling tricks) most current LLMs
+For images: 2D positions (row, column) of each patch → Vision Transformer, later
+J. Devlin et al. BERT. NAACL 2019 · J. Su et al. RoFormer (RoPE). 2021 · O. Press et al. ALiBi. ICLR 2022
+
+=== PDF PAGE 18 ===
+Where we are going: transformers for text
+Same building block, three ways to use it : what goes in, what comes out
+Encoder-only
+e.g. BERT
+Decoder-only
+e.g. GPT, Llama, Claude
+Encoder–decoder
+“Attention is all you need”, T5
+label: “positive”
+(or one vector per token)
+Encoder
+“The movie was great”
+next token: “the”
+append it, repeat → text
+Decoder
+“The fish lived in”
+“I am a student”
+(one token at a time)
+Encoder Decoder
+“Je suis étudiant”
+Tasks
+sentiment, topic, spam
+named entities
+search / embeddings
+(images: ViT)
+Tasks
+text generation
+chat assistants
+code completion
+Tasks
+translation
+summarisation
+captioning, speech → text
+Our route through the next slides:
+Text → vectors Encoder Decoder Encoder–decoder
+Vaswani et al. 2017 · Devlin et al. (BERT) 2019 · Radford et al. (GPT) 2018 · Raffel et al. (T 5) 2020
+
+=== PDF PAGE 19 ===
+Tokenisation: from text to tokens
+● A transformer processes a sequence of
+tokens from a fixed vocabulary
+● Words as tokens?
+○ unknown words (names, typos),
+punctuation
+○ walk, walks, walked, walking: unrelated
+tokens
+● Characters? tiny vocabulary, very long
+sequences
+● Sub-word tokenisation, e.g. Byte-Pair
+Encoding: start from characters,
+repeatedly merge the most frequent
+pair
+○ frequent words = 1 token; rare words =
+several pieces
+○ typical vocabularies: 30k–200k tokens
+Figure: S. J. D. Prince. Understanding Deep Learning. MIT Press, 2023, ch. 12 (udlbook.github.io) · R. Sennrich, B. Haddow, A . Birch. Neural machine translation of rare
+words with subword units. ACL 2016
+
+=== PDF PAGE 20 ===
+From tokens to embeddings
+● Each token index → one-hot vector tn of size |V| (vocabulary)
+● A learned embedding matrix Ω maps it to a D-dimensional vector:
+Ω is trained with the rest of the
+network (nn.Embedding)
+Stack the N embeddings as rows: X
+∈ ℝN×D
+Context-free: 'bank' (river) = 'bank'
+(money). Self-attention will fix that
+Figure: S. J. D. Prince. Understanding Deep Learning. MIT Press, 2023, ch. 12 (udlbook.github.io)
+
+=== PDF PAGE 21 ===
+Text → tokens → embeddings
+
+
+=== PDF PAGE 22 ===
+Contextual embeddings
+
+
+=== PDF PAGE 23 ===
+The transformer block
+One block, four steps:
+● Multi-head self-attention: tokens exchange information
+● Add & Norm: residual connection + layer normalisation
+● Feed-forward: the same MLP on each token separately
+● Add & Norm
+Stack N blocks (input and output: N × D)
+A. Vaswani et al. “Attention Is All You Need”. In: NIPS. 2017.
+GOAL: augment each token representation based on relationship to other
+tokens
+Transformer/attention block
+
+
+=== PDF PAGE 24 ===
+Block (1): multi-head attention
+Multi-head Attention (h “heads”):
+● Use different sets of projection matrices
+(W_K, W_Q and W_V), one per “head”
+● Process each “head”, in parallel
+● Concatenate all h values
+and re-project them to get
+the final embedding
+
+=== PDF PAGE 25 ===
+Block (2): Add & Norm
+Add & Norm: Residual connection
++ Layer Normalization*
+V
+Combine with input embeddings  (Residual)
+K V K V K V K V
+EThe cute white cat.
+Residual + Layer Norm * batch normalization with statistics computed for each sample
+
+=== PDF PAGE 26 ===
+Block (3): feed-forward
+Feed Forward: Two layer MLPs applied
+individually to each token embedding
+● Attention: “recombining” input vectors
+● MLP: adds non-linearities and linear layers to
+“mix” the features of each token
+V V V V
+Representations
+after Multi-Head
+and Add&Norm
+MLP
+V V V V
+MLPMLPMLP
+
+=== PDF PAGE 27 ===
+Block (4): Add & Norm
+Add & Norm:
+The cute white cat.
+V V V V
+MLP
+V V V V
+MLPMLPMLP
+Residual + Layer Norm
+E E E E
+
+=== PDF PAGE 28 ===
+Stacking blocks: the transformer encoder
+tokens: “The fish ate the man”
+embedding + positional encoding
+Add & Norm
+Feed-forward
+Add & Norm
+Multi-head self-attention
+× L
+contextual embeddings (N × D)
+→ head per token (tagging)
+→ head on CLS (classification)
+•  Each block maps N × D → N × D, so blocks can be stacked: L
+blocks, each with its own weights
+•  L = 6 in the original paper, 12 in BERT-base, ~100 in large
+LLMs
+•  No mask: every token sees every other token, in every layer
+(bidirectional)
+•  Output: one contextual vector per token, used by a task head
+(next slide)
+•  Pre-training (BERT): hide ~15 % of the tokens and predict them
+from both sides (masked language modelling)
+•  The same encoder works on image patches: ViT (end of the
+lecture)
+In the original paper's figure this stack is the “N×”. We write L: N is the number
+of tokens.
+A. Vaswani et al. NeurIPS 2017 · J. Devlin et al. BERT. NAACL 2019
+
+=== PDF PAGE 29 ===
+Using the encoder: the CLS token
+CLS Token
+● Often have a dummy token attached to beginning of input
+● Use the output representation of that token for
+classification/other downstream tasks (e.g. pass it into a
+feed forward network to predict)
+
+=== PDF PAGE 30 ===
+Decoder-only models: next-token prediction
+● A decoder (GPT) is an autoregressive model of the token sequence:
+● Training = maximum likelihood = cross -entropy on the next token, at every position:
+● One forward pass trains all N predictions in parallel (teacher forcing). Generation:
+sample, append, repeat
+Figure: S. J. D. Prince. Understanding Deep Learning. MIT Press, 2023, ch. 12 (udlbook.github.io)
+
+=== PDF PAGE 31 ===
+Causal (masked) self-attention
+● Without a mask, position n would attend to n
++ 1, n + 2, … (the targets)
+● Add −∞ to the scores of future positions
+before the softmax:
+● After the softmax those weights are exactly
+0: token n only uses tokens 1 … n
+● Same computation at training and
+generation time → no cheating, no
+mismatch
+● Encoders (BERT) use no mask; decoders
+(GPT) always do
+attention weights with the causal mask (illustrative)
+A. Vaswani et al. Attention is all you need. NeurIPS 2017 · see also Prince, Understanding Deep Learning, fig. 'masked self -attention' (ch. 12)
+
+=== PDF PAGE 32 ===
+Self- vs cross-attention
+● “self-attention”:
+keys and values are produced
+from the same source as queries.
+● “cross-attention”:
+keys and values come from some
+other, external source (e.g. an
+encoder module), than the
+queries
+● “Encoder-decoder” uses both:
+Queries come from the previous
+decoder layer, but Keys and
+Values come from encoder output
+
+=== PDF PAGE 33 ===
+The original Transformer (encoder–decoder)
+A. Vaswani et al. “Attention Is All You Need”. In: NIPS. 2017.
+
+=== PDF PAGE 34 ===
+Zoom: multi-head attention
+● Transformers - Attention
+A. Vaswani et al. “Attention Is All You Need”. In: NIPS. 2017.
+
+
+=== PDF PAGE 35 ===
+Three families, one building block
+Encoder-only Decoder-only Encoder–decoder
+vector per token / CLS
+Block × L
+no mask
+all tokens
+next token
+Block × L
+causal mask
+tokens so far
+Encoder
+× L
+K, V
+Decoder
+× L
+source target so far
+next target token
+Attention Trained to Typical use Examples
+Encoder-only self, no mask fill in hidden tokens classification, retrieval, embeddings BERT, ViT
+Decoder-only causal self predict the next token generation, chat GPT, Llama, Claude
+Encoder–decoder self + causal self + cross next target token, given the source translation, captioning, speech → text original Transformer, T5, Whisper
+Slides 5–8 were already an encoder–decoder: CNN encoder + cross-attention + LSTM decoder. The Transformer
+replaces both sides with attention blocks.
+Vaswani et al. 2017 · Devlin et al. (BERT) 2019 · Radford et al. (GPT) 2018 · Raffel et al. (T 5) 2020 · Radford et al. (Whisper) 2023
+
+=== PDF PAGE 36 ===
+The cost of attention
+● QK⊤ has N × N entries: time O(N2·d), memory
+O(N2) per head and layer
+○ RNN: O(N), but sequential. Attention: O(N2), but
+fully parallel
+● KV cache: when generating token by token, the
+keys and values of past tokens do not change
+→ store them, compute q, k, v only for the new
+token
+○ memory grows linearly with the context length
+● Efficient attention
+○ FlashAttention: exact, tiled so the N × N matrix
+never sits in GPU memory
+○ Sparse / sliding-window attention; linear and low-
+rank approximations
+○ Multi-/grouped-query attention: heads share K, V →
+smaller KV cache
+memory for one attention matrix (one head, one layer) if
+materialised
+Go deeper → 62668 Acceleration for AI · 62653 Supercomputing · 62664 NLP with Language
+Models
+T. Dao et al. FlashAttention. NeurIPS 2022 · J. Ainslie et al. GQA. EMNLP 2023 · I. Beltagy et al. Longformer. 2020
+
+=== PDF PAGE 37 ===
+Visual Transformers
+● The Vision Transformer: patches + positional encoding
+Spring 2021
+Bill Freeman, Phillip Isola
+Dosovitskiy et al. “An Image is Worth 16x16 Words: Transformers for Image
+Recognition at Scale”. In: ICLR. 2021.
+key valuequery
+positional
+embedding
+CLS
+
+
+=== PDF PAGE 38 ===
+Visual Transformers
+● The Vision Transformer: patches + positional encoding
+Spring 2021
+Bill Freeman, Phillip Isola
+A. Dosovitskiy et al. “An Image is Worth 16x16 Words: Transformers for Image
+Recognition at Scale”. In: ICLR. 2021.
+key valuequery
+
+
+=== PDF PAGE 39 ===
+ViT: Differences with text
+
+
+=== PDF PAGE 40 ===
+● The Vision Transformer: later architectures used a conv
+layer instead of patches + linear projections for token
+embeddings
+● Transformers applied later, where the input is smaller
+● Input dimension to each block is downsampled
+Spring 2021
+Bill Freeman, Phillip Isola
+“CoAtNet: Marrying Convolution and Attention for All Data Sizes”
+Visual Transformers
+
+=== PDF PAGE 41 ===
+Exercise: A or B?
+● Transformers - Attention
+
+
+=== PDF PAGE 42 ===
+Exercise: A or B?
+Example: We are training an attention block to find a good representation
+for the given vocabulary (which contains “ambiguous” words).
+Which matrix (A or B) provides a better encoding for the attention
+block we are training?  To simplify:
+- The 3 matrices are the same! W_q = W_k = W_v
+- Compute only the new encoding obtained by the word “apple” given
+the context “Eat red apple”
+- Simplify the normalization step by computing just /3 as
+normalization step
+Embedding INIT. (E):
+Dimensions:
+[Base_Tech-ness, Base_Nature-ness, Base_Food-ness]
+apple : [1 1 1]
+phone : [1 0 0]
+eat  : [0 0 1]
+tree  : [0 1 0]
+red  : [0 0 0]
+normalized_attention = K Q / 3
+new_V = normalized_attention * V
+
+=== PDF PAGE 43 ===
+Resources
+● A. Vaswani et al. Attention is all you need. NeurIPS 2017
+● S. J. D. Prince. Understanding Deep Learning, ch. 12 — udlbook.github.io
+● J. Alammar. The Illustrated Transformer — jalammar.github.io
+● Zhang, Lipton, Li, Smola. Dive into Deep Learning, ch. 11 — d2l.ai
+● A. Dosovitskiy et al. An image is worth 16x16 words (ViT). ICLR 2021
+● Blog on ViT, step by step — amaarora.github.io/2021/01/18/ViT.html
+Slides adapted from A. C. Murillo (Univ. Zaragoza), MIT 6.869 (B. Freeman, P. Isola) and S. J. D. Prince (UDL)

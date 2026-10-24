@@ -24,7 +24,7 @@ function Pandoc(doc)
       if block.level == 1 and label ~= 'How to use this question bank' and label ~= 'Instructions' then
         out:insert(pandoc.RawBlock('latex', '\\clearpage'))
       end
-      if block.level == 3 and label:match('Q%d%d%d') then
+      if block.level == 3 and label:match('%-[MSC]%d%d') then
         open = true
         short = not label:match(' · MC$')
         if is_mock and short then

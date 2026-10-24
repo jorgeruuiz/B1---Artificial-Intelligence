@@ -1,18 +1,26 @@
+param([string[]]$Topics = @())
 $ErrorActionPreference = 'Stop'
 $notesSource = $PSScriptRoot
 $notesOutput = Split-Path -Parent $notesSource
 $notesBuild = Join-Path $notesSource 'build'
 New-Item -ItemType Directory -Path $notesBuild -Force | Out-Null
-$volumes = @(
-    '0. Mathematical background',
-    '1. Learning fundamentals, shallow and Bayesian learning',
-    '2. Reinforcement learning',
-    '3. Neural networks and deep learning fundamentals',
-    '4. CNNs and transfer learning'
-)
+$volumes = [ordered]@{
+    '0' = '0. Mathematical background'
+    '1' = '1. Learning fundamentals, shallow and Bayesian learning'
+    '2' = '2. Reinforcement learning'
+    '3' = '3. Neural networks and deep learning fundamentals'
+    '4' = '4. CNNs and transfer learning'
+    '5' = '5. Advanced deep learning'
+}
+foreach ($requestedTopic in $Topics) {
+    if (-not $volumes.Contains($requestedTopic)) {
+        throw "Unknown topic '$requestedTopic'. Use: $($volumes.Keys -join ', ')."
+    }
+}
 Push-Location $notesSource
 try {
-    for ($topicIndex = 0; $topicIndex -lt $volumes.Count; $topicIndex++) {
+    foreach ($topicIndex in $volumes.Keys) {
+        if ($Topics.Count -gt 0 -and $topicIndex -notin $Topics) { continue }
         $topicSource = "Topic_$topicIndex.tex"
         # A populated two-page contents list can change pagination on pass 2.
         # Pass 3 resolves those updated destinations in a clean build.
@@ -23,6 +31,9 @@ try {
                 throw "PDF compilation failed for $topicSource (pass $compilePass)."
             }
         }
+        $logPath = Join-Path $notesBuild "Topic_$topicIndex.log"
+        $layoutWarnings = Select-String -LiteralPath $logPath -Pattern 'Overfull|Missing character|undefined references'
+        if ($layoutWarnings) { $layoutWarnings.Line | Write-Output }
         $compiledPdf = Join-Path $notesBuild "Topic_$topicIndex.pdf"
         $finalPdf = Join-Path $notesOutput ($volumes[$topicIndex] + '.pdf')
         Copy-Item -LiteralPath $compiledPdf -Destination $finalPdf -Force

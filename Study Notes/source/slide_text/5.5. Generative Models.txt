@@ -1,0 +1,305 @@
+=== PDF PAGE 1 ===
+Master in Artificial Intelligence & Computational engineering
+Ana C. Murillo
+Artificial Intelligence
+Deep learning 5.5 - Generative models
+
+=== PDF PAGE 2 ===
+This block
+●Generative models:
+●Autoencoder
+●Generative Adversarial Networks
+●Diffusion
+
+=== PDF PAGE 3 ===
+Deep Learning && Generative
+Zebra
+Non-zebra
+Decision
+boundary
+●Discriminative models:
+○posterior
+●Generative models:
+○likelihood and priors
+
+=== PDF PAGE 4 ===
+●Discriminative models: ●Generative models:
+Deep Learning && Generative
+Durk Kingma
+Berkeley Lecture slides - 2016
+sound/
+image
+class
+label
+X, Y?
+
+=== PDF PAGE 5 ===
+Foundation models & image generation
+Two self-supervised generative objectives
+Language model
+Predicts the next token (discrete)
+Diffusion model
+Denoises a latent step by step (continuous)
+LLM conditions diffusion
+Separate models
+e.g. Stable Diffusion 3, Imagen, Qwen-Image
+Text prompt
+LLM / text encoder → embeddings
+Diffusion transformer (denoiser)
+VAE decoder → image
+Post-training. Preference optimization and RL
+now also tune image generators, like for text.
+LLM + diffusion model. Images from “prompts”
+
+=== PDF PAGE 6 ===
+Deep Learning && Generative
+Assumption: data comes from a unknown data distribution
+Goal: train networks to learn this distribution from its samples
+… to generate new data by sampling from the learned model
+Many generative models, with different types of supervision:
+•Pixel RNN,
+•Autoencoders,
+•Generative Adversarial Networks (GAN),
+•Diffusion-based,
+•etc …
+
+=== PDF PAGE 7 ===
+Deep Learning && Generative: Autoencoder
+●Auto encoders
+○Similar encoder-decoder architecture than segmentation
+
+BUT unsupervised
+○Learn features that can reconstruct original images
+How to learn this?
+Adapted from Li, Johnson,  Yeung. http://cs231n.stanford.edu 2017
+
+=== PDF PAGE 8 ===
+Deep Learning && Generative
+●Auto-encoder:
+○deterministic mapping: input —> latent vector
+○only the outputs of the encoder can be decoded
+○Decoding a random latent
+
+might give garbage
+μx,σx
+ KL[N(μx,σx),N(0,1)]+
+●Variational Auto encoders
+○mapping to a distribution of latent vectors,
+
+(i.e., mean & covariance of distribution of latent vectors)
+
+○Train with reconstruction loss
+
++ regularizing term
+
+○probabilistic encoding enforces structured latents
+—> better results for decoding random latent inputs
+
+=== PDF PAGE 9 ===
+Deep Learning && Generative - GAN
+●Goal: realistic results from image decoders
+●Can I automatically evaluate how “realistic” my decoder is?
+Generative Adversarial Networks (GAN)
+
+=== PDF PAGE 10 ===
+Deep Learning && Generative
+●Generative Adversarial Networks (GAN)
+Train 2 networks
+
+simultaneously
+
+to generate
+
+realistic data
+Goodfellow, Ian, et al. "Generative adversarial nets.” NIPS 2014.
+samples from the
+generator networks
+
+=== PDF PAGE 11 ===
+●Generative Adversarial Networks (GAN)
+Train 2 networks, G and D: How?
+○Generative model (captures data distribution) —> maximize
+probability of D making a mistake
+○Discriminative model—> discriminate “actual” data from
+“generated” data by G, i.e., probability of a sample coming
+from the training data or G.
+Goodfellow, Ian, et al. "Generative adversarial nets” NIPS 2014.DEMO-web: https://cs.stanford.edu/people/karpathy/gan
+Deep Learning && Generative
+
+=== PDF PAGE 12 ===
+●Generative Adversarial Networks (GAN)
+Train 2 networks, G and D: How?
+○Generative model (captures data distribution) —> maximize
+probability of D making a mistake
+○Discriminative model—> discriminate “actual” data from
+“generated” data by G, i.e., probability of a sample coming
+from the training data or G.
+Deep Learning && Generative
+https://poloclub.github.io/ganlab/
+
+
+=== PDF PAGE 13 ===
+Deep Learning && Generative
+●Generative Adversarial Networks (GAN)
+○Supervised … but “weakly”
+○Known to be very hard (tricky) to train
+○Generator stops learning (e.g. If the discriminator is too good,
+gradients to the generator can vanish)
+○Generator might slip up and get caught in a “mode collapse” (e.g.
+finds a few outputs that perform well at fooling the discriminator, and
+outputs only those for all inputs)
+○Training procedure issues (The vanilla GAN setup doesn’t converge,
+wild oscillations during training)
+○Many strategies proposed to improve these issues
+
+=== PDF PAGE 14 ===
+Deep Learning && Generative
+J. Zhu, T. Park, P. Isola. A. Efros,
+
+"Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks," ICCV 2017.
+●CycleGAN: Gan losses beyond raw image generation… used to ensure “quality” and
+“realism” in different tasks
+https://junyanz.github.io/CycleGAN/
+
+
+=== PDF PAGE 15 ===
+●DEMO-web: https://tenso.rs/demos/fast-neural-style/
+●A lot of interactive demos:
+https://vcai.mpi-inf.mpg.de/projects/DragGAN/
+https://www.nvidia.com/en-us/research/ai-playground/
+●Of course … deep-fakes: https://deepfakedetectionchallenge.ai/
+●Although lately GANs are losing impact regarding image generation with respect to new text2im
+approaches using diffusion models …
+Deep Learning && Generative
+Gatys, Leon A., Alexander S. Ecker, and Matthias Bethge. "Image style transfer using convolutional neural networks." CVPR. 2016.
+Johnson, Justin, Alexandre Alahi, and Li Fei-Fei. "Perceptual losses for real-time style transfer and super-resolution" ECCV 2016.
+
+
+
+=== PDF PAGE 16 ===
+Deep Learning && Generative
+CS 198-126. Deep learning for visual data. UC Berkeley
+
+=== PDF PAGE 17 ===
+Diffusion models - Forward diffusion process:
+●Gradually add very small amounts of Gaussian noise to input data x_0
+●Repeat this process for T steps until you get something resembling
+pure noise
+Deep Learning && Generative - Diffusion
+
+Ho, Jonathan, Ajay Jain, and Pieter Abbeel.
+
+“Denoising diﬀusion probabilistic models." NeurIPS 2020.
+
+
+=== PDF PAGE 18 ===
+Deep Learning && Generative
+
+Ho, Jonathan, Ajay Jain, and Pieter Abbeel.
+
+“Denoising diﬀusion probabilistic models." NeurIPS 2020.
+Diffusion models - reverse step
+●Learn reverse denoising process to iteratively undo the forward diffusion process
+●The reverse process seems to be generating new data from random noise
+Train
+Inference
+
+
+=== PDF PAGE 19 ===
+Deep Learning && Generative
+CS 198-126. Deep learning for visual data. UC Berkeley
+
+=== PDF PAGE 20 ===
+Deep Learning && Generative
+Diffusion models + ATTENTION + …
+•Text to image: Dall-E (openAI), Imagen 3 (Google)
+•Image to image: https://imagic-editing.github.io/
+•Text to video: https://imagen.research.google/video/
+•Many more …
+
+=== PDF PAGE 21 ===
+Two self-supervised generative objectives
+Language model
+Predicts the next token (discrete)
+Diffusion model
+Denoises a latent step by step (continuous)
+LLM conditions diffusion
+Separate models
+e.g. Stable Diffusion 3, Imagen, Qwen-Image
+Text prompt
+LLM / text encoder → embeddings
+Diffusion transformer (denoiser)
+VAE decoder → image
+Post-training. Preference optimization and RL
+now also tune image generators, like for text.
+LLM + diffusion model. Images from “prompts”
+Deep Learning && Generative - Diffusion
+
+=== PDF PAGE 22 ===
+Deep Learning && Generative
+CS 198-126. Deep learning for visual data. UC Berkeley
+Feature Autoencoder (AE) VAE GAN (Adversarial) Diffusion
+Core Goal/Basis
+Training Stability
+Inference Speed
+Image Quality
+Latent Space
+Good use cases
+Stable?
+Fast?
+Good?
+??
+??
+
+=== PDF PAGE 23 ===
+Main resources for the materials in this class
+•CS294-129 Designing, Visualizing and Understanding
+Deep Neural Networks. UC Berkeley.
+•CS 198-126. Deep learning for visual data. UC Berkeley.
+•Stanford classes on deep learning for Computer Vision
+http://cs231n.stanford.edu
+●Computer Vision: Algorithms and Applications. 2nd
+Edition. Richard Szeliski. https://szeliski.org/Book/
+
+=== PDF PAGE 24 ===
+Thanks for attending! This was the last “lecture”
+●Tomorrow, last day, LAB 5
+●If possible review the prior work to be prepared
+●It’s short, to submit right after the session or next day.
+We’ll evaluate it on Thursday with an interview.
+●Final Exam: short questions (everyone, around 1h) +
+Global exam about labs (if not submitted in the
+continuous evaluation)
+●Remember to submit Lab4
+
+=== PDF PAGE 25 ===
+Note that … AI & ML
+Artificial Intelligence
+…
+Machine Learning
+…
+Neural Networks
+… Deep Learning
+¿EJEMPLOS?
+
+=== PDF PAGE 26 ===
+Artificial Intelligence
+Rule-based systems  Planning algorithms
+Search algorithms …
+Machine Learning
+SVM k-Nearest Neigh. k-Means
+Random Forest Logistic Regression …
+
+
+Neural Networks
+Perceptron
+Shallow NN
+ …
+Deep Learning
+CNN GAN RNN
+DBN    Transformers …
+NLP
+COMPUTER
+VISION
+ROBOTICS
+Note that … AI & ML

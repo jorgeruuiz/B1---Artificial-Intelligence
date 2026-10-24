@@ -1,0 +1,29 @@
+% This preamble is embedded in the exported workbook: no local style files are needed.
+\usepackage{xparse}
+\fancyhead[R]{\small\sffamily\color{examnavy}Practice workbook}
+\AtBeginDocument{\hypersetup{linkcolor=examnavy,filecolor=examteal}}
+
+% Type your response between \begin{solution} and \end{solution}.
+% The optional dimension controls handwriting space ONLY when the answer is empty.
+% Typed answers replace that space and may contain paragraphs and displayed maths.
+\ExplSyntaxOn
+\NewDocumentEnvironment{solution}{O{20mm} m +b}
+  {
+    \par\nopagebreak[4]\smallskip
+    \tl_set:Nn \l_tmpa_tl {#3}
+    \tl_remove_all:Nn \l_tmpa_tl {\par}
+    \tl_if_blank:VTF \l_tmpa_tl
+      {
+        \noindent\begin{minipage}{\linewidth}
+        {\small\sffamily\bfseries\color{examteal}My~answer~(#2):}\par
+        \vspace*{#1}
+        \end{minipage}\par
+      }
+      {
+        {\small\sffamily\bfseries\color{examteal}My~answer~(#2):}\par\nopagebreak[4]
+        #3\par
+      }
+    \medskip
+  }
+  {}
+\ExplSyntaxOff

@@ -1,0 +1,79 @@
+=== PDF PAGE 1 ===
+Master in Artificial Intelligence & Computational Engineering
+Luis Montesano
+Artificial Intelligence –
+Deep learning 5.1: Sequence models
+(Extra material)
+
+=== PDF PAGE 2 ===
+LSTM: inside the cell
+Diagram from colah.github.io
+● LSTM networks - Long short-term memory cells
+○ The most widely used RNN cell
+○ More sophisticated hidden function than the basic RNN
+○ Capable of learning long-term dependencies
+
+=== PDF PAGE 3 ===
+LSTM: inside the cell
+Diagram from colah.github.io
+
+
+=== PDF PAGE 4 ===
+LSTM: inside the cell
+Diagram from colah.github.io
+
+
+=== PDF PAGE 5 ===
+Exercise: a tiny LSTM by hand
+Vocabulary V = 3:  a, b, c
+Hidden units H = 2  (size of c and h)
+Part A Sizes and roles: fill in the table
+object size role (one line)
+x_t
+W_xf
+W_hf
+b_f
+W_x  (4 gates)
+W_h  (4 gates)
+c_t
+h_t
+W_y,  b_y
+LSTM parameters
+Work in pairs, 5 minutes. Parts B and C on the next slides. 5
+
+=== PDF PAGE 6 ===
+Exercise: what kind of representation?
+Part B Same tiny LSTM: V = 3 (a, b, c), H = 2
+1 While the network reads one sequence, which of these change: the weights, c_t, h_t?
+2 What does the network “know” about the letter b, and where is it stored? How many numbers?
+3 True or false: c_t has one entry per letter.
+4 We add a fourth letter, d. Which sizes change? Do c and h change size?
+5 We double H to 4. Which sizes change, and how many LSTM parameters are there now?
+Hint: separate what is learned (parameters) from what is computed while reading (state). 6
+
+=== PDF PAGE 7 ===
+Exercise: one update step by hand
+Part C Weights (already trained)
+W_x (letters) W_h
+gate unit a b c h₁ h₂ bias
+f 1 1 2 −1 4 0 0
+2 3 −4 0 0 2 0
+i 1 0 −4 2 0 1 0
+2 1 4 −2 0 0 0
+g 1 1 0 −1 0 0 0
+2 0 2 1 −2 0 0
+o 1 2 0 1 0 3 0
+2 0 0 −1 2 0 −1
+Previous state
+c(t−1) = [1.0, 0.5]     h(t−1) = [0.5, 0]
+Input letter: b   →   x_t = [0, 1, 0]
+σ:  −4 → 0.02,  0 → 0.5,  4 → 0.98
+tanh:  0 → 0,  0.76 → 0.64,  0.98 → 0.75,  1 → 0.76
+1. Which column of W_x is used? Compute a_f, a_i,
+a_g, a_o.
+2. Apply σ / tanh: f, i, g, o.
+3. Compute c_t and h_t.
+4. What did each unit do: keep, erase, write?
+5. Bonus: W_y = [[1, 0], [0, 1], [−1, −1]], b_y = 0. Next
+letter?
+Uses the equations from Part A. 10 minutes. 7

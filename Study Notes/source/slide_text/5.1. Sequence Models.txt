@@ -1,0 +1,373 @@
+=== PDF PAGE 1 ===
+Master in Artificial Intelligence & Computational Engineering
+Luis Montesano
+Artificial Intelligence –
+Deep learning 5.1: Sequence models
+
+=== PDF PAGE 2 ===
+Today
+● Sequential data and recurrent neural networks (RNNs)
+● Training RNNs: backpropagation through time, vanishing and exploding gradients
+● Gated units: LSTM and GRU
+● Deep RNNs and applications: video classification, dense captioning
+● Other sequence models: temporal convolutions (TCN, WaveNet)
+● Encoder–decoder (seq2seq) and the bottleneck that motivates attention
+● Attention in practice: image captioning
+● Homework: a char-RNN on your own text
+
+=== PDF PAGE 3 ===
+Sequential data: order matters
+
+=== PDF PAGE 4 ===
+Sequential data: order matters
+● Text and speech: words and sounds only make sense in
+order
+● Video: frames over time
+● Sensor and financial data: time series
+● Length varies from one example to the next
+○ Feed-forward nets and CNNs expect a fixed-size input
+
+=== PDF PAGE 5 ===
+Recurrent networks for sequences
+● Video, speech, text → Recurrent NN
+○ can handle non-fixed length input/output
+Fei-Fei Li & Justin Johnson & Serena Yeung
+http://cs231n.stanford.edu
+
+=== PDF PAGE 6 ===
+Unrolling an RNN: one set of shared weights
+● repeat (as many input/output/steps as needed)
+● share the weights across iterations
+y
+x
+h
+Figure 10.2 - Deep Learning book. Ian
+Goodfellow
+y yt-1 yt yt+1
+
+=== PDF PAGE 7 ===
+Toy example: a character-level RNN
+Main ingredients on a toy example:
+● time: t
+● hidden state: h
+● “vocabulary”: {h,e,l,o}
+● weights: Wxh, Whh, Why
+ht = tanh(Whhht−1 + Wxhxt)
+yt = Whyht
+Andrej Karpathy
+http://karpathy.github.io/ 2015/05/21/rnn-effectiveness/
+
+
+=== PDF PAGE 8 ===
+Toy example: a character-level RNN
+Andrej Karpathy
+http://karpathy.github.io/ 2015/05/21/rnn-effectiveness/
+ht = tanh(Whhht−1 + Wxhxt)
+yt = Whyht
+Main ingredients on a toy example:
+● time: t
+● hidden state: h
+● “vocabulary”: {h,e,l,o}
+● weights: Wxh, Whh, Why
+
+=== PDF PAGE 9 ===
+Toy example: a character-level RNN
+Andrej Karpathy
+http://karpathy.github.io/ 2015/05/21/rnn-effectiveness/
+ht = tanh(Whhht−1 + Wxhxt)
+yt = Whyht
+Main ingredients on a toy example:
+● time: t
+● hidden state: h
+● “vocabulary”: {h,e,l,o}
+● weights: Wxh, Whh, Why
+
+=== PDF PAGE 10 ===
+What a vanilla RNN can learn: char-RNN examples
+Interesting examples from a vanilla version
+● text generator (Shakespeare, Wikipedia page, …)
+● code generator! (LaTeX, C, …)
+http://karpathy.github.io/2015/05/21/rnn-effectiveness/
+
+=== PDF PAGE 11 ===
+Interpretable neurons: one cell detects URLs
+Interesting examples from a vanilla version
+● text generator (Shakespeare, Wikipedia page, …)
+● code generator! (LaTeX, C, …)
+http://karpathy.github.io/2015/05/21/rnn-effectiveness/
+Top row of each block: input sequence; below: the 5 most likely
+next characters
+
+=== PDF PAGE 12 ===
+Interpretable neurons: one cell tracks [[ ]] links
+Interesting examples from a vanilla version
+● text generator (Shakespeare, Wikipedia page, …)
+● code generator! (LaTeX, C, …)
+http://karpathy.github.io/2015/05/21/rnn-effectiveness/
+
+=== PDF PAGE 13 ===
+Vanilla RNNs miss long-range dependencies
+● Dependencies over many steps are hard to learn:
+gradients vanish or explode through time
+● Next: why this happens (BPTT) and how gated cells fix it
+
+=== PDF PAGE 14 ===
+Training RNNs: backpropagation through time
+● Unroll the RNN over T steps → a deep feed-forward network whose layers
+share Wxh, Whh, Why
+● Total loss = sum of the per-step losses:
+● Standard backprop (4.3) on the unrolled graph. Gradients of a shared weight
+add up over time:
+○ ∂⁺: immediate derivative, treating hk−1 as a constant
+● Truncated BPTT: backpropagate through the last K steps only (memory,
+speed)
+Goodfellow, Bengio, Courville. Deep Learning, ch. 10.2 · R. Pascanu, T. Mikolov, Y. Bengio. On the difficulty of training recurrent neural networks. ICML 2013
+
+=== PDF PAGE 15 ===
+Why gradients vanish or explode
+● Each factor of the product is a Jacobian:
+● Since |tanh′| ≤ 1:
+● σmax < 1 → contributions from far-away steps
+shrink exponentially: vanishing gradient, long-
+range dependencies are not learned
+● σmax > 1 → they can grow exponentially:
+exploding gradient (loss spikes, NaN)
+R. Pascanu, T. Mikolov, Y. Bengio. On the difficulty of training recurrent neural networks. ICML 2013 (σ_max = largest singular value)
+
+=== PDF PAGE 16 ===
+Fixing the gradient problems
+● Exploding → gradient clipping: rescale the gradient if its norm is too
+large
+○ Keeps the direction, limits the step. One line in PyTorch:
+torch.nn.utils.clip_grad_norm_
+● Vanishing → change the architecture
+○ Gated units (LSTM, GRU): an additive path for information and gradients, like the
+skip connections of ResNets
+○ Helpers: orthogonal initialisation of W hh, layer normalisation
+○ Truncated BPTT saves memory and time but does not fix vanishing: it cuts the
+long-range gradients
+● Or remove the long chain of multiplications altogether
+○ Temporal convolutions (TCN) and attention: short paths between any two time
+steps
+R. Pascanu, T. Mikolov, Y. Bengio. On the difficulty of training recurrent neural networks. ICML 2013
+
+=== PDF PAGE 17 ===
+LSTM: long short-term memory
+● LSTM networks - Long short-term memory cells
+○ The most widely used RNN cell
+○ More sophisticated hidden function than the basic RNN
+○ Capable of learning long-term dependencies
+S. Hochreiter, J. Schmidhuber. Long short-term memory. Neural Computation, 1997 · Forget gate: F. Gers, J. Schmidhuber, F. Cummi ns. Learning to forget. Neural
+Computation, 2000
+
+
+=== PDF PAGE 18 ===
+LSTM: a cell state with gates
+● LSTM networks - Long short-term memory cells
+○ The most widely used RNN cell
+○ More sophisticated hidden function than the basic RNN
+○ Capable of learning long-term dependencies
+Diagram from colah.github.io
+
+=== PDF PAGE 19 ===
+LSTM: inside the cell
+Diagram from colah.github.io
+● LSTM networks - Long short-term memory cells
+○ The most widely used RNN cell
+○ More sophisticated hidden function than the basic RNN
+○ Capable of learning long-term dependencies
+
+=== PDF PAGE 20 ===
+LSTM gates: forget, input, cell, output
+Fei-Fei Li & Justin Johnson & Serena Yeung
+http://cs231n.stanford.edu
+Wikipedia
+● LSTM networks - Long short-term memory cells
+○ f: forget gate.
+Erase cell or not?
+○ i: input gate.
+Write cell or not?
+○ g: cell gate.
+How much to write to cell
+○ o: output gate.
+How much to reveal cell value
+
+=== PDF PAGE 21 ===
+Why gates help, and the GRU
+● The LSTM cell state is updated additively:
+○ Forget gate ft ≈ 1 → information and gradients cross many steps without being
+multiplied by Whh
+● GRU (Cho et al., 2014): lighter variant, no separate cell state; update
+gate zt, reset gate rt
+○ 3 weight blocks instead of 4 → fewer parameters; similar accuracy on many tasks
+(nn.LSTM, nn.GRU)
+K. Cho et al. Learning phrase representations using RNN encoder –decoder for statistical machine translation. EMNLP 2014 · biases omitted · conventions differ:
+PyTorch nn.GRU swaps z and 1 − z
+
+=== PDF PAGE 22 ===
+Stacking RNN layers, and other variants
+● Many successful examples and variations:
+○ Many variations of LSTM cells
+○ Multi-layer RNN
+○ Bidirectional RNN
+■ reads both directions
+■ needs the whole input first
+Fei-Fei Li & Justin Johnson & Serena Yeung
+http://cs231n.stanford.edu
+
+=== PDF PAGE 23 ===
+RNN applications: action recognition in video
+● Action Classification. Video and Flow (temporal data)
+Beyond Short Snippets: Deep Networks for Video Classification.
+Joe Yue-Hei Ng et al. Google. CVPR 2015.
+Results:
+Beyond short
+snippets
+
+=== PDF PAGE 24 ===
+RNN applications: dense captioning
+● Multimodal problems. Image and Text. Dense Captions
+(other types of sequential data)
+DenseCap: Fully Convolutional Localization Networks for Dense Captioning.
+Johnson, Justin and Karpathy, Andrej and Fei -Fei, Li. CVPR 2016
+Results: DenseCap project page
+
+=== PDF PAGE 25 ===
+Other temporal processing: TCN
+● TCN - Temporal Convolutional Network
+● Causal CNN / Convolutional Markov Model
+In practice each sample sees only the previous
+samples within the receptive field
+● Receptive field grows with depth and dilation (next
+slides)
+
+
+=== PDF PAGE 26 ===
+Other temporal processing: TCN
+● TCN - Temporal Convolutional Network
+● Causal CNN / Convolutional Markov Model
+● 1D dilated convolutions
+2D illustrations; a TCN applies the same idea in 1D and causally (only past inputs). Fig.: V. Dumoulin, F. Visin,
+conv_arithmetic
+dilated convolutionstandard convolution
+
+=== PDF PAGE 27 ===
+Other temporal processing: TCN
+● TCN - Temporal Convolutional Network
+● Causal CNN / Convolutional Markov Model
+● 1D dilated convolutions
+● WaveNet: stack of dilated causal 1D conv layers
+https://deepmind.com/blog/article/wavenet-generative-
+model-raw-audio
+Oord, Aaron van den, et al. "Wavenet: A
+generative model for raw audio." arXiv
+preprint arXiv:1609.03499 (2016).
+
+
+=== PDF PAGE 28 ===
+Seq2seq: encoder–decoder RNNs
+● Same encoder–decoder as SegNet (4.4), over time instead of space;
+lengths may differ
+● Encoder RNN reads x1 … xT: last state = context vector c = hT
+● Decoder RNN generates y1, y2, … one token at a time until <end>
+RNN
+"the"
+RNN
+"cat"
+RNN
+"sleeps"
+c RNN
+<start>
+le
+RNN
+le
+chat
+RNN
+chat
+dort
+RNN
+dort
+<end>encoder
+decoder: each output is fed back as the next input
+I. Sutskever, O. Vinyals, Q. V. Le. Sequence to sequence learning with neural networks. NeurIPS 2014 · Fig.: SegNet, PAMI 2017
+Recall 4.4: SegNet, the same idea over space
+
+=== PDF PAGE 29 ===
+Training the decoder: teacher forcing
+● Training: feed the ground-truth previous token y*t−1 as decoder input, not the
+model's own guess
+○ Every step gets the correct context → stable training, no sampling needed; steps run in
+parallel only in non-recurrent decoders (5.2)
+● Loss = cross-entropy of the next token (maximum likelihood, as in 1.2):
+● Inference: no ground truth → feed back the model's own predictions (greedy
+or beam search)
+● Train/test mismatch = exposure bias: an early mistake puts the decoder in
+states it never saw
+○ Remedy: scheduled sampling (gradually feed own predictions during training)
+● Same recipe as next-token training of GPT-style models (5.2)
+R. J. Williams, D. Zipser. A learning algorithm for continually running fully recurrent neural networks. Neural Computation, 1989 · S. Bengio et al. Scheduled sampling.
+NeurIPS 2015
+
+=== PDF PAGE 30 ===
+The bottleneck, and the idea of attention
+● The whole input is squeezed into one fixed-size vector c → quality drops
+for long sentences
+● Bahdanau et al. (2015): keep all encoder states h1 … hT; at each output
+step build a different context as a weighted average:
+h1
+α = 0.05
+h2
+α = 0.10
+h3
+α = 0.60
+h4
+α = 0.20
+h5
+α = 0.05
+Σ ct decoder st
+αt,i: how much output
+step t looks at input
+position i (weights sum to
+1)
+● 5.2: remove the recurrence and keep only attention → Transformers
+D. Bahdanau, K. Cho, Y. Bengio. Neural machine translation by jointly learning to align and translate. ICLR 2015 · K. Cho et al. On the properties of neural machine
+translation: encoder–decoder approaches. SSST 2014
+
+=== PDF PAGE 31 ===
+RNN applications: captioning with attention
+● Multimodal problems. Image and Text. Captioning &
+Attention (other types of sequential data)
+Areas of Attention for Image Captioning. Marco Pedersoli, Thomas Lucas, Cordelia Schmid, Jakob Verbeek; ICCV 2017
+
+=== PDF PAGE 32 ===
+Summary: key equations
+RNN
+BPTT
+LSTM
+Seq2seq
+Attention
+Main message: recurrence keeps a memory, but long paths through time make learning
+hard. Gates shorten the gradient path; attention gives direct access to every input.
+
+
+=== PDF PAGE 33 ===
+Homework: char-RNN on your own text
+● Pick your own text of one style, about the size of the Shakespeare dataset
+(~200K words)
+● Examples: one person’s speeches, song lyrics of one genre, source code in
+one language; more ideas in Karpathy’s char-RNN post
+● Run the Colab example to train a simple RNN on your text: Colab
+notebook (adapted from the TensorFlow text generation tutorial)
+1. Read and understand the current example
+2. Re-run it with your own data
+
+=== PDF PAGE 34 ===
+Resources
+● Goodfellow, Bengio, Courville. Deep Learning, ch. 10 —
+www.deeplearningbook.org
+● Zhang, Lipton, Li, Smola. Dive into Deep Learning, ch. 9–10 — d2l.ai
+● A. Karpathy. The unreasonable effectiveness of RNNs — karpathy.github.io
+(char-RNN code)
+● C. Olah. Understanding LSTM networks — colah.github.io
+● Stanford cs231n, lecture on RNNs — cs231n.stanford.edu
+Slides adapted from A. C. Murillo (Univ. Zaragoza), cs231n (F. -F. Li, J. Johnson, S. Yeung) and MIT 6.869 (B. Freeman, P. Isola)

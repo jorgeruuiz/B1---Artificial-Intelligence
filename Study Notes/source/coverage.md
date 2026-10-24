@@ -15,9 +15,15 @@ References throughout the notes count PDF pages from 1, including title slides. 
 | 2.4. Policy Search | 19 | Topic 2: policy objectives, trajectory likelihood, gradients, softmax policy, REINFORCE, actor–critic and optimization alternatives. |
 | 3.1. Introduction to Deep Learning | 41 | Topic 3: definitions, applications, data and representation-learning pipeline. |
 | 3.2. Shallow NN | 51 | Topic 3: ReLU construction, shapes/counts, approximation theorem, activation regions and terminology. |
-| 3.3. Deep Learning Fundamentals | 48 | Topic 3: deep composition, representation capacity, scores, losses, SGD, momentum, Adam and hyperparameters. |
+| 3.3. Deep Learning Fundamentals | 44 | Topic 3: deep composition, capacity, scores, losses, SGD, momentum, Adam and hyperparameters. References aligned to the current deck. |
 | 3.4. Deep Learning Fundamentals II | 53 | Topic 3: scalar/matrix backprop, autograd, initialization, normalization, explicit/implicit regularization, dropout, augmentation and double descent. |
-| 4.1. CNNs | 98 | Topic 4: convolution, stride/padding/dilation, channels, receptive fields, pooling/upsampling, architecture modules, transfer learning, training diagnostics, task extensions, engineering applications and slide exercise. |
+| 4.1. CNNs | 111 | Topic 4: convolution, sizes/counts, receptive fields, pooling/upsampling, architectures, expanded residual blocks/normalization, transfer learning, diagnostics, task extensions and exercises. |
+| 5.1. Sequence Models | 34 | Topic 5, section 5.1: RNNs, shapes/counts, BPTT, clipping/truncation, LSTM/GRU, variants, TCNs, seq2seq, teacher forcing and attention. |
+| 5.1. Extra Material | 7 | Topic 5, section 5.1: gate equations, sizes/counts, parameters versus states, and the actual p. 7 tiny-LSTM update. |
+| 5.2. Transformers | 43 | Topic 5, section 5.2: Q/K/V, arithmetic/shapes/counts, positions, tokenization/embeddings, blocks, normalization, families/masks/cross-attention, efficiency, ViT and the p. 42 A/B exercise. |
+| 5.3. Foundation models | 28 | Topic 5, section 5.3: broad pretraining/adaptation, supervision stages, MoE/storage, language families, CLIP, DINOv2, SAM, generation pipelines and limitations. |
+| 5.4. Unsupervised learning | 38 | Topic 5, section 5.4: supervision distinctions, PCA/t-SNE, clustering/LDA, proxy tasks, contrastive learning, BYOL, SuperPoint and semi-supervised extensions. |
+| 5.5. Generative Models | 26 | Topic 5, section 5.5: generative/discriminative distinctions, AE/VAE, reconstruction/KL, GAN objectives, collapse, CycleGAN, diffusion, conditioning and course hierarchy. |
 | X.1 / X.2 (initially supplied) | 41 / 51 | Extracted text identical to 3.1 / 3.2; no separate content. |
 
 ## Clarifications made in context
@@ -30,5 +36,20 @@ References throughout the notes count PDF pages from 1, including title slides. 
 - Approximate Q-learning differentiates only the current prediction (semi-gradient); the slide Pacman weights are calculated before rounding.
 - Neural-network approximation results are existence results; activation regions live in input space. Backpropagation is separated from optimization. Dropout and batch-normalization training/inference distinctions are explained.
 - Convolution output-size calculations include floor and dilation; the 240-by-240 exercise gives distinct answers for stated padding assumptions. Historical model examples are kept as slide examples.
+- Residual identity arguments require compatible shapes and activations. BN trainable parameters are separated from running statistics; evaluation mode differs from disabling gradients.
+- RNN/LSTM counts state bias conventions and distinguish shared parameters from computed states. The tiny LSTM uses the teacher's rounded nonlinearities and identifies its output scores as logits.
+- Attention matrix conventions are explicit. The unscaled p. 11 example and divide-by-three p. 42 shortcut are distinguished from scaled-softmax attention. The A/B comparison states the row-vector convention and toy semantic-axis assumption.
+- Causal masking prevents future-token leakage but does not remove exposure bias. Encoders can still mask padding. Layer norm does not use BN's cross-sample running statistics.
+- Foundation models are distinguished from architectures. CLIP similarities are not calibrated probabilities; CLIP alone does not decode images. Transfer learning and reward optimization do not guarantee universal performance or factual correctness.
+- PCA preserves variance under a linear squared-error criterion, not an arbitrary percentage of meaning or accuracy. t-SNE emphasizes local relationships; standard t-SNE has no simple reusable fitted linear map. LDA means Latent Dirichlet Allocation here.
+- Self-supervision has targets and losses. BYOL uses no explicit negatives; pseudo-labels are uncertain predictions.
+- Deterministic autoencoders can decode arbitrary latent vectors, but may decode them poorly. VAE variance versus standard deviation is explicit. GAN collapse concerns diversity; discriminator uncertainty alone does not prove success.
+- Diffusion training can directly construct noisy inputs at sampled timesteps; generation usually iterates a reverse process. Text encoding, denoising and image decoding are distinct components.
+
+## Completion and printing
+
+The explanatory notes cover every teaching deck currently supplied in `Lecture Slides`, through 5.5. Administrative, demonstration and bibliography slides are identified or consolidated rather than copied as theory. The earlier mathematical-background volume remains available; its exclusion from the practice-question bank is unchanged.
+
+The notes are grouped into one PDF per main course topic, 0–5. All material from 5.1–5.5, including the LSTM extra deck, is contained in Topic 5 with a unified contents list and continuous pagination. Expanded CNN material is part of Topic 4. Superseded separate chapter files are archived rather than listed as primary volumes. Page references in Topics 3 and 4 were aligned to current slide versions.
 
 No lab solutions or teacher files were edited. The lab references connect the supplied theory to the named practical tasks.
